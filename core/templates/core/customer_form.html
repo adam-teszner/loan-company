@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}
+<h3>Please enter the requiered information</h3>
+{% endblock title %}
+
+{% block content %}
+<div class='w3-container'>
+    <form method="post">
+    {% csrf_token %}
+    {{form.as_p}}
+    <button class='w3-button w3-green' type='submit'>Submit</button>
+    </form>
+
+</div>
+{% endblock content %}
