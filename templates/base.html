@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <title>Document</title>
+</head>
+<body>
+    <!-- Sidebar -->
+<div class="w3-sidebar w3-bar-block w3-border-right w3-animate-left" style="display:none" id="mySidebar">
+    <button onclick="w3_close()" class="w3-bar-item w3-large">Close &times;</button>
+    <a href="{% url 'index' %}" class="w3-bar-item w3-button">Home</a>
+    <a href="{% url 'create_customer' %}" class="w3-bar-item w3-button">New Customer</a>
+    <a href="{% url 'custom_create' %}" class="w3-bar-item w3-button">Custom Customer</a>
+    <a href="#" class="w3-bar-item w3-button">Link 3</a>
+  </div>
+
+  <!-- Page Content -->
+<div class="w3-teal">
+  <button class="w3-button w3-teal w3-xlarge" onclick="w3_open()">☰</button>
+  <div class="w3-container">
+    {% block title %}
+    <h3>Base HTML</h3>
+    {% endblock title %}
+  </div> 
+</div>
+{% block content %}
+{% endblock content %}
+
+
+
+
+
+
+<script>
+  function w3_open() {
+    document.getElementById("mySidebar").style.display = "block";
+  }
+  
+  function w3_close() {
+    document.getElementById("mySidebar").style.display = "none";
+  }
+</script>
+    
+</body>
+</html>

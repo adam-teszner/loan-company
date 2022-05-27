@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %}
+<h3>Custom Create Customer</h3>
+{% endblock title %}}
+{% block content %}
+<form method="post">
+    {% csrf_token %}
+    {{customer_form.as_p}}
+    <p>Now the Adress:</p>
+    {{customer_adress.as_p}}
+    <button class='w3-button w3-green' type='submit'>Submit</button>
+
+</form>
+
+{% endblock content %}
