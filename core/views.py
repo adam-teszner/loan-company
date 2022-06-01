@@ -19,6 +19,14 @@ class CustomerCreateView(CreateView):
     model = Customer
     fields = '__all__'
 
+#     def form_valid(self, form):
+#         form.instance.adress_id = self.kwargs.get('pk')
+#         return super(CustomerCreateView, self).form_valid(form)
+
+# class AdressCreateView(CreateView):
+#     model = Adress
+#     fields = '__all__'
+
 
 def custom_customer(request):
 
@@ -27,12 +35,15 @@ def custom_customer(request):
 
     if request.method == 'POST':
 
-
-
         if customer_form.is_valid() and customer_adress.is_valid():
 
-            customer_form.save()
-            customer_adress.save()
+            
+            x = customer_form.save(commit=False)
+            z = customer_adress.save(commit=False)
+            x.adress = z
+            z.save()
+            x.save()
+            
             return HttpResponseRedirect(reverse('index'))
 
         else:
@@ -47,13 +58,3 @@ def custom_customer(request):
             'customer_adress': customer_adress,
         }
         return render(request, 'core/custom_create.html', context)
-
-# def custom_customer(request):
-
-#     customer_form = CustCreatePersonalInfo(request.POST)
-#     customer_adress = CustCreateAdressForm(request.POST)
-#     context = {
-#             'customer_form': customer_form,
-#             'customer_adress': customer_adress,
-#         }
-#     return render(request, 'core/custom_create.html', context)
