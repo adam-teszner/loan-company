@@ -20,7 +20,7 @@ class Customer(models.Model):
     last_name = models.CharField('Last Name', max_length=50)
     adress = models.ForeignKey('Adress', on_delete=models.SET_NULL, null=True)
     social_security_no_pesel = models.IntegerField('PESEL', unique=True, blank=False, 
-                                                    null=False,)
+                                                    null=False)
     id_passport = models.CharField('ID serial number or Passport serial number',
                                 max_length=10, unique=True, blank=False, null=False)
     martial_status = models.CharField(choices=martial_choices, max_length=2)
