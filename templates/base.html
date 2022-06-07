@@ -1,4 +1,5 @@
 {% load static %}
+{% load tags %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,10 +13,19 @@
 <body>
     <!-- Navbar -->
 <div class="w3-bar w3-theme-d3">
-    <a href="{% url 'index' %}" class="w3-bar-item w3-button w3-hover-theme">Home</a>
-    <a href="{% url 'create_customer' %}" class="w3-bar-item w3-button w3-hover-theme">New Customer</a>
-    <a href="{% url 'custom_create' %}" class="w3-bar-item w3-button w3-hover-theme">Custom Customer</a>
-    <a href="#" class="w3-bar-item w3-button w3-hover-theme">Link 3</a>
+    <a href="{% url 'index' %}" class="w3-bar-item w3-button w3-hover-theme w3-mobile">Home</a>
+    <a href="{% url 'create_customer' %}" class="w3-bar-item w3-button w3-hover-theme w3-mobile">New Customer</a>
+    <a href="{% url 'custom_create' %}" class="w3-bar-item w3-button w3-hover-theme w3-mobile">Custom Customer</a>
+    <a href="#" class="w3-bar-item w3-button w3-hover-theme w3-mobile">My Customers</a>
+    {% if user.is_authenticated %}
+      <span class='w3-right w3-mobile'>
+        <span class='w3-bar-item w3-small w3-mobile'>Welcome, {% user_first_name %}</span>
+        <a href="{% url 'logout' %}?next={{request.path}}" class="w3-bar-item w3-button w3-hover-theme w3-mobile">Logout</a>
+      </span>
+    {% else %}
+    <a href="{% url 'login' %}" class="w3-bar-item w3-right w3-button w3-hover-theme w3-mobile">Login</a>
+    {% endif %}
+
   </div>
 
   <!-- Page Content -->
