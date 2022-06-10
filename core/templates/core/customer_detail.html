@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block title %}
+<h4>{{customer}}</h4>
+{% endblock title %}
+
+{% block content %}
+<p>{{customer.first_name}}</p>
+<p>{{customer.last_name}}</p>
+<p>{{customer.dob}}</p>
+<ol>
+{% for item in customer.product_set.all %}
+<li>{{item}}</li>
+{% empty %}
+<p>No products sold yet ! </p>
+{% endfor %}
+</ol>
+{% endblock content %}
