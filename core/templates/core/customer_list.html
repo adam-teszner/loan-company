@@ -4,4 +4,13 @@
 {% endblock title %}
 {% block content %}
 
+<div class='w3-card-4 w3-container w3-row'>
+{% for i in customer_list %}
+    <br><span class='w3-twothird'><h4>{{i}}</h4></span><h4><a class='w3-rest' href='{% url 'customer_detail' i.pk %}'>Details</a></h4></span>
+{% empty %}
+    <br><span class='w3-twothird'><h4>You currently have 0 customers</h4></span>
+{% endfor %}
+</div>
+
+
 {% endblock content %}
