@@ -71,11 +71,11 @@ class Customer(models.Model):
     workplace = models.ForeignKey('Workplace', on_delete=models.SET_NULL, 
                                 null=True)
     esd = models.DateField('Employment start date')
-    salaty = models.IntegerField()
-    position = models.CharField(max_length=50)
+    salaty = models.IntegerField(blank=True, null=True)
+    position = models.CharField(max_length=50, blank=True, null=True)
     phone_no = models.IntegerField(unique=True)
     email = models.EmailField(max_length=50, blank=True, null=True)
-    created_by = models.ForeignKey(UserInfo, on_delete=models.SET_NULL, 
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, 
                                 null=True)
     created_date = models.DateField(auto_now_add=True)
 

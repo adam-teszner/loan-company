@@ -16,7 +16,7 @@
     <a href="{% url 'index' %}" class="w3-bar-item w3-button w3-hover-theme w3-mobile">Home</a>
     <a href="{% url 'create_customer' %}" class="w3-bar-item w3-button w3-hover-theme w3-mobile">New Customer</a>
     <a href="{% url 'custom_create' %}" class="w3-bar-item w3-button w3-hover-theme w3-mobile">Custom Customer</a>
-    <a href="#" class="w3-bar-item w3-button w3-hover-theme w3-mobile">My Customers</a>
+    <a href="{% url 'customer_list' %}" class="w3-bar-item w3-button w3-hover-theme w3-mobile">My Customers</a>
     {% if user.is_authenticated %}
       <span class='w3-right w3-mobile'>
         <span class='w3-bar-item w3-small w3-mobile'>Welcome, {% user_first_name %}</span>
