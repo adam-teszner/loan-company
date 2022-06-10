@@ -1,8 +1,8 @@
 from django.urls import reverse
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template.response import TemplateResponse
-from django.views.generic import CreateView, DetailView
+from django.views.generic import CreateView, DetailView, ListView
 from .models import Customer, Adress, UserInfo
 from .forms import (CustCreatePersonalInfo, CustCreateAdressForm,
                     CustomSignUpForm)
@@ -72,19 +72,27 @@ def custom_customer(request):
             
             x = customer_form.save(commit=False)
             z = customer_adress.save(commit=False)
+            x.created_by = request.user
             x.adress = z
             z.save()
             x.save()
             
-            return HttpResponseRedirect(reverse('index'))
+            print(request.POST)
+            print('\n', x.id)
+
+            return redirect('customer_detail', pk=x.id)
+            # teraz dziala, warto to PRINTOWAC !!!!  w request.post wychodzi:
+            # with keyword arguments '{'kwargs': {'pk': 18}}' not found. 1 pattern(s) tried: ['my_customers_list/(?P<pk>[0-9]+)\\Z']
+            # gdy bylo kwargs={'pk': x.id} to wyszlo to wyzej !
 
         else:
             context = {
                 'customer_form': customer_form,
                 'customer_adress': customer_adress,
             }
+            print('form is wrong !')
+            return render(request, 'core/custom_create.html', context)
     else:
-        # return render(request, 'core/custom_create.html')
         context = {
             'customer_form': customer_form,
             'customer_adress': customer_adress,
@@ -121,3 +129,13 @@ class RegisterUser(View):
 
         return render(request, self.template_name, self.initial)
             
+
+class CustomerListView(LoginRequiredMixin, ListView):
+
+    def get_queryset(self):  
+        return Customer.objects.filter(created_by=self.request.user.id).order_by('created_date')
+
+class CustomerDetailView(LoginRequiredMixin, DetailView):
+
+    model = Customer
+    template_name = 'core/customer_detail.html'
