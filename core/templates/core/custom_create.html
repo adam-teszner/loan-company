@@ -70,6 +70,17 @@
                     <p></p><label class='w3-text-theme' for="{{customer_form.created_by.auto_id}}">{{customer_form.created_by.label}}</label>
                     {{customer_form.created_by}}
                 </div> {% endcomment %}
+                </div>
+                <ul>
+                    {%for form in workplace_form%}
+                        <li><label for="{{form.label}}" class="w3-text-theme">{{form.label}}</label>{{form}}</li>
+                    {% endfor %}
+                </ul>
+                <ol>
+                    {%for adr_form in workplace_adr_form%}
+                    <li><label for="{{adr_form.label}}" class="w3-text-theme">{{adr_form.label}}</label>{{adr_form}}</li>
+                    {% endfor %}
+                </ol>
                 <div class='w3-col w3-container'>
                     <p></p><button class='w3-button w3-theme-d5 w3-hover-theme' type='submit'>Submit</button>
                     <p></p>
