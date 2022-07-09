@@ -5,7 +5,8 @@ from django.template.response import TemplateResponse
 from django.views.generic import CreateView, DetailView, ListView
 from .models import Customer, Adress, UserInfo
 from .forms import (CustCreatePersonalInfo, CustCreateAdressForm,
-                    CustomSignUpForm)
+                    CustomSignUpForm, CustomWorkplaceForm,
+                    AddNewProductForm)
 from django.views import View
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
@@ -63,18 +64,28 @@ class CustomerCreateView(LoginRequiredMixin, CreateView):
 def custom_customer(request):
 
     customer_form = CustCreatePersonalInfo(request.POST)
-    customer_adress = CustCreateAdressForm(request.POST)
+    customer_adress = CustCreateAdressForm(request.POST, prefix='customer_adress')
+    workplace_adr_form = CustCreateAdressForm(request.POST, prefix='workplace_adr_form')
+    workplace_form = CustomWorkplaceForm(request.POST)
 
     if request.method == 'POST':
 
-        if customer_form.is_valid() and customer_adress.is_valid():
+        if customer_form.is_valid() and customer_adress.is_valid() and workplace_adr_form.is_valid() and workplace_form.is_valid():
 
             
             x = customer_form.save(commit=False)
             z = customer_adress.save(commit=False)
+            y = workplace_adr_form.save(commit=False)
+            q = workplace_form.save(commit=False)
+            
             x.created_by = request.user
             x.adress = z
-            z.save()
+            q.adress = y
+            x.workplace = q
+
+            z.save()            
+            y.save()
+            q.save()
             x.save()
             
             print(request.POST)
@@ -89,13 +100,26 @@ def custom_customer(request):
             context = {
                 'customer_form': customer_form,
                 'customer_adress': customer_adress,
+                'workplace_adr_form': workplace_adr_form,
+                'workplace_form': workplace_form,
             }
             print('form is wrong !')
+            # print(request.POST)
+            # print('\n\n')
+            # print(customer_form.is_valid())
+            # print(customer_adress.is_valid())
+            # print(workplace_adr_form.is_valid())
+            # print(workplace_form.is_valid())
+
+            # for field in workplace_adr_form:
+            #     print("Field Error:", field.name,  field.errors)
             return render(request, 'core/custom_create.html', context)
     else:
         context = {
             'customer_form': customer_form,
             'customer_adress': customer_adress,
+            'workplace_adr_form': workplace_adr_form,
+            'workplace_form': workplace_form,
         }
         return render(request, 'core/custom_create.html', context)
 
@@ -107,12 +131,12 @@ class RegisterUser(View):
     initial =   {'user_info_form': user_info_form,
                 'user_create_form': user_create_form}
 
-    def get(self, request, *args, **kwargs):
+    def get(self, request):
         self.user_create_form(initial = self.initial)
         self.user_info_form(initial = self.initial)
         return render(request, self.template_name, self.initial)
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request):
         
         user_info = self.user_info_form(request.POST)
         user_create = self.user_create_form(request.POST)
@@ -132,10 +156,41 @@ class RegisterUser(View):
 
 class CustomerListView(LoginRequiredMixin, ListView):
 
-    def get_queryset(self):  
-        return Customer.objects.filter(created_by=self.request.user.id).order_by('created_date')
+    paginate_by = 8
 
+    def get_queryset(self):
+
+        default_order = ['-created_date']
+        order = self.request.GET.getlist('order_by', default_order)
+        # print(self.request.GET)
+        # print(order)
+        return Customer.objects.filter(created_by=self.request.user.id).order_by(*order)
+
+    
 class CustomerDetailView(LoginRequiredMixin, DetailView):
 
     model = Customer
     template_name = 'core/customer_detail.html'
+
+
+class AddNewProductView(LoginRequiredMixin, View):
+
+    add_product_form = AddNewProductForm
+    template_name = 'core/add_product.html'
+    initial = {'add_product': add_product_form }
+
+    def get(self, request, id):    
+        self.add_product_form(initial=self.initial)
+        return render(request, self.template_name, self.initial)
+
+    def post(self, request, id):
+        customer_instance = Customer.objects.get(id=id)
+        add_prod = self.add_product_form(request.POST)
+        if add_prod.is_valid():
+            s = add_prod.save(commit=False)
+            s.owner = customer_instance
+            s.save()
+            return redirect('customer_detail', pk=id)
+        else:
+            return render(request, self.template_name, self.initial)
+

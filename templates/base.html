@@ -6,52 +6,93 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-    <link rel="stylesheet" href="{% static 'css/colors.css' %}">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&family=Ubuntu:wght@300;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/pyle-style.css' %}">
     <title>Document</title>
 </head>
 <body>
-    <!-- Navbar -->
-<div class="w3-bar w3-theme-d3">
-    <a href="{% url 'index' %}" class="w3-bar-item w3-button w3-hover-theme w3-mobile">Home</a>
-    <a href="{% url 'create_customer' %}" class="w3-bar-item w3-button w3-hover-theme w3-mobile">New Customer</a>
-    <a href="{% url 'custom_create' %}" class="w3-bar-item w3-button w3-hover-theme w3-mobile">Custom Customer</a>
-    <a href="{% url 'customer_list' %}" class="w3-bar-item w3-button w3-hover-theme w3-mobile">My Customers</a>
-    {% if user.is_authenticated %}
-      <span class='w3-right w3-mobile'>
-        <span class='w3-bar-item w3-small w3-mobile'>Welcome, {% user_first_name %}</span>
-        <a href="{% url 'logout' %}?next={{request.path}}" class="w3-bar-item w3-button w3-hover-theme w3-mobile">Logout</a>
-      </span>
-    {% else %}
-    <a href="{% url 'login' %}" class="w3-bar-item w3-right w3-button w3-hover-theme w3-mobile">Login</a>
-    {% endif %}
 
-  </div>
+<!-- NAVBAR -->
+    <section>
+        <div class="pyl-navbar">
+            <div class="pyl-header">
+                <a class="pyl-title" href="{% url 'index' %}">LoanCompany <span class='t2'>website</span></a>
+                <span id="menu-ic" class="material-icons-outlined" onclick="openMenu()">menu</span>
+                <span id='close-ic' class="material-icons-outlined menu-invisible" onclick="openMenu()">close</span>
+            </div>      
+            <nav id='navbar' class="menu-invisible">   
+                <ul class="pyl-navbar-links">
+                    <li><a href="{% url 'customer_list' %}">My Customers</a></li>
+                    <li><a href="#">Statistics</a></li>
+                    <li><a href="#">Search</a></li>
+                    <li><a href="#">Print to pdf</a></li>
+                </ul>
+                <ul class="pyl-navbar-login-links">
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Contact</a></li>
+                    {% if user.is_authenticated %}
+                    <li><span id= 'account_icon' class="account-icon">{% user_icon %}</span></li>
+                    {% else %}
+                    <li><a href="{% url 'login' %}">Login</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+        <div id="user-info">
+            <div class="pyl-card">
+                <div class="user-tooltip">
+                    {% if user.is_authenticated %}
+                    
+                    <div class="user-tooltip-basic">
+                        <div class="usr-tt-col1">
+                            <span class="account-icon-2">{% user_icon %}</span>
+                        </div>
+                            <div class="usr-tt-col2">
+                            <span class="user-names">{% user_first_name%} {% user_last_name %}</span>
+                            <br>
+                            {% if user.email %}
+                            <span class="user-email">{{ user.email }}</span>
+                            {% else %}
+                            <span class="user-email">no email provided</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="user-tooltip-links">
+                        <a href="#">Edit profile</a>
+                        <a href="{% url 'logout' %}?next={{request.path}}">Logout</a>
+                    </div>
+                    
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </section>
+{% block content%}
 
-  <!-- Page Content -->
-  <div class="w3-container w3-theme">
-    {% block title %}
-    <h3>Base HTML</h3>
-    {% endblock title %}
-  </div>
-<div class='w3-theme-l5'>
-{% block content %}
-{% endblock content %}
+<div class="test-pyl">
+    <h1>testetr</h1>
+    <ul>
+        <li>TEST</li>
+        <li>TEST</li>
+        <li>TEST</li>
+        <li>TEST</li>
+        <li>TEST</li>
+    </ul>
+    <ul>
+        <li>test2</li>
+        <li>test2</li>
+        <li>test2</li>
+        <li>test2</li>
+        <li>test2</li>
+    </ul>
 </div>
-
-
-
-
-
-<script>
-  function w3_open() {
-    document.getElementById("mySidebar").style.display = "block";
-  }
-  
-  function w3_close() {
-    document.getElementById("mySidebar").style.display = "none";
-  }
-</script>
-    
+{% endblock content %}
+{% comment %} <script src="{% static 'js/jquery-3.6.0.js' %}"></script> {% endcomment %}
+<script src="{% static 'js/scripts.js' %}"></script>
 </body>
 </html>

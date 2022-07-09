@@ -46,3 +46,41 @@ userInfoTooltip.addEventListener('mouseout', userTooltipHide);
 // not sure it its efficient ! 
 
 
+// TABLE column sorting looks  // 
+
+
+if (sort_order.length > 0) {
+    for (let th = 1; th < sort_order.length; th++) {
+        if (sort_order[th].startsWith('-')) {
+            var id_desc = sort_order[th].slice(1);
+            var add_class = document.getElementById(id_desc).classList.add('active');
+            var remove_primary = document.getElementById(id_desc).classList.remove('active-primary');
+            var arrow = document.getElementById(id_desc).querySelector('#sort-icon').innerHTML = '&#8593';
+            // console.log('jeden');
+        }else{
+            var id_asc = sort_order[th];
+            var add_class = document.getElementById(id_asc).classList.add('active');
+            var remove_primary = document.getElementById(id_asc).classList.remove('active-primary');
+            var arrow = document.getElementById(id_asc).querySelector('#sort-icon').innerHTML = '&#8595';
+            // console.log('dwa');
+        }
+
+    }
+    if (sort_order[0].startsWith('-')) {
+        var id_desc = sort_order[0].slice(1);
+        var add_class = document.getElementById(id_desc).classList.add('active-primary');
+        var remove_primary = document.getElementById(id_desc).classList.remove('primary');
+        var arrow = document.getElementById(id_desc).querySelector('#sort-icon').innerHTML = '&#8593';
+        // console.log('ZERO');
+    }else{
+        var id_asc = sort_order[0];
+        var add_class = document.getElementById(id_asc).classList.add('active-primary');
+        var remove_primary = document.getElementById(id_asc).classList.remove('primary');
+        var arrow = document.getElementById(id_asc).querySelector('#sort-icon').innerHTML = '&#8595';
+        // console.log('Nie-zero');
+    }
+
+
+}else {
+    // console.log('blank');
+}
