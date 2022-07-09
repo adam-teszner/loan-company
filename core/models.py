@@ -84,6 +84,9 @@ class Customer(models.Model):
     
     def get_absolute_url(self):
         return reverse("create_customer") #kwargs={"pk": self.pk})
+
+    def get_fields(self):
+        return [(field.verbose_name, field.value_from_object(self)) for field in self.__class__._meta.fields]
     
 
 

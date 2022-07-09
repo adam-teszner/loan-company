@@ -1,4 +1,4 @@
-from .models import Customer, Adress, UserInfo, Workplace
+from .models import Customer, Adress, UserInfo, Workplace, Product
 from django import forms
 from django.forms.widgets import *
 
@@ -78,7 +78,17 @@ class CustomWorkplaceForm(forms.ModelForm):
             'phone_no':  NumberInput(attrs={'class': 'w3-input w3-border'}),
             'email': EmailInput(attrs={'class': 'w3-input w3-border'}),
         }
+
+        labels = {
+            'id_nip': 'NIP'
+        }
         
+
+class AddNewProductForm(forms.ModelForm):
+
+    class Meta():
+        model = Product
+        exclude = ('created_date', 'owner',)
 
 
 class CustomSignUpForm(forms.ModelForm):

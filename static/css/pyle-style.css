@@ -1,6 +1,12 @@
 :root {
-    --primary-background-color: #faf7f7;
-    --secondary-backgroud-color: rgb(58, 38, 38);
+    --primary-background-color: whitesmoke;
+    --secondary-backgroud-color: #333A56;
+    --color-1: rgb(247, 245, 230);
+    --color-1-alt: rgb(255, 250, 190);
+    --color-1-2-alt:rgb(255, 230, 160);
+    --ad-one-color: #52658F;
+    --ad-two-color: #E8E8E8;
+
     
 }
 
@@ -11,9 +17,15 @@ a {
 
 
 body {
-    background-color: var(--primary-background-color);
+    background-color: whitesmoke;
     font-family: 'Ubuntu', sans-serif;
     margin: 0;
+}
+
+.pyl-container {
+    margin: .5em;
+    padding: .5em;
+
 }
 
 .material-icons-outlined {
@@ -45,7 +57,7 @@ body {
 
 .pyl-navbar {
     color: var(--secondary-backgroud-color);
-    background-color:white;
+    background-color:var(--ad-two-color);
     font-weight: 200;
     padding: 0 10px 0 10px;
     
@@ -72,8 +84,8 @@ body {
 }
 
 .pyl-header {
-    /* color: var(--secondary-backgroud-color);
-    background-color: white; */
+    display: flex;
+    place-content: space-between;
     padding: 10px 0 10px 0;
 }
 .pyl-header a {
@@ -114,10 +126,6 @@ body {
     
 }
 
-.pyl-container {
-    display: flex;
-    place-content: space-between;
-}
 
 nav ul li {
     list-style: none;
@@ -155,7 +163,7 @@ nav ul li {
         grid-template-columns: max-content auto;
         align-items: baseline;
         padding: 0;
-        background-color: white;
+        background-color: var(--ad-two-color);
         color: var(--secondary-backgroud-color);
         
     }
@@ -189,7 +197,7 @@ nav ul li {
         display: grid;
         grid-template-columns: max-content auto; 
         align-items: baseline;
-        background-color: white;
+        background-color: var(--ad-two-color);
         
     }
 
@@ -209,7 +217,7 @@ nav ul li {
     z-index: 100;
     opacity: 1;
     width:max-content;
-    background-color: white;
+    background-color: var(--color-1);
     display: none;
 }
 
@@ -280,16 +288,76 @@ nav ul li {
     padding-bottom: 5px;
 }
 
-.stnd-list th {
-    font-weight: 400;
+.pyl-stnd-list th {
+    text-align: center;
+    font-weight: 600;
+    font-size: 1.1em;
+    background-color: var(--color-1);
+    color: white;
+    width: max-content;
+    height: 3em;
+    padding: 0 .5em 0 .5em;
+    margin: 0;
 }
 
-.stnd-list {
-    font-weight: 100;
-    font-size: .8em;
-    border: 1px solid gray;
+.pyl-stnd-list th:hover {
+    background-color: var(--ad-two-color) !important;
 }
 
-.stnd-list td {
-    border: 1px solid gray;
+.active {
+    background-color: var(--color-1-alt) !important;
+}
+
+.active-primary {
+    background-color: var(--color-1-2-alt) !important;
+}
+
+
+
+.pyl-stnd-list {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 300;
+    padding: .5em;
+    /* border: 1px solid gray; */
+    border-collapse: collapse;
+}
+
+.pyl-stnd-list td {
+    text-align: center;
+    padding: 0 .5em 0 .5em;
+    /* border: 1px solid gray; */
+    margin: 10px;
+
+}
+
+.pyl-stnd-list tr:hover {
+    background-color: var(--color-1); 
+}
+
+.pyl-stnd-list thead {
+    background-color: var(--color-1);
+}
+
+.pyl-stnd-list tbody {
+    background-color: white;
+    /* border: none; */
+}
+
+.pyl-responsive {
+    overflow-x:auto;
+    padding: 16px;
+    display: grid;
+}
+
+#sort-icon {
+    font-size: .7em;
+}
+
+a.fill-th {
+    height: 100%;
+    width: 100%;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
