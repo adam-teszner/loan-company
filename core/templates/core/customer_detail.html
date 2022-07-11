@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %}
+<h4>{{customer}}</h4>
+{% endblock title %}
+
+{% block content %}
+<table>
+    {% for label, value in object.get_fields %}
+        <tr>
+            <td>{{ label }}</td>
+            <td>{{ value }}</td>
+        </tr>
+    {% endfor %}
+</table>
+<ol>
+{% for item in customer.product_set.all %}
+<li>{{item}}</li>
+{% empty %}
+<p>No products sold yet ! </p>
+{% endfor %}
+</ol>
+<div class="w3-container"><a href='{% url 'add_product' object.id %}'class="w3-button w3-theme-d5 w3-hover-theme">Add Product</a></div>
+<ul>
+    <li>{{customer.adress.street}}</li>
+</ul>
+{% endblock content %}
