@@ -1,94 +1,154 @@
 {% extends 'base.html' %}
-{% block title %}
-<h3>Custom Create Customer</h3>
-{% endblock title %}}
 {% block content %}
-<div class="w3-row">  
-    <div class='w3-container'>
-        <p></p>
-        <div class='w3-card-4'>                
-            <form method="post" class='w3-container w3-card-4 w3-lightgrey'>
-                <div class='w3-half w3-container'>
-                    {% csrf_token %}
-                    <p></p><label class='w3-text-theme' for="{{customer_form.first_name.auto_id}}">{{customer_form.first_name.label}}</label>
-                    {{customer_form.first_name}}
-                    <p></p><label class='w3-text-theme' for="{{customer_form.phone_no.auto_id}}">{{customer_form.phone_no.label}}</label>
-                    {{customer_form.phone_no}}
-                    
-                    
-                </div>
-                <div class='w3-half w3-container'>
-                    <p></p><label class='w3-text-theme' for="{{customer_form.last_name.auto_id}}">{{customer_form.last_name.label}}</label>
-                    {{customer_form.last_name}}
-                    <p></p><label class='w3-text-theme' for="{{customer_form.email.auto_id}}">{{customer_form.email.label}}</label>
-                    {{customer_form.email}}
-                    
-                </div>
-                <div class='w3-third w3-container'>
-                    <p></p><label class='w3-text-theme' for="{{customer_form.martial_status.auto_id}}">{{customer_form.martial_status.label}}</label>
-                    {{customer_form.martial_status}}
-                </div>
-                <div class='w3-third w3-container'>
-                    <p></p><label class='w3-text-theme' for="{{customer_form.id_passport.auto_id}}">{{customer_form.id_passport.label}}</label>
-                    {{customer_form.id_passport}}
-                </div>
-                <div class='w3-third w3-container'>
-                    <p></p><label class='w3-text-theme' for="{{customer_form.social_security_no_pesel.auto_id}}">{{customer_form.social_security_no_pesel.label}}</label>
-                    {{customer_form.social_security_no_pesel}}
-                </div>
-                <div class='w3-mobile w3-col w3-container' style='width:40%'>
-                    <p></p><label class='w3-text-theme' for="{{customer_adress.street.auto_id}}">{{customer_adress.street.label}}</label>
-                    {{customer_adress.street}}
-                </div>
-                <div class='w3-mobile w3-col w3-container' style='width:20%'>
-                    <p></p><label class='w3-text-theme' for="{{customer_adress.building_no.auto_id}}">{{customer_adress.building_no.label}}</label>
-                    {{customer_adress.building_no}}
-                </div>
-                <div class='w3-mobile w3-col w3-container' style='width:20%'>
-                    <p></p><label class='w3-text-theme' for="{{customer_adress.city.auto_id}}">{{customer_adress.city.label}}</label>
-                    {{customer_adress.city}}
-                </div>
-                <div class='w3-mobile w3-col w3-container' style='width:20%'>
-                    <p></p><label class='w3-text-theme' for="{{customer_adress.zip_code.auto_id}}">{{customer_adress.zip_code.label}}</label>
-                    {{customer_adress.zip_code}}
-                </div>
-                <div class='w3-half w3-container'>
-                <p></p><label class='w3-text-theme' for="{{customer_form.dob.auto_id}}">{{customer_form.dob.label}}</label>
-                    {{customer_form.dob}}
-                    <p></p><label class='w3-text-theme' for="{{customer_form.gender.auto_id}}">{{customer_form.gender.label}}</label>
-                    {{customer_form.gender}}
-                </div>
-                <div class='w3-third w3-container'>
-                    <p></p><label class='w3-text-theme' for="{{customer_form.esd.auto_id}}">{{customer_form.esd.label}}</label>
-                    {{customer_form.esd}}
-                </div>
-                <div class='w3-third w3-container'>
-                    <p></p><label class='w3-text-theme' for="{{customer_form.work_status.auto_id}}">{{customer_form.work_status.label}}</label>
-                    {{customer_form.work_status}}
-                </div>
-                {% comment %} <div class='w3-third w3-container'>
-                    <p></p><label class='w3-text-theme' for="{{customer_form.created_by.auto_id}}">{{customer_form.created_by.label}}</label>
-                    {{customer_form.created_by}}
-                </div> {% endcomment %}
-                </div>
-                <ul>
-                    {%for form in workplace_form%}
-                        <li><label for="{{form.label}}" class="w3-text-theme">{{form.label}}</label>{{form}}</li>
-                    {% endfor %}
-                </ul>
-                <ol>
-                    {%for adr_form in workplace_adr_form%}
-                    <li><label for="{{adr_form.label}}" class="w3-text-theme">{{adr_form.label}}</label>{{adr_form}}</li>
-                    {% endfor %}
-                </ol>
-                <div class='w3-col w3-container'>
-                    <p></p><button class='w3-button w3-theme-d5 w3-hover-theme' type='submit'>Submit</button>
-                    <p></p>
-                </div>
-            </form>
-                
+{% load static %}
+
+<!-- Customer create form -->
+<div class="pyl-container">
+    <div class="pyl-card form-container">
+        <div class="form-image" style="background-image: url('{% static "images/ballpoint-pen-794330_1280.jpg" %}')">            
         </div>
-        <p></p>
+        <form class="pyl-form" method='post'>
+            {% csrf_token %}
+            <div class="form-header">
+                <h1>Create New Customer</h1>
+            </div>
+            <div class="step-panel">
+                <div class="step step-color" step-name='Personal'>1</div>
+                <div class="step-line"></div>
+                <div class="step" step-name='Contact'>2</div>
+                <div class="step-line"></div>
+                <div class="step" step-name='Workplace'>3</div>
+            </div>
+            <div class="form-step">
+                <div class="form-content">
+                    <span class="form-fields">
+                    <label class='w3-text-theme' for="{{customer_form.first_name.auto_id}}">{{customer_form.first_name.label}}</label>
+                    {{customer_form.first_name}}
+                    </span>
+                    <span class="form-fields">
+                    <label class='w3-text-theme' for="{{customer_form.last_name.auto_id}}">{{customer_form.last_name.label}}</label>
+                    {{customer_form.last_name}}
+                    </span>
+                    <span class="form-fields">
+                    <label class='w3-text-theme' for="{{customer_form.gender.auto_id}}">{{customer_form.gender.label}}</label>
+                    {{customer_form.gender}}
+                    </span>
+                    <span class="form-fields">
+                    <label class='w3-text-theme' for="{{customer_form.dob.auto_id}}">{{customer_form.dob.label}}</label>
+                    {{customer_form.dob}}
+                    </span>
+                    <span class="form-fields">
+                    <label class='w3-text-theme' for="{{customer_form.martial_status.auto_id}}">{{customer_form.martial_status.label}}</label>
+                    {{customer_form.martial_status}}
+                    </span>
+                    <span class="form-fields">
+                    <label class='w3-text-theme' for="{{customer_form.social_security_no_pesel.auto_id}}">{{customer_form.social_security_no_pesel.label}}</label>
+                    {{customer_form.social_security_no_pesel}}
+                    </span>
+                    <span class="form-fields">
+                    <label class='w3-text-theme' for="{{customer_form.id_passport.auto_id}}">{{customer_form.id_passport.label}}</label>
+                    {{customer_form.id_passport}}
+                    </span>
+                    <span class="form-fields">
+                    <label class='w3-text-theme' for="{{customer_form.work_status.auto_id}}">{{customer_form.work_status.label}}</label>
+                    {{customer_form.work_status}}
+                    </span>
+                </div>            
+                {% comment %} <div class="buttons">
+                    <button class='pyl-btn' style='visibility: hidden'>Previous</button>
+                    <button class='pyl-btn'>Next</button>
+                </div> {% endcomment %}
+            </div>
+            <div class="form-step form-hide">
+                <div class="form-content">
+                    <span class="form-fields">
+                    <label class='w3-text-theme' for="{{customer_adress.street.auto_id}}">{{customer_adress.street.label}}</label>
+                    {{customer_adress.street}}
+                    </span>
+                    <span class="form-fields">
+                    <label class='w3-text-theme' for="{{customer_adress.building_no.auto_id}}">{{customer_adress.building_no.label}}</label>
+                    {{customer_adress.building_no}}
+                    </span>
+                    <span class="form-fields">
+                    <label class='w3-text-theme' for="{{customer_adress.city.auto_id}}">{{customer_adress.city.label}}</label>
+                    {{customer_adress.city}}
+                    </span>
+                    <span class="form-fields">
+                    <label class='w3-text-theme' for="{{customer_adress.zip_code.auto_id}}">{{customer_adress.zip_code.label}}</label>
+                    {{customer_adress.zip_code}}
+                    </span>
+                    <span class="form-fields">
+                    <label class='w3-text-theme' for="{{customer_form.phone_no.auto_id}}">{{customer_form.phone_no.label}}</label>
+                    {{customer_form.phone_no}}
+                    </span>
+                    <span class="form-fields">
+                    <label class='w3-text-theme' for="{{customer_form.email.auto_id}}">{{customer_form.email.label}}</label>
+                    {{customer_form.email}}
+                    </span>
+                </div>
+                {% comment %} <div class="buttons">
+                    <button class='pyl-btn'>Previous</button>
+                    <button class='pyl-btn'>Next</button>
+                </div> {% endcomment %}
+            </div>
+            <div class="form-step form-hide">
+                <div class="form-content">
+                    <span class="form-fields">
+                    <label class='w3-text-theme' for="{{workplace_form.name.auto_id}}">{{workplace_form.name.label}}</label>
+                    {{workplace_form.name}}
+                    </span>
+                    <span class="form-fields">
+                    <label class='w3-text-theme' for="{{workplace_adr_form.street.auto_id}}">{{workplace_adr_form.street.label}}</label>
+                    {{workplace_adr_form.street}}
+                    </span>
+                    <span class="form-fields">
+                    <label class='w3-text-theme' for="{{workplace_adr_form.building_no.auto_id}}">{{workplace_adr_form.building_no.label}}</label>
+                    {{workplace_adr_form.building_no}}
+                    </span>
+                    <span class="form-fields">
+                    <label class='w3-text-theme' for="{{workplace_adr_form.city.auto_id}}">{{workplace_adr_form.city.label}}</label>
+                    {{workplace_adr_form.city}}
+                    </span>
+                    <span class="form-fields">
+                    <label class='w3-text-theme' for="{{workplace_adr_form.zip_code.auto_id}}">{{workplace_adr_form.zip_code.label}}</label>
+                    {{workplace_adr_form.zip_code}}
+                    </span>
+                    <span class="form-fields">
+                    <label class='w3-text-theme' for="{{workplace_form.id_nip.auto_id}}">{{workplace_form.id_nip.label}}</label>
+                    {{workplace_form.id_nip}}
+                    </span>
+                    <span class="form-fields">
+                    <label class='w3-text-theme' for="{{workplace_form.phone_no.auto_id}}">{{workplace_form.phone_no.label}}</label>
+                    {{workplace_form.phone_no}}
+                    </span>
+                    <span class="form-fields">
+                    <label class='w3-text-theme' for="{{workplace_form.email.auto_id}}">{{workplace_form.email.label}}</label>
+                    {{workplace_form.email}}
+                    </span>
+                    <span class="form-fields">
+                    <label class='w3-text-theme' for="{{customer_form.esd.auto_id}}">{{customer_form.esd.label}}</label>
+                    {{customer_form.esd}}
+                    </span>
+                    <span class="form-fields">
+                    <label class='w3-text-theme' for="{{customer_form.salaty.auto_id}}">{{customer_form.salaty.label}}</label>
+                    {{customer_form.salaty}}
+                    </span>
+                    <span class="form-fields">
+                    <label class='w3-text-theme' for="{{customer_form.position.auto_id}}">{{customer_form.position.label}}</label>
+                    {{customer_form.position}}
+                    </span>                 
+                </div>
+
+            </div>
+            <div class="form-buttons">
+                <button onclick='formPreviousPage()' type='button' class='pyl-btn btn-hide' id='btn-prev'>Previous</button>
+                <button onclick='formNextPage()' type='button' class='pyl-btn' id='btn-next'>Next</button>
+                <button type='submit' class='pyl-btn btn-hide' id='btn-finish'>Finish</button>
+            </div>
+        </form>
     </div>
 </div>
+
+
+
 {% endblock content %}
