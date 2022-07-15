@@ -1,3 +1,4 @@
+from tokenize import Number
 from .models import Customer, Adress, UserInfo, Workplace, Product
 from django import forms
 from django.forms.widgets import *
@@ -32,7 +33,7 @@ class CustCreatePersonalInfo(forms.ModelForm):
     class Meta():
 
         fields = ['first_name', 'last_name', 'dob', 'gender', 'social_security_no_pesel',
-                'id_passport', 'martial_status', 'phone_no', 'email', 'esd', 'work_status']
+                'id_passport', 'martial_status', 'phone_no', 'email', 'esd', 'work_status', 'salaty', 'position']
         model = Customer
         widgets = {
             'first_name': TextInput(attrs={'class': 'w3-input w3-border'}),
@@ -48,20 +49,24 @@ class CustCreatePersonalInfo(forms.ModelForm):
                                     'type': 'date'}),
             'phone_no' : NumberInput(attrs={'class': 'w3-input w3-border'}),
             'email' : EmailInput(attrs={'class': 'w3-input w3-border'}),
+            'salaty' : NumberInput(attrs={'class': 'w3-input w3-border'}),
+            'position': TextInput(attrs={'class': 'w3-input w3-border'}),
             # 'created_by': Select(attrs={'class': 'w3-input w3-border'})
         }
         labels = {
             'first_name':'First Name',
             'last_name': 'Last Name',
             'dog' : 'Date of Birth',
-            'gender' : 'Gender',
+            'gender' : 'Sex',
             'social_security_no_pesel': 'PESEL',
             'id_passport' : 'ID no. or Passport no.',
             'martial_status': 'Martial Status',
             'phone_no' : 'Mobile phone number',
             'email' : 'Email adress',
-            'work_status' : 'Working status',
+            'work_status' : 'Income source',
             'esd' : 'Employment start date',
+            'salaty': 'Net Income',
+            'position' : 'Job Position',
             # 'created_by' : 'Created By',
 
         }
@@ -80,7 +85,8 @@ class CustomWorkplaceForm(forms.ModelForm):
         }
 
         labels = {
-            'id_nip': 'NIP'
+            'id_nip': 'NIP',
+            'name': 'Company Name',
         }
         
 

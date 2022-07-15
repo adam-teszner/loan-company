@@ -84,3 +84,61 @@ if (sort_order.length > 0) {
 }else {
     // console.log('blank');
 }
+
+
+function formNextPage () {
+    var form_step = document.getElementsByClassName('form-step');
+    var step_no = document.getElementsByClassName('step');
+    var button_prev = document.getElementById('btn-prev');
+    var button_next = document.getElementById('btn-next');
+    var button_finish = document.getElementById('btn-finish');
+
+
+    for (var z = 0; z < form_step.length; z++) {
+        if (form_step[z].classList.contains('form-hide') === false && z !== form_step.length-2) {
+            
+            return form_step[z].classList.add('form-hide'), 
+                    form_step[z+1].classList.remove('form-hide'),
+                    step_no[z+1].classList.add('step-color'),
+                    button_prev.classList.remove('btn-hide')
+        }else if (form_step[z].classList.contains('form-hide') === false) {
+            
+            return form_step[z].classList.add('form-hide'),
+                    form_step[z+1].classList.remove('form-hide'),
+                    step_no[z+1].classList.add('step-color'),
+                    button_next.classList.add('btn-hide'),
+                    button_finish.classList.remove('btn-hide')
+        }else {}
+    }
+
+}
+
+function formPreviousPage () {
+    var form_step = document.getElementsByClassName('form-step');
+    var step_no = document.getElementsByClassName('step');
+    var button_prev = document.getElementById('btn-prev');
+    var button_next = document.getElementById('btn-next');
+    var button_finish = document.getElementById('btn-finish');
+
+    for (var z = 1; z < form_step.length; z++) {
+        if (form_step[z].classList.contains('form-hide') === false && z == form_step.length-1){
+            button_prev.classList.remove('btn-hide'),
+            button_finish.classList.add('btn-hide'),
+            button_next.classList.remove('btn-hide'),
+            form_step[z].classList.add('form-hide'),
+            form_step[z-1].classList.remove('form-hide'),
+            step_no[z].classList.remove('step-color')
+        }
+            
+        else if (form_step[z].classList.contains('form-hide') === false && z !== 0 ){
+            button_prev.classList.remove('btn-hide'),
+            form_step[z].classList.add('form-hide'),
+            form_step[z-1].classList.remove('form-hide'),
+            step_no[z].classList.remove('step-color')
+        }else{
+            button_prev.classList.add('btn-hide')
+        }
+    }
+}
+
+// MOZNA TO BYLO ZROBIC PRZY POMOCY SPRAWDZENIA NA KTOREJ JESTEM STRONIE...

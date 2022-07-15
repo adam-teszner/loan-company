@@ -7,6 +7,8 @@
 
 {% autoescape off %}<script>const sort_order = {% sort_active_th %};</script>{% endautoescape %}
 <div class="pyl-container">
+
+    <button><a href="{% url 'custom_create' %}">Add Customer</a></button>
     <div class="pyl-responsive">
     <table class="pyl-stnd-list pyl-card">
         <thead>
@@ -15,7 +17,7 @@
             <th id='first_name'><a class='fill-th' href="{% sort_col 'first_name' %}&page={{page_obj.number}}">First Name <span id='sort-icon'>&#8597</span></a></th>
             <th id='last_name'><a class='fill-th' href="{% sort_col 'last_name' %}&page={{page_obj.number}}">Last Name <span id='sort-icon'>&#8597</span></a></th>
             <th id='created_date'><a class='fill-th' href="{% sort_col 'created_date' %}&page={{page_obj.number}}">Date created <span id='sort-icon'>&#8597</span></a></th>
-            <th id='salary'><a class='fill-th' href="{% sort_col 'salary' %}&page={{page_obj.number}}">Salary <span id='sort-icon'>&#8597</span></a></th>
+            <th id='salaty'><a class='fill-th' href="{% sort_col 'salaty' %}&page={{page_obj.number}}">Salary <span id='sort-icon'>&#8597</span></a></th>
             <th id='adress__zip_code'><a class='fill-th' href="{% sort_col 'adress__zip_code' %}&page={{page_obj.number}}">Zip Code <span id='sort-icon'>&#8597</span></a></th>
             <th id='adress__city'><a class='fill-th' href="{% sort_col 'adress__city' %}&page={{page_obj.number}}">City <span id='sort-icon'>&#8597</span></a></th>
             <th id='adress__street'><a class='fill-th' href="{% sort_col 'adress__street' %}&page={{page_obj.number}}">Street <span id='sort-icon'>&#8597</span></a></th>
@@ -32,7 +34,7 @@
             <td>{{cust.first_name}}</td>
             <td>{{cust.last_name}}</td>
             <td>{{cust.created_date}}</td>
-            <td>{{cust.salary}}</td>
+            <td>{{cust.salaty}}</td>
             <td>{{cust.adress.zip_code}}</td>
             <td>{{cust.adress.city}}</td>
             <td>{{cust.adress.street}}</td>
