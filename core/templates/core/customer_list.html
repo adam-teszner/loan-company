@@ -8,7 +8,7 @@
 {% autoescape off %}<script>const sort_order = {% sort_active_th %};</script>{% endautoescape %}
 <div class="pyl-container">
 
-    <button><a href="{% url 'custom_create' %}">Add Customer</a></button>
+    <a type='button' class='pyl-btn' href="{% url 'custom_create' %}">Add Customer</a>
     <div class="pyl-responsive">
     <table class="pyl-stnd-list pyl-card">
         <thead>
