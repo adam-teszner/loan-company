@@ -1,6 +1,7 @@
 :root {
     --primary-background-color: whitesmoke;
     --secondary-backgroud-color: #333A56;
+    /* --secondary-backgroud-color-light: #40496e; */
     --color-1: rgb(247, 245, 230);
     --color-1-alt: rgb(255, 250, 190);
     --color-1-2-alt:rgb(255, 230, 160);
@@ -374,7 +375,9 @@ a.fill-th {
 }
 
 .step-line {
-    border: solid 1px black;
+    /* border: solid 1px black; */
+    background-color: var(--color-1);
+    outline: var(--color-1-2-alt);
     border-radius: 25px;
     width: 23%;
     height: .3em;
@@ -382,20 +385,24 @@ a.fill-th {
 }
 
 .step {
-    border: solid 1px black;
+    /* border: solid 1px black; */
+    background-color: var(--color-1);
+    color: var(--secondary-backgroud-color);
     border-radius: 70%;
     /* flex-basis: 10%; */
     text-align: center;
-    width: 25px;
+    width: 1.5em;
     padding: 0.4em;
-    font-size: 20px;
+    font-size: 1.5em;
+    font-weight: 400;
+    font-family:'Rajdhani', sans-serif;
     position: relative;
 }
 
 .step::after {
     content: attr(step-name);
     position: absolute;
-    padding-top: 35px;
+    padding-top: 3em;
     font-size: .7em;
     left: 50%;
     transform: translateX(-50%);
@@ -439,11 +446,13 @@ a.fill-th {
 } */
 
 .form-header {
-    background-color: var(--color-1);
+    background-color: var(--secondary-backgroud-color);
 }
 
 .form-header h1 {
     text-align: center;
+    font-weight: 200;
+    color: whitesmoke;
 }
 
 .pyl-form {
@@ -501,7 +510,12 @@ a.fill-th {
 
 /* Buttons looks */
 
+.pyl-btn > a {
+    color: white;
+}
+
 .pyl-btn {
+    display: inline-block;
     border: none;
     border-radius: 13px;
     background-color: var(--secondary-backgroud-color);
@@ -512,15 +526,19 @@ a.fill-th {
     /* font-family: 'Rajdhani', sans-serif; */
     font-family: 'Ubuntu';
     letter-spacing: 2px;
+    cursor: pointer;
+    transition: 0.1s;
 }
 
 .pyl-btn:hover {
-    background-color: black;
+    background-color: var(--ad-one-color);
+    /* transition: 0.3s; */
 }
 
 .pyl-btn:active {
     background-color: black;
     transform: translate3d(2px, 2px, 0px);
+    transition: 0.1s;
 }
 
 .pyl-form > .form-hide {
@@ -529,10 +547,11 @@ a.fill-th {
 
 .step-panel > .step-color {
     color: white;
-    background-color: var(--ad-one-color);
+    background-color: var(--secondary-backgroud-color);
     border: 0px;
     outline: 3px solid red;
     text-shadow: 0px 0px 3px black;
+    font-weight: 800;
 }
 .form-buttons {
     /* display: grid;
@@ -556,3 +575,35 @@ a.fill-th {
 .form-buttons > .btn-hide {
     display: none;
 }
+
+.step-panel > .line-color {
+    background-color: var(--secondary-backgroud-color);
+    outline: 1px solid red;
+
+}
+
+/* Form - input */
+
+.pyl-label-text {
+    padding-bottom: 0.5em;
+    margin-top: .5em;
+    color: var(--secondary-backgroud-color);
+    font-weight: 200;
+}
+ .pyl-input {
+    box-sizing: border-box;
+    height: 1.8em;
+    border-radius: 4px;
+    border: 1px solid var(--ad-one-color);
+    font-family: 'Rajdhani';
+    font-weight: 600;
+    font-size: 1.1em;
+    text-indent: .3em;
+    -webkit-transition: 0.5s;
+    transition: 0.5s;
+    outline: none;
+ }
+
+ .pyl-input:focus {
+    border: 1px solid var(--color-1-alt);
+ }

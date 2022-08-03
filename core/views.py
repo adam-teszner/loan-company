@@ -1,3 +1,4 @@
+import json
 from django.urls import reverse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, HttpResponseRedirect
@@ -6,8 +7,9 @@ from django.views.generic import CreateView, DetailView, ListView
 from .models import Customer, Adress, UserInfo
 from .forms import (CustCreatePersonalInfo, CustCreateAdressForm,
                     CustomSignUpForm, CustomWorkplaceForm,
-                    AddNewProductForm)
+                    AddNewProductForm, CustCreatePersonalInfoUpdate)
 from django.views import View
+from django.core import serializers
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
@@ -65,10 +67,41 @@ def custom_customer(request):
 
     customer_form = CustCreatePersonalInfo(request.POST)
     customer_adress = CustCreateAdressForm(request.POST, prefix='customer_adress')
-    workplace_adr_form = CustCreateAdressForm(request.POST, prefix='workplace_adr_form')
+    workplace_adr_form = CustCreateAdressForm(request.POST, prefix='workplace_adr_form')    #prefix dlatego bo jest adress 2 instatncje - workplace i zwykly !!
     workplace_form = CustomWorkplaceForm(request.POST)
+    pesel_check = request.GET.get('pesel')
+    
 
-    if request.method == 'POST':
+    if request.method == 'GET' and pesel_check:
+        try:
+            cust_obj = Customer.objects.get(social_security_no_pesel=pesel_check)
+            customer_data = serializers.serialize('json', [cust_obj])
+            customer_adr = serializers.serialize('json', [cust_obj.adress])
+            workplace_data = serializers.serialize('json', [cust_obj.workplace])
+            workplace_adress_data = serializers.serialize('json', [cust_obj.workplace.adress])
+
+            json_list = [customer_data, customer_adr, workplace_data, workplace_adress_data]
+            data_2 = []
+            for item in json_list:
+                data_2.extend(json.loads(item))
+
+            merged_json = json.dumps(data_2, indent=2)
+            return HttpResponse(merged_json, content_type='application/json')
+
+        except:
+            print('BRAK')
+            context = {
+                'customer_form': customer_form,
+                'customer_adress': customer_adress,
+                'workplace_adr_form': workplace_adr_form,
+                'workplace_form': workplace_form,
+            }
+            # return HttpResponse('Error')
+            return render(request, 'core/custom_create.html', context) 
+    
+    
+    if request.method == 'POST' and request.POST.get('customer_id_value') == '':
+
 
         if customer_form.is_valid() and customer_adress.is_valid() and workplace_adr_form.is_valid() and workplace_form.is_valid():
 
@@ -87,9 +120,6 @@ def custom_customer(request):
             y.save()
             q.save()
             x.save()
-            
-            print(request.POST)
-            print('\n', x.id)
 
             return redirect('customer_detail', pk=x.id)
             # teraz dziala, warto to PRINTOWAC !!!!  w request.post wychodzi:
@@ -103,17 +133,30 @@ def custom_customer(request):
                 'workplace_adr_form': workplace_adr_form,
                 'workplace_form': workplace_form,
             }
-            print('form is wrong !')
-            # print(request.POST)
-            # print('\n\n')
-            # print(customer_form.is_valid())
-            # print(customer_adress.is_valid())
-            # print(workplace_adr_form.is_valid())
-            # print(workplace_form.is_valid())
 
-            # for field in workplace_adr_form:
-            #     print("Field Error:", field.name,  field.errors)
+
             return render(request, 'core/custom_create.html', context)
+
+            
+    elif request.method == 'POST' and request.POST.get('customer_id_value') != '':
+
+        customer_id = request.POST.get('customer_id_value')
+        customer_instance = Customer.objects.get(id=customer_id)
+
+        cust_update = CustCreatePersonalInfoUpdate(request.POST, instance=customer_instance)
+        cust_adress_update = CustCreateAdressForm(request.POST, prefix='customer_adress', instance=customer_instance.adress)
+        workplace_adr_update = CustCreateAdressForm(request.POST, prefix='customer_adress', instance=customer_instance.workplace.adress)
+        workplace_update = CustomWorkplaceForm(request.POST, instance=customer_instance.workplace)
+
+
+        cust_update.save()
+        cust_adress_update.save()
+        workplace_adr_update.save()
+        workplace_update.save()
+        
+        return redirect('customer_detail', pk=customer_id)   
+    
+    
     else:
         context = {
             'customer_form': customer_form,
@@ -121,9 +164,15 @@ def custom_customer(request):
             'workplace_adr_form': workplace_adr_form,
             'workplace_form': workplace_form,
         }
+
         return render(request, 'core/custom_create.html', context)
 
 
+        ### SKROCIC TO - ZROBIC LADNIEJSZE, EFEKTYWNE BARDZIEJ ###
+
+    
+
+    
 class RegisterUser(View):
     user_info_form = CustomSignUpForm
     user_create_form = UserCreationForm
@@ -194,3 +243,32 @@ class AddNewProductView(LoginRequiredMixin, View):
         else:
             return render(request, self.template_name, self.initial)
 
+class jsonTestView(View):
+    def get(self, request):
+
+        pesel = 21241411111     
+
+
+        cust_obj = Customer.objects.get(social_security_no_pesel=pesel)
+
+        customer_data = serializers.serialize('json', {cust_obj})
+        customer_adress = serializers.serialize('json', [cust_obj.adress])
+        workplace_data = serializers.serialize('json', [cust_obj.workplace])
+        workplace_adress_data = serializers.serialize('json', [cust_obj.workplace.adress])
+
+        json_list = [customer_data, customer_adress, workplace_data, workplace_adress_data]
+        data_2 = []
+        for item in json_list:
+            data_2.extend(json.loads(item))
+
+        merged_json = json.dumps(data_2, indent=2)
+
+        context = {
+
+            'customer' : merged_json
+        }
+
+        # return render(request, 'core/test.html', context=context)
+        # return JsonResponse(context, safe=False, json_dumps_params={'indent':'    '})
+        return HttpResponse(merged_json, content_type='application/json')
+    

@@ -1,4 +1,3 @@
-from tokenize import Number
 from .models import Customer, Adress, UserInfo, Workplace, Product
 from django import forms
 from django.forms.widgets import *
@@ -12,10 +11,10 @@ class CustCreateAdressForm(forms.ModelForm):
         fields = '__all__'
         model = Adress
         widgets = {
-            'street': TextInput(attrs={'class': 'w3-input w3-border'}),
-            'city' : TextInput(attrs={'class': 'w3-input w3-border'}),
-            'building_no': TextInput(attrs={'class': 'w3-input w3-border'}),
-            'zip_code': NumberInput(attrs={'class': 'w3-input w3-border'}),
+            'street': TextInput(attrs={'class': 'pyl-input'}),
+            'city' : TextInput(attrs={'class': 'pyl-input'}),
+            'building_no': TextInput(attrs={'class': 'pyl-input'}),
+            'zip_code': NumberInput(attrs={'class': 'pyl-input'}),
         }
 
         labels = {
@@ -36,22 +35,22 @@ class CustCreatePersonalInfo(forms.ModelForm):
                 'id_passport', 'martial_status', 'phone_no', 'email', 'esd', 'work_status', 'salaty', 'position']
         model = Customer
         widgets = {
-            'first_name': TextInput(attrs={'class': 'w3-input w3-border'}),
-            'last_name': TextInput(attrs={'class': 'w3-input w3-border'}),
-            'dob': DateInput(format='%Y-%m-%d', attrs={'class': 'w3-input w3-border', 
+            'first_name': TextInput(attrs={'class': 'pyl-input'}),
+            'last_name': TextInput(attrs={'class': 'pyl-input'}),
+            'dob': DateInput(format='%Y-%m-%d', attrs={'class': 'pyl-input', 
                                     'type': 'date'}),
-            'gender': Select(attrs={'class': 'w3-input w3-border'}),
-            'social_security_no_pesel' : NumberInput(attrs={'class': 'w3-input w3-border'}),
-            'id_passport' : TextInput(attrs={'class': 'w3-input w3-border'}),
-            'martial_status': Select(attrs={'class': 'w3-input w3-border'}),
-            'work_status' : Select(attrs={'class': 'w3-input w3-border'}),
-            'esd': DateInput(format='%Y-%m-%d', attrs={'class': 'w3-input w3-border', 
+            'gender': Select(attrs={'class': 'pyl-input'}),
+            'social_security_no_pesel' : NumberInput(attrs={'class': 'pyl-input', 'onfocusout': 'checkPesel()'}),
+            'id_passport' : TextInput(attrs={'class': 'pyl-input'}),
+            'martial_status': Select(attrs={'class': 'pyl-input'}),
+            'work_status' : Select(attrs={'class': 'pyl-input'}),
+            'esd': DateInput(format='%Y-%m-%d', attrs={'class': 'pyl-input', 
                                     'type': 'date'}),
-            'phone_no' : NumberInput(attrs={'class': 'w3-input w3-border'}),
-            'email' : EmailInput(attrs={'class': 'w3-input w3-border'}),
-            'salaty' : NumberInput(attrs={'class': 'w3-input w3-border'}),
-            'position': TextInput(attrs={'class': 'w3-input w3-border'}),
-            # 'created_by': Select(attrs={'class': 'w3-input w3-border'})
+            'phone_no' : NumberInput(attrs={'class': 'pyl-input'}),
+            'email' : EmailInput(attrs={'class': 'pyl-input'}),
+            'salaty' : NumberInput(attrs={'class': 'pyl-input'}),
+            'position': TextInput(attrs={'class': 'pyl-input'}),
+            # 'created_by': Select(attrs={'class': 'pyl-input'})
         }
         labels = {
             'first_name':'First Name',
@@ -71,17 +70,24 @@ class CustCreatePersonalInfo(forms.ModelForm):
 
         }
 
+class CustCreatePersonalInfoUpdate(CustCreatePersonalInfo):
+    class Meta(CustCreatePersonalInfo.Meta):
+        exclude = ('first_name', 'gender', 'dob', 'social_security_no_pesel')
+
 class CustomWorkplaceForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super(CustomWorkplaceForm, self).__init__(*args, **kwargs)
+        self.auto_id = 'workplace_id_%s'
 
     class Meta():
         model = Workplace
         exclude = ('adress',) 
-
         widgets = {
-            'name' : TextInput(attrs={'class': 'w3-input w3-border'}),
-            'id_nip': NumberInput(attrs={'class': 'w3-input w3-border'}),
-            'phone_no':  NumberInput(attrs={'class': 'w3-input w3-border'}),
-            'email': EmailInput(attrs={'class': 'w3-input w3-border'}),
+            'name' : TextInput(attrs={'class': 'pyl-input'}),
+            'id_nip': NumberInput(attrs={'class': 'pyl-input'}),
+            'phone_no':  NumberInput(attrs={'class': 'pyl-input'}),
+            'email': EmailInput(attrs={'class': 'pyl-input'}),
         }
 
         labels = {
