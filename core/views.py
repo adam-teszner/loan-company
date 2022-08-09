@@ -79,13 +79,21 @@ def custom_customer(request):
             customer_adr = serializers.serialize('json', [cust_obj.adress])
             workplace_data = serializers.serialize('json', [cust_obj.workplace])
             workplace_adress_data = serializers.serialize('json', [cust_obj.workplace.adress])
+            customer_creator = UserInfo.objects.get(user=cust_obj.created_by.id)
 
             json_list = [customer_data, customer_adr, workplace_data, workplace_adress_data]
             data_2 = []
             for item in json_list:
                 data_2.extend(json.loads(item))
 
+            data_2.append({
+                'creator_first_name' : customer_creator.first_name,
+                'creator_last_name' : customer_creator.last_name
+                })
+
             merged_json = json.dumps(data_2, indent=2)
+
+            # print(merged_json)
             return HttpResponse(merged_json, content_type='application/json')
 
         except:
