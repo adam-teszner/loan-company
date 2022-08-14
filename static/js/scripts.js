@@ -228,9 +228,11 @@ function checkPesel () {
                             for (let child_no = 0; child_no < chng_value.children.length; child_no++) {
                                 if (chng_value.children[child_no].value === value) {
                                     for (let c of chng_value.children) {
-                                        c.removeAttribute('selected')
+                                        // CHANGING THIS FOR SAFARI COMPATIBILITY !!!
+                                        // c.removeAttribute('selected')
+                                        c.selected = false;
                                     }
-                                    chng_value.children[child_no].setAttribute('selected', '');
+                                    chng_value.children[child_no].selected = true;
                                 }else{} 
                             }
                         }else{}
@@ -256,9 +258,11 @@ function checkPesel () {
                             for (let child_no = 0; child_no < chng_value.children.length; child_no++) {
                                 if (chng_value.children[child_no].value === value) {
                                     for (let c of chng_value.children) {
-                                        c.removeAttribute('selected')
+                                        // CHANGING THIS FOR SAFARI COMPATIBILITY !!!
+                                        // c.removeAttribute('selected')
+                                        c.selected = false;
                                     }
-                                    chng_value.children[child_no].setAttribute('selected', '');
+                                    chng_value.children[child_no].selected = true;
                                 }else{} 
                             }
                         }else{}
@@ -287,6 +291,9 @@ function checkPesel () {
 
 }
 
+// in SAFARI - removeAttribute/setAttribute (in case of SELECTED option in form) doesnt update the website..
+// Use .selected true/false instead
+
 
 function resetForm() {
     let inputs = document.getElementsByTagName('input');
@@ -300,9 +307,50 @@ function resetForm() {
 
     for (let s = 0; s < selects.length; s++) {
         for (let c = 0; c < selects[s].childElementCount; c++){
-            selects[s].children[c].removeAttribute('selected');
+            selects[s].children[c].selected = false;
         }
-        selects[s].children[0].setAttribute('selected', '');
+        selects[s].children[0].selected = false;
 
     }
 }
+
+
+
+function expandTable (id) {
+
+    // console.log(id);
+    
+    document.getElementById('expanded-'+id).classList.add('pyl-hidden');
+    document.getElementById('collapsed-'+id).classList.remove('pyl-hidden');
+    
+    let tableAnimation = document.getElementById('table-'+id);
+    tableAnimation.classList.remove('pyl-hidden');
+    tableAnimation.classList.add('pyl-unfold');
+
+    tableAnimation.addEventListener('animationend', () => {
+        tableAnimation.classList.remove('pyl-unfold');
+    }, {once: true}) //KLUCZ !! bo cały czas działał event listener ! 
+
+}
+
+function shrinkTable (id) {
+
+    document.getElementById('collapsed-'+id).classList.add('pyl-hidden');
+    document.getElementById('expanded-'+id).classList.remove('pyl-hidden');
+    
+    let tableAnimation = document.getElementById('table-'+id);
+    tableAnimation.classList.add('pyl-fold');
+
+    
+    tableAnimation.addEventListener('animationend', () => {
+        tableAnimation.classList.add('pyl-hidden');
+        tableAnimation.classList.remove('pyl-fold');
+        
+    }, {once: true})
+
+    
+}
+
+
+
+

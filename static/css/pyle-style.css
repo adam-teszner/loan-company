@@ -7,6 +7,8 @@
     --color-1-2-alt:rgb(255, 230, 160);
     --ad-one-color: #52658F;
     --ad-two-color: #E8E8E8;
+    --ad-two-color-darker: #c9c9c9;
+    --font-raj: 'Rajdhani', sans-serif;
 
     
 }
@@ -24,9 +26,16 @@ body {
 }
 
 .pyl-container {
-    margin: .5em;
-    padding: .5em;
+    /* margin: .5em; */
+    /* padding: .5em; */
+    max-width: 1350px;
+    margin-left: auto;
+    margin-right: auto;
 
+}
+
+.pyl-padding {
+    padding: .5em;
 }
 
 .material-icons-outlined {
@@ -449,10 +458,22 @@ a.fill-th {
     background-color: var(--secondary-backgroud-color);
 }
 
-.form-header h1 {
+.form-header > h1, .form-header > h2  {
     text-align: center;
     font-weight: 200;
     color: whitesmoke;
+    margin: 0;
+    padding: .5em;
+}
+
+.form-header > svg {
+    float:left;
+    margin: 0;
+    padding-top: .5em;
+}
+
+.form-header > svg.right {
+    float:right;
 }
 
 .pyl-form {
@@ -462,29 +483,32 @@ a.fill-th {
 }
 
 .form-content {
-    display: grid;
+    /* display: grid; */
     gap: 0.5em;
-    grid-template-columns: repeat(auto-fill, minmax(20em, 32%));
+    /* grid-template-columns: repeat(auto-fill, minmax(20em, 32%)); */
     padding: 2em 1em;
-    justify-content: space-evenly;
+    /* justify-content: space-evenly; */
+
+    /* Firefox incompatibility ... changing to flex */
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
 }
 
-
-.left {
-    flex-basis: 40%;
-}
-
-.right  {
-    flex-basis: 60%;
-    background-color: var(--ad-one-color);
-    color: white;
-}
 
 .form-fields {
-    display: grid;
-    align-items: center;
-    align-content: center;
-    justify-items: stretch;
+    /* display: grid; */
+    /* align-items: center; */
+    /* align-content: center; */
+    /* justify-items: stretch; */
+
+    /* FF compatibility - changing to flex */
+
+    display: flex;
+    align-items: stretch;
+    flex-direction: column;
+    flex: 2 1 18em;
 }
 
 @media only screen and (max-width: 620px) {
@@ -515,7 +539,7 @@ a.fill-th {
     color: white;
 }
 
-.pyl-btn {
+/* .pyl-btn {
     display: inline-block;
     border: none;
     border-radius: 13px;
@@ -524,15 +548,30 @@ a.fill-th {
     padding: 0.4em 0.7em;
     font-weight: 800;
     font-size: 15px;
-    /* font-family: 'Rajdhani', sans-serif; */
     font-family: 'Ubuntu';
     letter-spacing: 2px;
     cursor: pointer;
     transition: 0.1s;
+} */
+
+.pyl-btn {
+    display: inline-block;
+    border: 1px solid var(--secondary-backgroud-color);
+    border-radius: 4px;
+    color: var(--secondary-backgroud-color);
+    font-weight: 200;
+    font-size: 15px;
+    font-family: 'Ubuntu';
+    letter-spacing: 3px;
+    cursor: pointer;
+    transition: 0.1s;
+    padding: .4em .8em;
 }
 
+
 .pyl-btn:hover {
-    background-color: var(--ad-one-color);
+    background-color: var(--secondary-backgroud-color);
+    color: whitesmoke;
     /* transition: 0.3s; */
 }
 
@@ -549,8 +588,9 @@ a.fill-th {
 .step-panel > .step-color {
     color: white;
     background-color: var(--secondary-backgroud-color);
-    border: 0px;
-    outline: 3px solid red;
+    border: 3px solid red;
+    border-radius: 60%;
+    /* outline: 3px solid red; */
     text-shadow: 0px 0px 3px black;
     font-weight: 800;
 }
@@ -579,7 +619,8 @@ a.fill-th {
 
 .step-panel > .line-color {
     background-color: var(--secondary-backgroud-color);
-    outline: 1px solid red;
+    /* outline: 1px solid red; */
+    border: 1px solid red;
 
 }
 
@@ -605,7 +646,7 @@ a.fill-th {
     outline: none;
  }
 
- .pyl-input:focus {
+ .form-fields > .pyl-input:focus {
     border: 1px solid var(--color-1-alt);
  }
 
@@ -621,6 +662,7 @@ a.fill-th {
     /* background-color: rgb(0,0,0); */
     background-color: rgba(0,0,0,0.4);
     backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
 }
 
 .pyl-modal {
@@ -689,9 +731,10 @@ a.fill-th {
 .pyl-modal-left, .pyl-modal-right {
     display: flex;
     flex-direction: column;
+    font-weight: 400;
 }
 
-.pyl-modal-right {
+.pyl-modal-left {
     font-weight: 600;
 }
 
@@ -703,7 +746,7 @@ a.fill-th {
 
 .refresh-form {
     float: left;
-    margin-top: 1em;
+    margin-top: .5em;
     cursor: pointer;
 }
 
@@ -741,4 +784,141 @@ a.fill-th {
 .pyl-tooltip:hover::before {
     display: block;
 }
+.pyl-box-content {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    /* align-items: center; */
+    flex-wrap: wrap;
+    column-gap: 1.5em;
+}
 
+.pyl-information-box {
+    background-color: var(--ad-two-color);
+    color: var(--secondary-backgroud-color);
+    width: auto;
+    min-width: max-content;
+    padding: .5em .5em 1em .5em;
+    margin: .5em 0;
+    flex: 1 1 20%;
+    
+}
+
+.pyl-box {
+    border-bottom: 1px solid var(--ad-two-color-darker);
+    padding: .2em;
+}
+
+.pyl-box-data {
+    margin: 0 .8em;
+}
+
+.pyl-box-header > h2 {
+    font-family: var(--font-raj);
+    font-weight: 400;
+    text-align: center;
+    padding: 0 1em;
+}
+
+.left {
+    font-weight: 400;
+    
+    
+}
+
+.right  {
+    font-weight: 200;
+    float: right;
+    margin-left: 3em;
+    
+}
+
+.pyl-product-table {
+    background-color: whitesmoke;
+    border: 0px solid black;
+    margin: 0.5em;
+    padding: 0.5em;
+    font-family: 'Rajdhani';
+}
+
+.pyl-product-table > tbody > tr:nth-child(odd) {
+    background-color: white;
+}
+
+.pyl-product-table > thead > tr > th {
+    font-weight: 600;
+}
+
+.products {
+    flex: 1 1 47%;
+    padding-bottom: .1em;
+    align-items: baseline;
+}
+
+.pyl-unfold {
+
+    animation: open .3s ease-in-out forwards;
+    transform-origin: top;
+}
+
+@keyframes open {
+    /* from {opacity: 1;} */
+    /* to {opacity: 0;} */
+    /* from {height: max-content;}
+    to {height: 2em;} */
+    0% {
+        transform: scaleY(0);
+    }
+    100% {
+        transform: scaleY(1);
+    }
+
+
+}
+
+.pyl-fold {
+    animation: close .3s ease-in-out forwards;
+    transform-origin: top;
+}
+
+@keyframes close {
+    100% {
+        transform: scaleY(0);
+    }
+    0% {
+        transform: scaleY(1);
+    }
+}
+
+.pyl-expand {
+    text-align: center;
+    font-family: 'Rajdhani';
+    font-weight: 700;
+    border: none;
+    padding-top: .5em;
+}
+
+.pyl-expand > span > svg {
+    vertical-align: bottom;
+
+}
+
+.pyl-expand > span {
+    cursor: pointer;
+    padding: .4em .4em .1em .1em;
+}
+
+.pyl-expand > span:hover {
+    color: var(--ad-one-color);
+    /* border-right: 3px solid var(--ad-one-color);
+    padding-right: .4em;
+    margin-right: -11px;
+    padding-right: 8px; */
+    background-color: whitesmoke;
+    
+
+}
+
+.pyl-hidden {
+    display: none;
+}

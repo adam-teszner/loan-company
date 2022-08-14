@@ -12,7 +12,7 @@ class ProductAdmin(admin.ModelAdmin):
                     'amount_requested', 'total_amount', 'loan_period']
     readonly_fields = ['created_date', 'id', 'days_since_create',
                     'total_amount', 'installments',
-                    'installement_schedule']
+                    'installement_schedule', 'installment_dict']
 
 
 class UserInfoAdmin(admin.ModelAdmin):
