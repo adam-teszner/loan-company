@@ -9,6 +9,7 @@
         </div>
         <form class="pyl-form" method='post' id='form-ajax'>
             {% csrf_token %}
+            {% comment %} {{ customer_form.errors }} {% endcomment %}
             <div class="form-header">
                 <div class="pyl-tooltip" data-text='Click here if You wish to start over'>
                     <svg class ='refresh-form' xmlns="http://www.w3.org/2000/svg" height="48" width="48" fill='whitesmoke' onclick='resetForm()'>

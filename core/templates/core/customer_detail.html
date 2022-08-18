@@ -35,7 +35,7 @@
         {% comment %} <svg class='right' xmlns="http://www.w3.org/2000/svg" height="48" width="48"><path d="M23.3 33h1.55v-8.15H33V23.3h-8.15V15H23.3v8.3H15v1.55h8.3Zm.7 9q-3.75 0-7-1.425T11.3 36.7Q8.85 34.25 7.425 31 6 27.75 6 24t1.425-7.025q1.425-3.275 3.875-5.7 2.45-2.425 5.7-3.85Q20.25 6 24 6t7.025 1.425q3.275 1.425 5.7 3.85 2.425 2.425 3.85 5.7Q42 20.25 42 24q0 3.75-1.425 7t-3.85 5.7q-2.425 2.45-5.7 3.875Q27.75 42 24 42Zm.05-1.55q6.8 0 11.6-4.8t4.8-11.7q0-6.8-4.775-11.6T24 7.55q-6.85 0-11.65 4.775Q7.55 17.1 7.55 24q0 6.85 4.8 11.65 4.8 4.8 11.7 4.8ZM24 24Z"/></svg> {% endcomment %}
     </div>
     <div class='pyl-box-content'>
-        <div class="pyl-information-box">
+        <div class="pyl-information-box personal-info">
             <div class="pyl-box-header">
                 <h2>Basic information</h2>
             </div>
@@ -48,8 +48,11 @@
                 <div class="pyl-box left">PESEL<span class="right">{{customer.social_security_no_pesel}}</span></div>
                 <div class="pyl-box left">ID or Passport<span class="right">{{customer.id_passport}}</span></div>
             </div>
+            <div class="pyl-box-buttons">
+                <a href="{% url 'customer_update' pk=customer.pk %}?mode=basic"><button id='basic' class="pyl-btn">Edit</button></a>
+            </div>
         </div>
-        <div class="pyl-information-box">
+        <div class="pyl-information-box personal-info">
             <div class="pyl-box-header">
                 <h2>Contact Information</h2>
             </div>
@@ -61,8 +64,11 @@
                 <div class="pyl-box left">Phone no.<span class="right">{{customer.phone_no}}</span></div>
                 <div class="pyl-box left">Email<span class="right">{{customer.email}}</span></div>
             </div>
+            <div class="pyl-box-buttons">
+                <a href="{% url 'customer_update' pk=customer.pk %}?mode=contact"><button id='contact' class="pyl-btn">Edit</button></a>
+            </div>
         </div>
-        <div class="pyl-information-box">
+        <div class="pyl-information-box personal-info">
             <div class="pyl-box-header">
                 <h2>Income Information</h2>
             </div>
@@ -77,6 +83,9 @@
                 <div class="pyl-box left">Zip-code<span class="right">{{customer.workplace.adress.zip_code}}</span></div>
                 <div class="pyl-box left">Phone no.<span class="right">{{customer.workplace.phone_no}}</span></div>
                 <div class="pyl-box left">Email<span class="right">{{customer.workplace.email}}</span></div>
+            </div>
+            <div class="pyl-box-buttons">
+                <button id='income' class="pyl-btn">Edit</button>
             </div>
         </div>
     </div>
@@ -134,6 +143,33 @@
             </div>
         </div>
         {% endfor %}
+    </div>
+</div>
+
+
+{% comment %} Edit information Modal {% endcomment %}
+
+<div class="pyl-modal-background" id='pyl-modal'>
+    <div class="pyl-modal pyl-card">
+        <h1>Customer already exists !</h1>
+        <div class="pyl-modal-text">
+        
+        </div>
+        <div class='pyl-modal-data'>
+            <div class="pyl-modal-left">
+                <span>First Name</span>
+                <span>Last Name</span>
+                <span>PESEL</span>
+                <span>Created by</span>    
+            </div>
+            <div class="pyl-modal-right">
+                <span id='modal-first_name'>First Name</span>
+                <span id='modal-last_name'>Last Name</span>
+                <span id='modal-pesel'>PESEL</span>
+                <span id='modal-created_by'>Created by</span> 
+            </div>
+        </div>
+        <span class="pyl-modal-button"><button class="pyl-btn" id='pyl-modal-ok'>OK</button></span>        
     </div>
 </div>
 {% endblock content %}

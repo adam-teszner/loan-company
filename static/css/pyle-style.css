@@ -813,6 +813,11 @@ a.fill-th {
     margin: 0 .8em;
 }
 
+.pyl-box-buttons {
+    padding-top: 1em;
+    margin: 1em;
+}
+
 .pyl-box-header > h2 {
     font-family: var(--font-raj);
     font-weight: 400;
@@ -847,6 +852,12 @@ a.fill-th {
 
 .pyl-product-table > thead > tr > th {
     font-weight: 600;
+}
+
+.personal-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .products {

@@ -314,7 +314,7 @@ function resetForm() {
     }
 }
 
-
+// animation for expanding/collapsing tables
 
 function expandTable (id) {
 
