@@ -1,7 +1,7 @@
 import json
 from django.urls import reverse
 from django.shortcuts import render, get_object_or_404, redirect
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.template.response import TemplateResponse
 from django.views.generic import (CreateView, DetailView, ListView,
                                 TemplateView, UpdateView)
@@ -16,34 +16,13 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-# Create your views here.
+from django.forms.models import model_to_dict
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
 
-# def include_user_info(request):
-#     user_id = request.user.id
-#     user_name = UserInfo.objects.get(user=user_id)
-#     context = {
-#         'user_name': user_name,
-#         'test_field': 'Tralalala'
-#     }
-
-#     return render(request, 'registration/login_usr_info.html', context=context)
-
-# Wrocic do INCLUDE TEMPLATE - ale w tym przypadku zbędne
 
 def index(request): 
   
-    # try:
-    #     user_id = request.user.id
-    #     user_name = UserInfo.objects.get(user=user_id)
-    #     context = {
-    #         'user_name': user_name.first_name
-    #     }
-    # except:
-    #     context = {
-    #         'user_name': request.user.username
-    #     }
-
-    # Jest zrobione jako custom_simple_template_tag
 
     return render(request, 'base.html')
 
@@ -391,3 +370,38 @@ class jsonTestView(View):
         # return JsonResponse(context, safe=False, json_dumps_params={'indent':'    '})
         return HttpResponse(merged_json, content_type='application/json')
     
+
+class restApi(View):
+
+    def get(self, *args, **kwargs):
+
+        print(self.request.GET)
+        print(self.request.POST)
+
+        body = self.request.body  # byte string of json data
+        data = {}
+
+        try:
+            data = json.loads(body) # string of Json data > python dict
+        except:
+            pass
+        print(data)
+
+        data['params'] = dict(self.request.GET)
+        data['headers'] = dict(self.request.headers)
+        data['content_type'] = self.request.content_type
+
+        return JsonResponse(data)
+
+
+@api_view(['GET'])
+def api_home(request, *args, **kwargs):
+
+    '''
+    DRF api view
+    '''
+    model_data = Customer.objects.all().order_by('?').first() # random ordering, first item only
+    data = {}
+
+    data = model_to_dict(model_data, fields = ['first_name', 'last_name', 'dob', 'adress'])
+    return Response(data)
