@@ -6,81 +6,107 @@ from django.forms.widgets import *
 
 
 class CustCreateAdressForm(forms.ModelForm):
+
+
+    # dobry sposób na nadanie jakiegos atrybutu wszystkim polom !
+    # zamiast dictionary jak nizej...
+    def __init__(self, *args, **kwargs):
+        super(CustCreateAdressForm, self).__init__(*args, **kwargs)
+        for c in self.fields.keys():
+            self.fields[c].widget.attrs.update({
+                'class' : 'pyl-input'
+            })
+
+
     class Meta():
 
         fields = '__all__'
         model = Adress
-        widgets = {
-            'street': TextInput(attrs={'class': 'w3-input w3-border'}),
-            'city' : TextInput(attrs={'class': 'w3-input w3-border'}),
-            'building_no': TextInput(attrs={'class': 'w3-input w3-border'}),
-            'zip_code': NumberInput(attrs={'class': 'w3-input w3-border'}),
-        }
 
         labels = {
-            'street' : 'Street',
-            'city': 'City',
+            # 'street' : 'Street',
+            # 'city': 'City',
             'building_no' : 'Building no/flat no',
-            'zip_code' : 'Zip Code',
+            # 'zip_code' : 'Zip Code',
         }
 
 class CustCreatePersonalInfo(forms.ModelForm):
-    # dob = forms.DateField(input_formats=['%Y-%m-%d'])
-    # esd = forms.DateField(input_formats=['%Y-%m-%d'])
+
+
+
+    def __init__(self, *args, **kwargs):
+        super(CustCreatePersonalInfo, self).__init__(*args, **kwargs)
+
+
+        for name in self.fields.keys():
+            self.fields[name].widget.attrs.update({
+                'class' : 'pyl-input'
+            })
+
 
 
     class Meta():
 
         fields = ['first_name', 'last_name', 'dob', 'gender', 'social_security_no_pesel',
-                'id_passport', 'martial_status', 'phone_no', 'email', 'esd', 'work_status']
+                'id_passport', 'martial_status', 'phone_no', 'email', 'esd', 'work_status', 'salaty', 'position']
         model = Customer
         widgets = {
-            'first_name': TextInput(attrs={'class': 'w3-input w3-border'}),
-            'last_name': TextInput(attrs={'class': 'w3-input w3-border'}),
-            'dob': DateInput(format='%Y-%m-%d', attrs={'class': 'w3-input w3-border', 
+            # 'first_name': TextInput(attrs={'class': 'pyl-input'}),
+            # 'last_name': TextInput(attrs={'class': 'pyl-input'}),
+            'dob': DateInput(format='%Y-%m-%d', attrs={ 
                                     'type': 'date'}),
-            'gender': Select(attrs={'class': 'w3-input w3-border'}),
-            'social_security_no_pesel' : NumberInput(attrs={'class': 'w3-input w3-border'}),
-            'id_passport' : TextInput(attrs={'class': 'w3-input w3-border'}),
-            'martial_status': Select(attrs={'class': 'w3-input w3-border'}),
-            'work_status' : Select(attrs={'class': 'w3-input w3-border'}),
-            'esd': DateInput(format='%Y-%m-%d', attrs={'class': 'w3-input w3-border', 
+            'gender': Select(attrs={'class': 'pyl-input'}),
+            'social_security_no_pesel' : NumberInput(attrs={'onfocusout': 'checkPesel()'}),
+            # 'id_passport' : TextInput(attrs={'class': 'pyl-input'}),
+            # 'martial_status': Select(attrs={'class': 'pyl-input'}),
+            # 'work_status' : Select(attrs={'class': 'pyl-input'}),
+            'esd': DateInput(format='%Y-%m-%d', attrs={
                                     'type': 'date'}),
-            'phone_no' : NumberInput(attrs={'class': 'w3-input w3-border'}),
-            'email' : EmailInput(attrs={'class': 'w3-input w3-border'}),
-            # 'created_by': Select(attrs={'class': 'w3-input w3-border'})
+            # 'phone_no' : NumberInput(attrs={'class': 'pyl-input'}),
+            # 'email' : EmailInput(attrs={'class': 'pyl-input'}),
+            # 'salaty' : NumberInput(attrs={'class': 'pyl-input'}),
+            # 'position': TextInput(attrs={'class': 'pyl-input'}),
+            # 'created_by': Select(attrs={'class': 'pyl-input'})
         }
         labels = {
-            'first_name':'First Name',
-            'last_name': 'Last Name',
-            'dog' : 'Date of Birth',
-            'gender' : 'Gender',
+            # 'first_name':'First Name',
+            # 'last_name': 'Last Name',
+            # 'dog' : 'Date of Birth',
+            'gender' : 'Sex',
             'social_security_no_pesel': 'PESEL',
             'id_passport' : 'ID no. or Passport no.',
-            'martial_status': 'Martial Status',
+            # 'martial_status': 'Martial Status',
             'phone_no' : 'Mobile phone number',
             'email' : 'Email adress',
-            'work_status' : 'Working status',
+            'work_status' : 'Income source',
             'esd' : 'Employment start date',
+            'salaty': 'Net Income',
+            'position' : 'Job Position',
             # 'created_by' : 'Created By',
 
         }
 
+class CustCreatePersonalInfoUpdate(CustCreatePersonalInfo):
+    class Meta(CustCreatePersonalInfo.Meta):
+        exclude = ('first_name', 'gender', 'dob', 'social_security_no_pesel')
+
 class CustomWorkplaceForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super(CustomWorkplaceForm, self).__init__(*args, **kwargs)
+        self.auto_id = 'workplace_id_%s'
+        for name in self.fields.keys():
+            self.fields[name].widget.attrs.update({
+                'class' : 'pyl-input'
+            })
 
     class Meta():
         model = Workplace
         exclude = ('adress',) 
 
-        widgets = {
-            'name' : TextInput(attrs={'class': 'w3-input w3-border'}),
-            'id_nip': NumberInput(attrs={'class': 'w3-input w3-border'}),
-            'phone_no':  NumberInput(attrs={'class': 'w3-input w3-border'}),
-            'email': EmailInput(attrs={'class': 'w3-input w3-border'}),
-        }
-
         labels = {
-            'id_nip': 'NIP'
+            'id_nip': 'NIP',
+            'name': 'Company Name',
         }
         
 
