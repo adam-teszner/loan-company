@@ -1,5 +1,4 @@
 import json
-from sys import prefix
 from django.urls import reverse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, HttpResponseRedirect
@@ -232,30 +231,14 @@ class CustomerDetailView(LoginRequiredMixin, DetailView):
     template_name = 'core/customer_detail.html'
 
 
-# class CustomerDetailView(LoginRequiredMixin, TemplateView):
-    
-#     template_name = 'core/customer_detail.html'
-    
-#     def get_context_data(self, pk, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         context['customer'] = Customer.objects.get(pk=pk)
-#         # print(context)
-#         return context
-
-
 
 class CustomerUpdateView(LoginRequiredMixin, UpdateView):
     template_name = 'core/customer_update.html'
-    # fields = '__all__'
-    # model = Adress
-    # form_class = CustCreateAdressForm
-    # field_choice = {
-    #     'some' : ['first_name', 'last_name'],
-    # }
-
 
 
     ### The same as model = Customer ###
+
+
     # def get_object(self):
         # self.object = Customer.objects.get(pk=self.kwargs['pk'])
         # print(self.object)
@@ -265,6 +248,7 @@ class CustomerUpdateView(LoginRequiredMixin, UpdateView):
     # fields = field_choice['some']
     # initial = {'first_name' : Customer.objects.get(pk=self.kwargs['pk']).first_name}
 
+    ### End ###
     
     basic_form = CustCreatePersonalInfoUpdate
     adress_form = CustCreateAdressForm
@@ -277,16 +261,29 @@ class CustomerUpdateView(LoginRequiredMixin, UpdateView):
         mode = self.request.GET.getlist('mode', default=None)
         object = Customer.objects.get(pk=self.kwargs['pk'])
 
-        basic_f_inst = self.adress_form()
-        initial_dict = {}
-        for f in basic_f_inst.fields.keys():
-            initial_dict[str(f)] = getattr(object.adress, f)
-            print(f)
-        print(initial_dict)
+        basic_form_inst = self.basic_form()
+        adress_form_inst = self.adress_form()
+        workplace_form_inst = self.workplace_form()
+        
+        # basic_initial = {}
+        # for f in basic_form_inst.fields.keys():
+        #     basic_initial[str(f)] = getattr(object, f)
+
+        basic_initial = { str(f): getattr(object, f) for f in basic_form_inst.fields.keys() }
+        adress_initial = { str(f): getattr(object.adress, f) for f in adress_form_inst.fields.keys() }
+        workplace_initial = { str(f): getattr(object.workplace, f) for f in workplace_form_inst.fields.keys() }
+        workplace_adress_initial = { str(f): getattr(object.workplace.adress, f) for f in adress_form_inst.fields.keys() }
 
         context_var = {
-            'basic': { 'form' : self.basic_form(initial=initial_dict) },
-            'contact' : {'form' : self.adress_form(initial=initial_dict) },
+            'basic': { 
+                'basic' : self.basic_form(initial=basic_initial) },
+            'contact' : {
+                'adress' : self.adress_form(initial=adress_initial),
+                'form': self.basic_form(initial=basic_initial),
+                },
+            'workplace' : {
+                'form': self.basic_form(initial=basic_initial)
+                }
     }
         
 
@@ -301,7 +298,10 @@ class CustomerUpdateView(LoginRequiredMixin, UpdateView):
             print('dwa')
             print(mode)
             print(request.GET)
-            return render(request, self.template_name, context=context_var['contact'])
+            # return render(request, self.template_name, context=context_var['contact'])
+            print(context_var)
+            print(basic_initial)
+            return HttpResponse(context_var['basic'], content_type='application/text')
 
         elif mode[0] == 'workplace' and len(mode) == 1:
             print('cztery')
@@ -319,27 +319,26 @@ class CustomerUpdateView(LoginRequiredMixin, UpdateView):
 
     def post(self, request, pk):
         object = Customer.objects.get(pk=self.kwargs['pk'])
-        form1 = self.basic_form(request.POST, instance=object)
-        if form1.is_valid():
-            form1.save()
-            # print(form1)
-            return HttpResponseRedirect(reverse('customer_detail', kwargs={'pk': pk }))
-        form2 = self.adress_form(request.POST, instance=object.adress)
-        if form2.is_valid():
-            form2.save()
-            return HttpResponseRedirect(reverse('customer_detail', kwargs={'pk': pk }))
+        basic_form_post = self.basic_form(request.POST, instance=object)
+        adress_form_post = self.adress_form(request.POST, instance=object.adress)
+        workplace_form_post = self.workplace_form(request.POST, instance=object.workplace)
+        workplace_adress_form_post = self.adress_form(request.POST, instance=object.workplace.adress)
+        if basic_form_post.is_valid():
+            basic_form_post.save()
+            
+        if adress_form_post.is_valid():
+            adress_form_post.save()
+        
+        if workplace_form_post.is_valid():
+            workplace_form_post.save()
+
+        if workplace_adress_form_post.is_valid():
+            workplace_adress_form_post.save()
+
+        return HttpResponseRedirect(reverse('customer_detail', kwargs={'pk':pk}))
+        # return redirect('customer_detail', pk=pk)
 
 
-
-# class CustomerUpdateView(LoginRequiredMixin, View):
-
-#     template_name = 'core/customer_update.html'
-#     update_customer = CustCreatePersonalInfoUpdate
-#     initial = {'update_customer': update_customer }
-
-#     def get(self, request, pk):
-#         self.update_customer(initial=self.initial)
-#         return render(request, self.template_name, self.initial)
 
 
 class AddNewProductView(LoginRequiredMixin, View):
