@@ -1,16 +1,18 @@
-{%extends 'base.html' %}
-{% block content %}
+    {% extends 'core/customer_detail.html' %}
+    {% block content %}
+{% comment %} <div class="pyl-modal-background" id='pyl-modal'> {% endcomment %}
+    <div class="pyl-modal pyl-card">
+        <h1>test</h1>
+        <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        {{ adress.as_p}}
+        <button class="submit">Sub</button>
+        </form>
+    </div>
+{% comment %} </div> {% endcomment %}
+    {% endblock content %}
 
-<h1>test</h1>
-<form method="post">
-{% csrf_token %}
-{{ form.as_p }}
-<button class="submit">Sub</button>
-</form>
 
 
 
-
-
-
-{% endblock content %}
