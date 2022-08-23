@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 {% comment %} {% block title %}
 <h4>{{customer}}</h4>
 {% endblock title %} {% endcomment %}
@@ -65,7 +66,7 @@
                 <div class="pyl-box left">Email<span class="right">{{customer.email}}</span></div>
             </div>
             <div class="pyl-box-buttons">
-                <a href="{% url 'customer_update' pk=customer.pk %}?mode=contact"><button id='contact' class="pyl-btn">Edit</button></a>
+                <a href="{% url 'customer_update' pk=customer.pk %}?mode=contact"><button onclick='openModal()' id='contact' class="pyl-btn">Edit</button></a>
             </div>
         </div>
         <div class="pyl-information-box personal-info">
@@ -85,7 +86,7 @@
                 <div class="pyl-box left">Email<span class="right">{{customer.workplace.email}}</span></div>
             </div>
             <div class="pyl-box-buttons">
-                <button id='income' class="pyl-btn">Edit</button>
+                <button id='income' class="pyl-btn" data-url="{% url 'customer_update' pk=customer.pk %}?mode=contact">Edit</button>
             </div>
         </div>
     </div>
@@ -147,29 +148,5 @@
 </div>
 
 
-{% comment %} Edit information Modal {% endcomment %}
 
-<div class="pyl-modal-background" id='pyl-modal'>
-    <div class="pyl-modal pyl-card">
-        <h1>Customer already exists !</h1>
-        <div class="pyl-modal-text">
-        
-        </div>
-        <div class='pyl-modal-data'>
-            <div class="pyl-modal-left">
-                <span>First Name</span>
-                <span>Last Name</span>
-                <span>PESEL</span>
-                <span>Created by</span>    
-            </div>
-            <div class="pyl-modal-right">
-                <span id='modal-first_name'>First Name</span>
-                <span id='modal-last_name'>Last Name</span>
-                <span id='modal-pesel'>PESEL</span>
-                <span id='modal-created_by'>Created by</span> 
-            </div>
-        </div>
-        <span class="pyl-modal-button"><button class="pyl-btn" id='pyl-modal-ok'>OK</button></span>        
-    </div>
-</div>
 {% endblock content %}
