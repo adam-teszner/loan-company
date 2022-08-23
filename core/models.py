@@ -37,10 +37,10 @@ class UserInfo(models.Model):
 class Customer(models.Model):
 
     martial_choices = (
-        ('md', 'maiden'),
-        ('dv', 'divorcee'),
-        ('mr', 'married'),
-        ('wd', 'widow'),
+        ('md', 'Maiden'),
+        ('dv', 'Divorced'),
+        ('mr', 'Married'),
+        ('wd', 'Widow'),
     )
 
     gender_choices = (
@@ -87,7 +87,6 @@ class Customer(models.Model):
 
     def get_fields(self):
         return [(field.verbose_name, field.value_from_object(self)) for field in self.__class__._meta.fields]
-    
 
 
 
@@ -175,9 +174,24 @@ class Product(models.Model):
                 
                 z.append(f'{x} - amount: -- {self.installments} ---- Required by: -- {self.created_date + relativedelta(months=x)}')
             return '\n'.join(z)
+            # return z
         except:
             return 'You must create a loan first ! '
 
-        
+
+    @property
+    def installment_dict(self):
+        try:
+            installments = {}
+            for x in range(1, self.loan_period+1):
+                installments[x] = {
+                    'amount' : self.installments,
+                    'required by' : str(self.created_date + relativedelta(months=x))
+                }
+                # installments['amount'] = self.installments
+                # installments['required by'] = self.created_date + relativedelta(months=x)
+            return installments
+        except:
+            return 'NO Loans'
             
 
