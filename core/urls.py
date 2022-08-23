@@ -14,5 +14,7 @@ urlpatterns = [
     path('my_customers_list/<int:pk>/update', views.CustomerUpdateView.as_view(), name='customer_update'),
     path('my_customers_list/<int:id>/add_prod', views.AddNewProductView.as_view(), name='add_product'),
     path('test/', views.jsonTestView.as_view(), name='json_test'),
+    path('rest_api/', views.restApi.as_view(), name='rest_api'),
+    path('api_home/', views.api_home, name='api_home'),
     
 ]
