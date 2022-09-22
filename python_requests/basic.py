@@ -1,7 +1,11 @@
 import requests
 
-endpoint = 'http://localhost:8000/rest_api/'          #'http://127.0.0.1:8000/my_customers_list/38'
+endpoint = 'http://localhost:8000/my_customers_list/36/update/api_home/'
 
-response = requests.get(endpoint)
+# endpoint = 'http://localhost:8000/custom_create?pesel=42'
 
-print(response.text)
+# response_get = requests.get(endpoint)
+response_put = requests.put(endpoint, json={"last_name": "Hughes12344", "adress": {"city" : "Grad123"}})
+
+# print(response_get.text)
+print(response_put.text)
