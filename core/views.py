@@ -16,9 +16,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from django.forms.models import model_to_dict
-from rest_framework.response import Response
-from rest_framework.decorators import api_view
+
 
 
 def index(request): 
@@ -110,9 +108,6 @@ def custom_customer(request):
             x.save()
 
             return redirect('customer_detail', pk=x.id)
-            # teraz dziala, warto to PRINTOWAC !!!!  w request.post wychodzi:
-            # with keyword arguments '{'kwargs': {'pk': 18}}' not found. 1 pattern(s) tried: ['my_customers_list/(?P<pk>[0-9]+)\\Z']
-            # gdy bylo kwargs={'pk': x.id} to wyszlo to wyzej !
 
         else:
             context = {
@@ -210,6 +205,8 @@ class CustomerDetailView(LoginRequiredMixin, DetailView):
     template_name = 'core/customer_detail.html'
 
 
+## using Django Rest Framework for update
+'''
 
 class CustomerUpdateView(LoginRequiredMixin, UpdateView):
     template_name = 'core/customer_update.html'
@@ -317,7 +314,7 @@ class CustomerUpdateView(LoginRequiredMixin, UpdateView):
         return HttpResponseRedirect(reverse('customer_detail', kwargs={'pk':pk}))
         # return redirect('customer_detail', pk=pk)
 
-
+'''
 
 
 class AddNewProductView(LoginRequiredMixin, View):
@@ -370,38 +367,3 @@ class jsonTestView(View):
         # return JsonResponse(context, safe=False, json_dumps_params={'indent':'    '})
         return HttpResponse(merged_json, content_type='application/json')
     
-
-class restApi(View):
-
-    def get(self, *args, **kwargs):
-
-        print(self.request.GET)
-        print(self.request.POST)
-
-        body = self.request.body  # byte string of json data
-        data = {}
-
-        try:
-            data = json.loads(body) # string of Json data > python dict
-        except:
-            pass
-        print(data)
-
-        data['params'] = dict(self.request.GET)
-        data['headers'] = dict(self.request.headers)
-        data['content_type'] = self.request.content_type
-
-        return JsonResponse(data)
-
-
-@api_view(['GET'])
-def api_home(request, *args, **kwargs):
-
-    '''
-    DRF api view
-    '''
-    model_data = Customer.objects.all().order_by('?').first() # random ordering, first item only
-    data = {}
-
-    data = model_to_dict(model_data, fields = ['first_name', 'last_name', 'dob', 'adress'])
-    return Response(data)
