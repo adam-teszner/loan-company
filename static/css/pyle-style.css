@@ -467,13 +467,31 @@ a.fill-th {
 }
 
 .form-header > svg {
-    float:left;
+    /* float:left; */
     margin: 0;
     padding-top: .5em;
 }
 
-.form-header > svg.right {
+#add-product {
+    cursor: pointer;
+}
+
+#add-product:hover path {
+    fill: red;
+    /* cursor: pointer; */
+}
+
+/* .form-header > svg.right {
     float:right;
+} */
+
+#customer-details {
+    display: flex;
+    justify-content: space-between;
+}
+
+#customer-details > a {
+    margin-top: .5em;
 }
 
 .pyl-form {

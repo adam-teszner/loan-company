@@ -1,6 +1,7 @@
 from .models import Customer, Adress, UserInfo, Workplace, Product
 from django import forms
 from django.forms.widgets import *
+from django.contrib.auth.forms import UserChangeForm
 
 
 
@@ -123,3 +124,12 @@ class CustomSignUpForm(forms.ModelForm):
         fields = ['first_name', 'last_name', 'dob', 'gender',
                 'social_security_no_pesel', 'id_passport', 'phone_no',
                 'information']
+
+class ChangeUsername(UserChangeForm):
+    username = forms.CharField(max_length=100, label='')
+
+    class Meta(UserChangeForm.Meta):
+        fields = ['username', 'email']
+        # fields = '__all__'
+
+

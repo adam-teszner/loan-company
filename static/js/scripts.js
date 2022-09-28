@@ -152,6 +152,9 @@ function formPreviousPage () {
 // MOZNA TO BYLO ZROBIC PRZY POMOCY SPRAWDZENIA NA KTOREJ JESTEM STRONIE...
 
 
+
+
+
 // Searching for PESEL in DB and autocompling other forms if pesel is in DB 
 
 // $('#id_first_name').on('focusout', console.log('left focus'))
@@ -374,6 +377,3 @@ function fetchTest () {
         .then(text => console.log(text))
 
 }
-
-
-
