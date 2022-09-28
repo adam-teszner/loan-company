@@ -1,49 +1,37 @@
+from ast import Pass
 import json
-from django.urls import reverse
+import profile
+from django.urls import reverse, reverse_lazy
 from django.shortcuts import render, get_object_or_404, redirect
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.template.response import TemplateResponse
 from django.views.generic import (CreateView, DetailView, ListView,
-                                TemplateView, UpdateView)
+                                TemplateView, UpdateView,)
+from django.views.generic.edit import BaseUpdateView
 from .models import Customer, Adress, UserInfo
 from .forms import (CustCreatePersonalInfo, CustCreateAdressForm,
                     CustomSignUpForm, CustomWorkplaceForm,
-                    AddNewProductForm, CustCreatePersonalInfoUpdate)
+                    AddNewProductForm, CustCreatePersonalInfoUpdate,
+                    ChangeUsername)
 from django.views import View
 from django.core import serializers
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.views import (PasswordChangeView,
+                                PasswordChangeDoneView)                                                                    
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-# Create your views here.
+'''
+### Trying Inline Formset ###
+from django.forms.models import inlineformset_factory
 
-# def include_user_info(request):
-#     user_id = request.user.id
-#     user_name = UserInfo.objects.get(user=user_id)
-#     context = {
-#         'user_name': user_name,
-#         'test_field': 'Tralalala'
-#     }
+UserInfoFormSet = inlineformset_factory(User, UserInfo, fields='__all__')
+'''
 
-#     return render(request, 'registration/login_usr_info.html', context=context)
-
-# Wrocic do INCLUDE TEMPLATE - ale w tym przypadku zbędne
 
 def index(request): 
   
-    # try:
-    #     user_id = request.user.id
-    #     user_name = UserInfo.objects.get(user=user_id)
-    #     context = {
-    #         'user_name': user_name.first_name
-    #     }
-    # except:
-    #     context = {
-    #         'user_name': request.user.username
-    #     }
-
-    # Jest zrobione jako custom_simple_template_tag
 
     return render(request, 'base.html')
 
@@ -131,9 +119,6 @@ def custom_customer(request):
             x.save()
 
             return redirect('customer_detail', pk=x.id)
-            # teraz dziala, warto to PRINTOWAC !!!!  w request.post wychodzi:
-            # with keyword arguments '{'kwargs': {'pk': 18}}' not found. 1 pattern(s) tried: ['my_customers_list/(?P<pk>[0-9]+)\\Z']
-            # gdy bylo kwargs={'pk': x.id} to wyszlo to wyzej !
 
         else:
             context = {
@@ -185,24 +170,33 @@ def custom_customer(request):
 class RegisterUser(View):
     user_info_form = CustomSignUpForm
     user_create_form = UserCreationForm
-    template_name = 'core/sign_up.html'
-    initial =   {'user_info_form': user_info_form,
-                'user_create_form': user_create_form}
+    user_adress_form = CustCreateAdressForm
+    template_name = 'registration/sign_up.html'
+    initial =   {
+                'user_info_form': user_info_form,
+                'user_create_form': user_create_form,
+                'user_adress_form': user_adress_form,
+                }
 
     def get(self, request):
         self.user_create_form(initial = self.initial)
         self.user_info_form(initial = self.initial)
+        self.user_adress_form(initial=self.initial)
         return render(request, self.template_name, self.initial)
 
     def post(self, request):
         
         user_info = self.user_info_form(request.POST)
         user_create = self.user_create_form(request.POST)
+        user_adress = self.user_adress_form(request.POST)
         if user_info.is_valid() and user_create.is_valid():
             z = user_info.save(commit=False)
             x = user_create.save(commit=False)
+            y = user_adress.save(commit=False)
+            z.adress = y
             z.user = x
             x.save()
+            y.save()
             z.save()
 
             # WYMYSLIC KROTSZA WERSJĘ !!! !! z comitem itd 
@@ -211,6 +205,176 @@ class RegisterUser(View):
 
         return render(request, self.template_name, self.initial)
             
+
+
+class UserProfileView(LoginRequiredMixin, DetailView):
+
+    model = UserInfo
+    fields = '__all__'
+    template_name = 'registration/profile.html'
+    queryset = UserInfo.objects.all()
+    # pk_url_kwarg = 'id'
+
+    def get_object(self, queryset=None):
+        queryset = self.queryset
+        id = self.kwargs['id']
+        obj = queryset.get(user=id)
+        return obj
+
+
+    def get(self, *args, **kwargs):
+        id = self.kwargs['id']
+        current_user = self.request.user.id
+
+
+        if current_user == id:
+            return super().get(*args, **kwargs)
+        else:
+            return render(self.request, self.template_name, context={'massage': 'You dont have permissions to see that !!'})
+
+
+
+
+
+#### Experimenting... ####
+class UserProfileEditView(LoginRequiredMixin, UpdateView):
+    queryset = UserInfo.objects.all()
+    template_name = 'registration/profile_edit.html'
+    fields = '__all__'
+    
+
+
+    def get_object(self, *args, **kwargs):
+        queryset = self.queryset
+        id = self.kwargs['id']
+        obj = queryset.get(user=id)
+        return obj
+    
+    
+    def get_context_data(self, *args, **kwargs):
+        data = super().get_context_data(*args, **kwargs)
+        data['user_info'] = CustomSignUpForm(instance=self.object)
+        data['user_adress'] = CustCreateAdressForm(instance=self.object.adress)
+        data['user_basic'] = ChangeUsername(instance=self.object.user)
+        '''
+        if self.request.POST:
+            data['user_info'] = CustomSignUpForm(self.request.POST, instance=self.object)
+            data['user_adress'] = CustCreateAdressForm(self.request.POST, instance=self.object.adress)
+            # data['user_basic'] = UserCreationForm(self.request.POST, instance=self.object.user)
+        else:
+            data['user_info'] = CustomSignUpForm(instance=self.object)
+            data['user_adress'] = CustCreateAdressForm(instance=self.object.adress)
+            # data['user_basic'] = UserCreationForm(instance=self.object.user)
+        '''
+        return data
+
+    def post(self, request, *args, **kwargs):
+        object = self.get_object()
+        forms = [
+        CustCreateAdressForm(self.request.POST, instance=object.adress),
+        ChangeUsername(self.request.POST, instance=object.user),
+        CustomSignUpForm(self.request.POST, instance=object)
+        ]
+        for form in forms:
+            if form.is_valid():
+                form.save()
+                # print(form)
+            else:
+                return render(request, self.template_name, context={
+                    'user_info':CustomSignUpForm(self.request.POST, instance=object),
+                    'user_adress':CustCreateAdressForm(self.request.POST, instance=object.adress),
+                    'user_basic':ChangeUsername(self.request.POST, instance=object.user)
+                })
+        return redirect('user_profile', id=self.kwargs['id'])
+
+    # def form_valid(self, form):
+    #     context = self.get_context_data()
+    #     userinfo = context['user_info']
+    #     useradress = context['user_adress']
+    #     print(userinfo)
+    #     print(form)
+    #     self.object = form.save()
+    #     if userinfo.is_valid() and useradress.is_valid():
+    #         print('OK')
+    #         useradress.save()
+    #         userinfo.save()
+    #     else:
+    #         print('NOT OK')
+            
+        
+    #     return super().form_valid(form)
+
+
+    # def get(self, request, *args, **kwargs):
+    #     print(self.kwargs)
+    #     print(self.request)
+    #     print(self.args)
+    #     print(self.form_class)
+    #     return super().get(request, *args, **kwargs)
+
+    # pass
+
+class UserChangePassword(LoginRequiredMixin, PasswordChangeView):
+    template_name = 'registration/password_change.html'
+    # success_url = reverse_lazy('user_password_done', kwargs={'id': })
+
+    def get_success_url(self, *args, **kwargs):
+        id = self.kwargs['id']
+        print(id)
+        return reverse('user_password_done', kwargs={'id': id})
+    
+
+class UserChangePasswordDone(LoginRequiredMixin, PasswordChangeDoneView):
+    template_name = 'registration/password_change_done_new.html'
+    
+
+
+'''
+
+### Trying Inline FormSet ###
+
+class UserProfileEditView(LoginRequiredMixin, UpdateView):
+    model = User
+    # fields = '__all__'
+    fields = [
+        'username',
+        'last_login',
+        'email'
+    ]
+    template_name = 'registration/profile_edit.html'
+    queryset = User.objects.all()
+
+    def get_object(self, queryset=None):
+        queryset = self.queryset
+        id = self.kwargs['id']
+        obj = queryset.get(id=id)
+        return obj
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        if self.request.POST:
+            data['userinfo'] = UserInfoFormSet(self.request.POST, instance=self.object)
+        else:
+            data['userinfo'] = UserInfoFormSet(instance=self.object)
+        return data
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        userinfo = context['userinfo']
+        self.object = form.save()
+        if userinfo.is_valid():
+            userinfo.instance = self.object
+            userinfo.save()
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('user_profile', kwargs={'id': self.kwargs['id']})
+
+
+    
+'''
+
+
 
 class CustomerListView(LoginRequiredMixin, ListView):
 
@@ -231,6 +395,8 @@ class CustomerDetailView(LoginRequiredMixin, DetailView):
     template_name = 'core/customer_detail.html'
 
 
+## using Django Rest Framework for update
+'''
 
 class CustomerUpdateView(LoginRequiredMixin, UpdateView):
     template_name = 'core/customer_update.html'
@@ -338,7 +504,7 @@ class CustomerUpdateView(LoginRequiredMixin, UpdateView):
         return HttpResponseRedirect(reverse('customer_detail', kwargs={'pk':pk}))
         # return redirect('customer_detail', pk=pk)
 
-
+'''
 
 
 class AddNewProductView(LoginRequiredMixin, View):
@@ -349,7 +515,8 @@ class AddNewProductView(LoginRequiredMixin, View):
 
     def get(self, request, id):    
         self.add_product_form(initial=self.initial)
-        return render(request, self.template_name, self.initial)
+        customer_instance = Customer.objects.get(id=id)
+        return render(request, self.template_name, context={'add_product': self.add_product_form, 'customer_id': customer_instance.id})
 
     def post(self, request, id):
         customer_instance = Customer.objects.get(id=id)
