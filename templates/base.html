@@ -63,7 +63,7 @@
                     </div>
                     <hr>
                     <div class="user-tooltip-links">
-                        <a href="#">Edit profile</a>
+                        <a href="{% url 'user_profile' user.id %}">Edit profile</a>
                         <a href="{% url 'logout' %}?next={{request.path}}">Logout</a>
                     </div>
                     
