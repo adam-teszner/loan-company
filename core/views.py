@@ -17,10 +17,12 @@ from django.views import View
 from django.core import serializers
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.views import (PasswordChangeView,
-                                PasswordChangeDoneView)                                                                    
+                                PasswordChangeDoneView, PasswordResetView,
+                                PasswordResetDoneView, PasswordResetConfirmView)                                                                    
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.messages.views import SuccessMessageMixin
 
 '''
 ### Trying Inline Formset ###
@@ -326,6 +328,19 @@ class UserChangePassword(LoginRequiredMixin, PasswordChangeView):
 
 class UserChangePasswordDone(LoginRequiredMixin, PasswordChangeDoneView):
     template_name = 'registration/password_change_done_new.html'
+
+
+class UserResetPassword(SuccessMessageMixin, PasswordResetView):
+    success_message = 'Email has been sent to %(email)s'
+    email_template_name = 'registration/reset_password_email.html'
+    template_name = 'registration/reset_password.html'
+    success_url = reverse_lazy('index')
+    
+
+class UserResetPasswordForm(PasswordResetConfirmView):
+    template_name = 'registration/reset_password_form.html'
+    success_url = reverse_lazy('login')
+
     
 
 
