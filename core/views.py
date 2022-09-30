@@ -188,7 +188,7 @@ class RegisterUser(View):
 
     def post(self, request):
         
-        user_info = self.user_info_form(request.POST)
+        user_info = self.user_info_form(request.POST, request.FILES or None)
         user_create = self.user_create_form(request.POST)
         user_adress = self.user_adress_form(request.POST)
         if user_info.is_valid() and user_create.is_valid():
@@ -275,7 +275,7 @@ class UserProfileEditView(LoginRequiredMixin, UpdateView):
         forms = [
         CustCreateAdressForm(self.request.POST, instance=object.adress),
         ChangeUsername(self.request.POST, instance=object.user),
-        CustomSignUpForm(self.request.POST, instance=object)
+        CustomSignUpForm(self.request.POST, self.request.FILES or None,  instance=object)
         ]
         for form in forms:
             if form.is_valid():
@@ -283,7 +283,7 @@ class UserProfileEditView(LoginRequiredMixin, UpdateView):
                 # print(form)
             else:
                 return render(request, self.template_name, context={
-                    'user_info':CustomSignUpForm(self.request.POST, instance=object),
+                    'user_info':CustomSignUpForm(self.request.POST, self.request.FILES or None, instance=object),
                     'user_adress':CustCreateAdressForm(self.request.POST, instance=object.adress),
                     'user_basic':ChangeUsername(self.request.POST, instance=object.user)
                 })

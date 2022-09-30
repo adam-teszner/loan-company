@@ -123,7 +123,11 @@ class CustomSignUpForm(forms.ModelForm):
         model = UserInfo
         fields = ['first_name', 'last_name', 'dob', 'gender',
                 'social_security_no_pesel', 'id_passport', 'phone_no',
-                'information']
+                'information', 'profile_pic']
+
+        # widgets = {
+        #     'profile_pic': FileInput
+        # }
 
 class ChangeUsername(UserChangeForm):
     username = forms.CharField(max_length=100, label='')

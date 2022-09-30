@@ -1,7 +1,11 @@
 from django.urls import path
+from django.conf import settings
+from django.conf.urls.static import static
 from . import views
 
 # app_name = 'core'
+
+dev_settings = static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) if settings.DEBUG == True else []
 
 urlpatterns = [
     path('', views.index, name='index'),
@@ -22,4 +26,4 @@ urlpatterns = [
     path('test/', views.jsonTestView.as_view(), name='json_test'),
 
     
-]
+] + dev_settings
