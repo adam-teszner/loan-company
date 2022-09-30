@@ -3,7 +3,7 @@
 {% block content %}
 
 <h1>edit profile</h1>
-<form method="post">{% csrf_token %}
+<form method="post" enctype="multipart/form-data" >{% csrf_token %}
     <h2>BASIC</h2>
     {% comment %} {{ user_basic.as_p }} {% endcomment %}
     <label for="{{ user_basic.username.auto_id }}">{{ user_basic.username.label }}</label>{{ user_basic.username }}

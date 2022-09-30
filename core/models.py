@@ -1,9 +1,14 @@
+import datetime
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 from dateutil.relativedelta import relativedelta
-import datetime
 from django.urls import reverse
 from django.contrib.auth.models import User
+
+## other
+
+def user_pic_path(instance, filename):
+    return 'user_{0}/profile_pic/{1}'.format(instance.user.id, filename)
 
 # Create your models here.
 
@@ -27,6 +32,7 @@ class UserInfo(models.Model):
     phone_no = models.IntegerField(unique=True)
     created_date = models.DateField(auto_now_add=True)
     information = models.TextField(null=True, blank=True)
+    profile_pic = models.FileField(upload_to=user_pic_path, null=True, blank=True)
     
 
     def __str__(self):

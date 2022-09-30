@@ -34,7 +34,7 @@ def user_icon(context):
     try:
         user_id = request.user.id
         user_initials = UserInfo.objects.get(user=user_id)
-        return user_initials.first_name[0] + user_initials.last_name[0]
+        return user_initials.first_name[0].upper() + user_initials.last_name[0].upper()
         
     except:
         return None
