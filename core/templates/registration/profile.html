@@ -20,5 +20,12 @@
 {{ userinfo.user.last_login }}
 <br>
 {{ userinfo.adress.street }}
+<br>
+{% if userinfo.profile_pic %}{{ userinfo.profile_pic }}
+<img src="{{userinfo.profile_pic.url}}" alt="#">
+{% else %}
+<h4>NONE</h4>
+{% endif %}
+
 
 {% endblock content %}

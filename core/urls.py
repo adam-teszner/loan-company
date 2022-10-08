@@ -1,7 +1,11 @@
 from django.urls import path
+from django.conf import settings
+from django.conf.urls.static import static
 from . import views
 
 # app_name = 'core'
+
+dev_settings = static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) if settings.DEBUG == True else []
 
 urlpatterns = [
     path('', views.index, name='index'),
@@ -10,6 +14,8 @@ urlpatterns = [
     path('accounts/user/<int:id>/edit', views.UserProfileEditView.as_view(), name='user_profile_edit'),
     path('accounts/user/<int:id>/edit/password_change', views.UserChangePassword.as_view(), name='user_password'),
     path('accounts/user/<int:id>/edit/password_change_done', views.UserChangePasswordDone.as_view(), name='user_password_done'),
+    path('accounts/user_password_reset', views.UserResetPassword.as_view(), name='user_password_reset'),
+    path('accounts/user_password_reset_form/<uidb64>/<token>/', views.UserResetPasswordForm.as_view(), name='user_password_reset_form'),
     path('create_customer/', views.create_customer, name='create_customer'),
     path('create_customer/add', views.CustomerCreateView.as_view(), name='add_customer'),
     path('custom_create', views.custom_customer, name='custom_create'),
@@ -20,4 +26,4 @@ urlpatterns = [
     path('test/', views.jsonTestView.as_view(), name='json_test'),
 
     
-]
+] + dev_settings
