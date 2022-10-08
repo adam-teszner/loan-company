@@ -1,9 +1,21 @@
+import datetime
+from email.policy import default
+import random
+from xml.sax.handler import property_declaration_handler
 from django.db import models
+from django.contrib.postgres.fields import ArrayField
 from django.core.validators import MinValueValidator, MaxValueValidator
 from dateutil.relativedelta import relativedelta
-import datetime
 from django.urls import reverse
 from django.contrib.auth.models import User
+
+## other
+
+def user_pic_path(instance, filename):
+    return 'user_{0}/profile_pic/{1}'.format(instance.user.id, filename)
+
+def account_generator():
+    return random.randint(10000000, 99999999)
 
 # Create your models here.
 
@@ -27,6 +39,7 @@ class UserInfo(models.Model):
     phone_no = models.IntegerField(unique=True)
     created_date = models.DateField(auto_now_add=True)
     information = models.TextField(null=True, blank=True)
+    profile_pic = models.FileField(upload_to=user_pic_path, null=True, blank=True)
     
 
     def __str__(self):
@@ -136,6 +149,7 @@ class Product(models.Model):
                                     blank=False, default=24)
     created_date = models.DateField(auto_now_add=True)
     
+    
     @property
     def days_since_create(self):
         today = datetime.date.today()
@@ -193,5 +207,145 @@ class Product(models.Model):
             return installments
         except:
             return 'NO Loans'
+
+    def inst_sch(self):
+        schedule = []
+        for x in range(1, self.loan_period+1):
+            schedule.append((x, self.installments, self.created_date + relativedelta(months=x)))
+        return schedule
+
+    @property
+    def get_payments(self):
+        payments = Payment.objects.filter(product=self.id)
+        payment_list = []
+        for payment in payments:
+            payment_list.append((payment.created_date, payment.amount))
+        return sorted(payment_list)
+
+
+    @property
+    def paid_total(self):
+        paid_total = 0
+        for (a,b) in self.get_payments:
+            paid_total = paid_total + b
+        return paid_total
+
+
+    @property
+    def paid_by_day(self):
+        daily_payements = {}
+        for a,b in self.get_payments:
+            if a in daily_payements:
+                daily_payements[a] += b
+            else:
+                daily_payements[a] = b
+        return daily_payements
+
+    def paid_by_day_human(self):
+        x = [f'{a} -- {b}' for (a,b) in self.paid_by_day.items()]
+        return '\n'.join(x)
+
+    def payments_human(self):
+        x = [f'{a} -- {b}' for (a,b) in self.get_payments]
+        return '\n'.join(x)
+        
+
+
+class Payment(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True)
+    created_date = models.DateField(auto_now_add=True)
+    amount = models.DecimalField(max_digits=12, decimal_places=2)
+
+'''
+
+    #### extending product 
+
+    account_no = models.IntegerField(default=account_generator)
+
+
+    # create balance field (how much is paid total) 
+    # paid_installments = []
+    paid_installments = ArrayField(
+        models.CharField(max_length=30), default=list, null=True, blank=True
+    )
+
+    # create ability to "pay" (like an ATM)
+
+    def pay_installment(self, amount):
+        date = str(datetime.date.today())
+        self.paid_installments.append((date, amount))
+
+    # sum all payments by day
+    @property
+    def payment_day_by_day(self):
+        daily_payements = {}
+        for k,v in self.paid_installments:
+            if k in daily_payements:
+                daily_payements[k] += v
+            else:
+                daily_payements[k] = v
+        return daily_payements
+    @property
+    def paid_total(self):
+        paid_total = 0
+        for k,v in self.paid_installments:
+            paid_total = paid_total + v
+        return paid_total
+
+    # connect payments to installements (product installements schedule)
+    # by tuples ? (ammount, date) ??
+
+    # create debt field(from schedule)
+
+    ### other, scoring, interest ?? ###    
+
             
+
+####  Maybe use django-moeny ???
+
+class ProductBankAccount(models.Model):
+
+    product = models.OneToOneField(Product, on_delete=models.CASCADE)
+    account_no = models.IntegerField(default=account_generator)
+
+
+    # create balance field (how much is paid total) 
+    # paid_installments = []
+    paid_installments = ArrayField(
+        models.CharField(max_length=30), default=list
+    )
+
+    # create ability to "pay" (like an ATM)
+
+    def pay_installment(self, amount):
+        date = str(datetime.date.today())
+        self.paid_installments.append((date, amount))
+
+    # sum all payments by day
+
+    def payment_day_by_day(self):
+        daily_payements = {}
+        for k,v in self.paid_installments:
+            if k in daily_payements:
+                daily_payements[k] += v
+            else:
+                daily_payements[k] = v
+        return daily_payements
+
+    def paid_total(self):
+        paid_total = 0
+        for k,v in self.paid_installments:
+            paid_total + v
+        return paid_total
+
+    # connect payments to installements (product installements schedule)
+    # by tuples ? (ammount, date) ??
+
+    # create debt field(from schedule)
+
+    ### other, scoring, interest ?? ###    
+
+
+
+'''
 

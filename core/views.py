@@ -17,10 +17,12 @@ from django.views import View
 from django.core import serializers
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.views import (PasswordChangeView,
-                                PasswordChangeDoneView)                                                                    
+                                PasswordChangeDoneView, PasswordResetView,
+                                PasswordResetDoneView, PasswordResetConfirmView)                                                                    
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.messages.views import SuccessMessageMixin
 
 '''
 ### Trying Inline Formset ###
@@ -186,7 +188,7 @@ class RegisterUser(View):
 
     def post(self, request):
         
-        user_info = self.user_info_form(request.POST)
+        user_info = self.user_info_form(request.POST, request.FILES or None)
         user_create = self.user_create_form(request.POST)
         user_adress = self.user_adress_form(request.POST)
         if user_info.is_valid() and user_create.is_valid():
@@ -273,7 +275,7 @@ class UserProfileEditView(LoginRequiredMixin, UpdateView):
         forms = [
         CustCreateAdressForm(self.request.POST, instance=object.adress),
         ChangeUsername(self.request.POST, instance=object.user),
-        CustomSignUpForm(self.request.POST, instance=object)
+        CustomSignUpForm(self.request.POST, self.request.FILES or None,  instance=object)
         ]
         for form in forms:
             if form.is_valid():
@@ -281,7 +283,7 @@ class UserProfileEditView(LoginRequiredMixin, UpdateView):
                 # print(form)
             else:
                 return render(request, self.template_name, context={
-                    'user_info':CustomSignUpForm(self.request.POST, instance=object),
+                    'user_info':CustomSignUpForm(self.request.POST, self.request.FILES or None, instance=object),
                     'user_adress':CustCreateAdressForm(self.request.POST, instance=object.adress),
                     'user_basic':ChangeUsername(self.request.POST, instance=object.user)
                 })
@@ -326,6 +328,19 @@ class UserChangePassword(LoginRequiredMixin, PasswordChangeView):
 
 class UserChangePasswordDone(LoginRequiredMixin, PasswordChangeDoneView):
     template_name = 'registration/password_change_done_new.html'
+
+
+class UserResetPassword(SuccessMessageMixin, PasswordResetView):
+    success_message = 'Email has been sent to %(email)s'
+    email_template_name = 'registration/reset_password_email.html'
+    template_name = 'registration/reset_password.html'
+    success_url = reverse_lazy('index')
+    
+
+class UserResetPasswordForm(PasswordResetConfirmView):
+    template_name = 'registration/reset_password_form.html'
+    success_url = reverse_lazy('login')
+
     
 
 

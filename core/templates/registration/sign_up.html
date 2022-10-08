@@ -3,7 +3,7 @@
 <h3>Register New User</h3>
 {% endblock title %}}
 {% block content %}
-<form method="post">
+<form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{user_create_form.as_p}}
     <h4>Dalej</h4>
