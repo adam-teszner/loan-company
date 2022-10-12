@@ -114,6 +114,10 @@ class ProductMethods:
     
     
     def count_payment(self, payment_no, payment_date, payment):
+        '''
+        function to count payment against installment,
+        every payment should have this function called        
+        '''
         # (installment_no, installment, due_date, payment_no, payment, payment_date, installment_remainder, payment_remainder)
         new = []
 
@@ -175,12 +179,18 @@ class ProductMethods:
         return new
 
     def calc_delay(self, inst_due_date):
+        '''
+        generating delay in days if installment is behind schedule
+        '''
         today = datetime.date.today()
         delay = today - inst_due_date
         return delay.days if delay.days > 0 else ''
 
     
     def create_schedule(self):
+        '''
+        generating full schedule - with installments delays and all payments
+        '''
         self.complete = []
         if not self.get_payments:
             [self.complete.append((a,c,b,'','','','','','')) for (a,b,c) in self.inst_sch]
