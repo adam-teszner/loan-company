@@ -102,12 +102,12 @@
                 <div class="pyl-box left">Product Name<span class="right">{{pr.get_product_name_display}}</span></div>
                 <div class="pyl-box left">Amount Requested<span class="right">{{pr.amount_requested}}</span></div>
                 <div class="pyl-box left">Load Period<span class="right">{{pr.loan_period}}</span></div>
-                <div class="pyl-box left">Interest rate<span class="right">{{pr.global_interest_rate}}</span></div>
-                <div class="pyl-box left">Lombard rate<span class="right">{{pr.lombard_rate}}</span></div>
-                <div class="pyl-box left">Total Amount<span class="right">{{pr.total_amount}}</span></div>
+                <div class="pyl-box left">Interest rate<span class="right">{{pr.global_interest_rate_dec}}</span></div>
+                <div class="pyl-box left">Lombard rate<span class="right">{{pr.lombard_rate_dec}}</span></div>
+                <div class="pyl-box left">Total Amount<span class="right">{{pr.total_amount_dec}}</span></div>
                 <div class="pyl-box left">Sold Date<span class="right">{{pr.created_date}}</span></div>
                 <div class="pyl-box left">ID<span class="right">{{pr.id}}</span></div>
-                <div class="pyl-box left">Installment<span class="right">{{pr.installments}}</span></div>
+                <div class="pyl-box left">Installment<span class="right">{{pr.installments_dec}}</span></div>
                 <div id="expanded-{{pr.id}}" class='pyl-box pyl-expand'>                  
                     <span id="{{pr.id}}" onclick='expandTable(this.id)'><svg xmlns="http://www.w3.org/2000/svg" height="24" width="24"><path d="M12 20.625 7.825 16.45 8.9 15.375l3.1 3.1 3.1-3.1 1.075 1.075ZM8.9 8.675 7.825 7.6 12 3.425 16.175 7.6 15.1 8.675 12 5.6Z"/></svg>Expand</span></div>
                 <div id="collapsed-{{pr.id}}" class='pyl-box pyl-expand pyl-hidden'>                  
@@ -117,13 +117,42 @@
             <div class="pyl-hidden" id="table-{{pr.id}}">
                 <table class="pyl-product-table">
                     <thead>
+                        {% comment %} <tr>
+                            <th>Installment no.</th>
+                            <th>Required amount</th>
+                            <th>Due Date</th>
+                        </tr> {% endcomment %}
                         <tr>
                             <th>Installment no.</th>
                             <th>Required amount</th>
                             <th>Due Date</th>
+                            <th>Payment no.</th>
+                            <th>Payment amount</th>
+                            <th>Payment Date</th>
+                            <th>Installment Remainder</th>
+                            <th>Payment Remainder</th>
+                            <th>Delay (days)</th>
                         </tr>
                     </thead>
-                        <tr>
+                    <tr>
+
+                        {% for a,b,c,d,e,f,g,h,i in pr.create_schedule %}
+                            <td>{{a}}</td>
+                            <td>{{b}}</td>
+                            <td>{{c}}</td>
+                            <td>{{d}}</td>
+                            <td>{{e}}</td>
+                            <td>{{f}}</td>
+                            <td>{{g}}</td>
+                            <td>{{h}}</td>   
+                            <td>{{i}}</td>                         
+                    <tr>                    
+                        {% endfor %}
+
+
+
+
+                        {% comment %} <tr>
 
                         {% for k,v in pr.installment_dict.items%}
                             <td>{{k}}</td>
@@ -132,7 +161,7 @@
                             {% endfor %}
                         <tr>
                     
-                {% endfor %}
+                        {% endfor %} {% endcomment %}
                 </table>
             </div>
         </div>

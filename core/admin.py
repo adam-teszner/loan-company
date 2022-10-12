@@ -12,13 +12,20 @@ admin.site.register(Workplace)
 
 
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ['id', 'product_name', 'created_date', 'installments',
-                    'amount_requested', 'total_amount', 'loan_period',                  
-                    
+    list_display = [
+                    'id', 
+                    'product_name', 
+                    'created_date', 
+                    'installments_dec',
+                    'total_amount_dec',
+                    'amount_requested',
+                    'loan_period',
                     ]
     readonly_fields = ['created_date', 'id', 'days_since_create',
-                    'total_amount', 'installments',
-                    'installement_schedule', 'installment_dict',
+                    'total_amount_dec',
+                    'installments_dec',
+                    'installement_schedule', 
+                    'installment_dict',
                     'get_payments',
                     # 'payments_amounts',
                     'paid_total',
@@ -26,6 +33,8 @@ class ProductAdmin(admin.ModelAdmin):
                     'inst_sch',
                     'payments_human',
                     'paid_by_day_human',
+                    'create_schedule',
+                    'schedule_human'                    
                     ]
 '''
 class ProductBankAccAdmin(admin.ModelAdmin):
