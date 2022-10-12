@@ -16,16 +16,36 @@ class Liczenie2:
         
         
         
-        nr_raty = 0 if self.complete == [] else self.complete[-1][0]
+        # nr_raty = 0 if self.complete == [] else self.complete[-1][0]
+
+        if not self.complete:
+            nr_raty = 0
+        elif self.complete[-1][4] == 0 and self.complete[-1][5] == 0:
+            nr_raty = len(self.complete)
+        else:
+            nr_raty = self.complete[-1][0]
+
         iter = 0
-        
         if iter == 0:
             reszta = wplata * (-1)
 
-        try:
-            rata = self.complete[-1][4] if self.complete[-1][4] > 0 and iter == 0 else self.raty[nr_raty]
-        except IndexError:
-            rata = self.raty[nr_raty]
+
+        # try:
+        #     rata = self.complete[-1][4] if self.complete[-1][4] > 0 and iter == 0 else self.raty[nr_raty]
+        # except IndexError:
+        #     rata = self.raty[nr_raty]
+
+
+        if self.complete and self.complete[-1][4] > 0:
+            rata = self.complete[-1][4]
+        else:
+            try:
+                rata = self.raty[nr_raty]
+            except IndexError:
+                rata = self.raty[-1]
+
+
+        
 
 
         try:    
@@ -57,8 +77,8 @@ class Liczenie2:
 
 
 
-kal_raty = [200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200]
-kal_wplaty = [550, 120, 40]  
+kal_raty = [200, 200, 200, 200, 200]
+kal_wplaty = [200, 200, 200]  
 
 ac = Liczenie2(kal_raty, kal_wplaty)
 
