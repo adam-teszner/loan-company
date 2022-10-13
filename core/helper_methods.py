@@ -42,16 +42,13 @@ class ProductMethods:
     def installement_schedule(self):
         try:
             z = []
-            for x in range(1, self.loan_period+1):
-                
+            for x in range(1, self.loan_period+1):                
                 z.append(f'{x} - amount: -- {self.installments_dec} ---- Required by: -- {self.created_date + relativedelta(months=x)}')
             return '\n'.join(z)
             # return z
         except:
             return 'You must create a loan first ! '
         
-
-
 
     @property
     def installment_dict(self):
@@ -124,7 +121,8 @@ class ProductMethods:
         if not self.complete:
             installment_no = 0
         elif self.complete[-1][6] == 0 and self.complete[-1][7] == 0:
-            installment_no = len(self.complete)
+            # installment_no = len(self.complete)
+            installment_no = self.complete[-1][0] + 1
         else:
             installment_no = self.complete[-1][0]
        
