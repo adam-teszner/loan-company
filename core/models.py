@@ -167,10 +167,15 @@ class Product(models.Model, ProductMethods):
         self.payments_query = Payment.objects.filter(product=self.id)
         self.complete = []
 
+    def __str__(self):
+        return f'ID: {self.id}, Owner {self.owner.id}, amount: {self.amount_requested}, period: {self.loan_period}'
+
 
 class Payment(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True)
     created_date = models.DateField(auto_now_add=True)
     amount = models.DecimalField(max_digits=12, decimal_places=2)
 
+    def __str__(self):
+        return f'Product: {self.product.id}, amount: {self.amount}, date: {self.created_date} '
 
