@@ -88,7 +88,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'loanco_db', 
-        'USER': 'postgres', 
+        'USER': 'pyloslaw', 
         'PASSWORD': 'test123$',
         'HOST': '127.0.0.1', 
         'PORT': '5432',

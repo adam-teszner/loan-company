@@ -21,7 +21,8 @@ class Liczenie2:
         if not self.complete:
             nr_raty = 0
         elif self.complete[-1][4] == 0 and self.complete[-1][5] == 0:
-            nr_raty = len(self.complete)
+            # nr_raty = len(self.complete)
+            nr_raty = self.complete[-1][0] + 1
         else:
             nr_raty = self.complete[-1][0]
 
@@ -78,7 +79,7 @@ class Liczenie2:
 
 
 kal_raty = [200, 200, 200, 200, 200]
-kal_wplaty = [200, 200, 200]  
+kal_wplaty = [200, 190, 10, 191] 
 
 ac = Liczenie2(kal_raty, kal_wplaty)
 
