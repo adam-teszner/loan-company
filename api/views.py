@@ -1,6 +1,4 @@
 from collections import OrderedDict
-from re import L
-from tkinter import E
 from django.views import View
 from django.http import JsonResponse
 

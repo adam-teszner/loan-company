@@ -1,6 +1,4 @@
-from ast import Pass
 import json
-import profile
 from django.urls import reverse, reverse_lazy
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
