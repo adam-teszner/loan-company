@@ -48,7 +48,6 @@ class UserInfo(models.Model):
         return self.user.username
 
 
-
 class Customer(models.Model):
 
     martial_choices = (

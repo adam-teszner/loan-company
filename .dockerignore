@@ -1,2 +1,11 @@
-*/venv
-*/.venv
+.venv
+venv
+# */.venv
+# */venv
+.git
+.gitingnore
+*.pyc
+dockerfile
+dockercompose.yml
+.dockerignore
+docker_other
