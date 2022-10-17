@@ -1,6 +1,4 @@
-from ast import Pass
 import json
-import profile
 from django.urls import reverse, reverse_lazy
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
@@ -15,6 +13,7 @@ from .forms import (CustCreatePersonalInfo, CustCreateAdressForm,
                     ChangeUsername)
 from django.views import View
 from django.core import serializers
+from django.core.exceptions import PermissionDenied
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.views import (PasswordChangeView,
                                 PasswordChangeDoneView, PasswordResetView,
@@ -228,11 +227,9 @@ class UserProfileView(LoginRequiredMixin, DetailView):
         id = self.kwargs['id']
         current_user = self.request.user.id
 
-
-        if current_user == id:
-            return super().get(*args, **kwargs)
-        else:
+        if current_user != id:
             return render(self.request, self.template_name, context={'massage': 'You dont have permissions to see that !!'})
+        return super().get(*args, **kwargs)
 
 
 
@@ -268,6 +265,8 @@ class UserProfileEditView(LoginRequiredMixin, UpdateView):
             data['user_adress'] = CustCreateAdressForm(instance=self.object.adress)
             # data['user_basic'] = UserCreationForm(instance=self.object.user)
         '''
+        if self.kwargs['id'] != self.request.user.id:
+            raise PermissionDenied
         return data
 
     def post(self, request, *args, **kwargs):
