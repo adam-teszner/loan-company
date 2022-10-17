@@ -3,10 +3,12 @@ version: "3.9"
 services:
   db:
     image: postgres:14.5
-    environment:
-      - POSTGRES_DB=loanco_db
-      - POSTGRES_USER=pyloslaw
-      - POSTGRES_PASSWORD=test123#
+    # environment:
+    #   - POSTGRES_DB=${POSTGRES_DB}
+    #   - POSTGRES_USER=${POSTGRES_USER}
+    #   - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    env_file:
+      - .env
     ports:
       - "5432:5432"
   web:
@@ -14,10 +16,12 @@ services:
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/loan_site/
-    environment:
-      - POSTGRES_NAME=loanco_db
-      - POSTGRES_USER=pyloslaw
-      - POSTGRES_PASSWORD=test123#
+    # environment:
+    #   - POSTGRES_NAME=${POSTGRES_NAME}
+    #   - POSTGRES_USER=${POSTGRES_USER}
+    #   - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    env_file:
+      - .env
     ports:
       - "8000:8000"
     depends_on:
