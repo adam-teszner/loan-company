@@ -51,7 +51,8 @@
                 <div class="pyl-box left">ID or Passport<span class="right">{{customer.id_passport}}</span></div>
             </div>
             <div class="pyl-box-buttons">
-                <a href="{% url 'customer_update' pk=customer.pk %}?mode=basic"><button id='basic' class="pyl-btn">Edit</button></a>
+                {% comment %} <a href="{% url 'customer_update' pk=customer.pk %}?mode=basic"><button id='basic' class="pyl-btn">Edit</button></a> {% endcomment %}
+                <button data="{% url 'customer_update' pk=customer.pk %}?mode=basic" id='basic' class="pyl-btn" onclick="editModal(this.getAttribute('data'))">Edit</button>
             </div>
         </div>
         <div class="pyl-information-box personal-info">
@@ -67,7 +68,8 @@
                 <div class="pyl-box left">Email<span class="right">{{customer.email}}</span></div>
             </div>
             <div class="pyl-box-buttons">
-                <a href="{% url 'customer_update' pk=customer.pk %}?mode=contact"><button onclick='openModal()' id='contact' class="pyl-btn">Edit</button></a>
+                {% comment %} <a href="{% url 'customer_update' pk=customer.pk %}?mode=contact"><button onclick='openModal()' id='contact' class="pyl-btn">Edit</button></a> {% endcomment %}
+                <button data="{% url 'customer_update' pk=customer.pk %}?mode=contact" id='contact' class="pyl-btn" onclick="editModal(this.getAttribute('data'))">Edit</button>
             </div>
         </div>
         <div class="pyl-information-box personal-info">
@@ -87,7 +89,8 @@
                 <div class="pyl-box left">Email<span class="right">{{customer.workplace.email}}</span></div>
             </div>
             <div class="pyl-box-buttons">
-                <button id='income' class="pyl-btn" data-url="{% url 'customer_update' pk=customer.pk %}?mode=contact">Edit</button>
+                {% comment %} <button id='income' class="pyl-btn" data-url="{% url 'customer_update' pk=customer.pk %}?mode=contact">Edit</button> {% endcomment %}
+                <button data="{% url 'customer_update' pk=customer.pk %}?mode=workplace" id='workplace' class="pyl-btn" onclick="editModal(this.getAttribute('data'))">Edit</button>
             </div>
         </div>
     </div>
@@ -176,7 +179,31 @@
         {% endfor %}
     </div>
 </div>
+{% comment %} Modal {% endcomment %}
 
+<div class="pyl-modal-background" id='pyl-modal'>
+    <div class="pyl-modal pyl-card">
+        <h1>Edit</h1>
+        <div class="pyl-modal-text">
+
+        </div>
+        {% comment %} <div class='pyl-modal-data'> {% endcomment %}
+        <div>
+            <form class='pyl-modal-data' method="post" id='edit-form'>
+                <div class="pyl-modal-left">
+
+                </div>
+                <div class="pyl-modal-right" id="form-inputs">
+    
+                </div>
+            </form>
+        </div>
+        <span class="pyl-modal-button"><button class="pyl-btn" id='pyl-modal-ok' onclick="formToJson('form-inputs')">Save</button></span>
+        <span class="pyl-modal-button"><button class="pyl-btn" id='pyl-modal-ok' onclick="closeEdit()">Cancel</button></span>
+    </div>
+</div>
+
+<script src="{% static 'js/edit.js' %}"></script>
 
 
 {% endblock content %}

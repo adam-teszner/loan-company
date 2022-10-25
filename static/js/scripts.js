@@ -360,20 +360,20 @@ function shrinkTable (id) {
 
 
 
-const btnTest = document.getElementById('income');
-btnTest.addEventListener('click', fetchTest);
+// const btnTest = document.getElementById('income');
+// btnTest.addEventListener('click', fetchTest);
 
-// document.getElementById('income').addEventListener('click', fetchTest);
+// // document.getElementById('income').addEventListener('click', fetchTest);
 
-function fetchTest () {
-    var url = btnTest.getAttribute('data-url')
-    fetch(url)
-        // .then(response => response.text())
-        // .then(text => console.log(text))
-        // .then(res => {
-        //     console.log(res.body)
-        // })
-        .then(res => res.text())
-        .then(text => console.log(text))
+// function fetchTest () {
+//     var url = btnTest.getAttribute('data-url')
+//     fetch(url)
+//         // .then(response => response.text())
+//         // .then(text => console.log(text))
+//         // .then(res => {
+//         //     console.log(res.body)
+//         // })
+//         .then(res => res.text())
+//         .then(text => console.log(text))
 
-}
+// }
