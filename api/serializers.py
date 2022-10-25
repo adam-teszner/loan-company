@@ -55,11 +55,11 @@ class CustomerSerializer(DynamicFieldsModelSerializer):
 
     adress = AdressSerializer()
     workplace = WorkplaceSerializer()
-    
 
     class Meta:
         model = Customer
         fields = '__all__'
+ 
 
     def update(self, cust_inst, validated_data):
 

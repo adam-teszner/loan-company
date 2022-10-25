@@ -951,3 +951,12 @@ a.fill-th {
 .pyl-hidden {
     display: none;
 }
+
+
+/* #edit-form > label {
+    margin: .3em;
+} */
+
+.pyl-modal-left, .pyl-modal-right > input, label {
+    margin: .3em;
+}
