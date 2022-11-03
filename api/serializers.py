@@ -25,6 +25,12 @@ class WorkplaceSerializer(serializers.ModelSerializer):
         exclude = [
             'id',
         ]
+        # Validators are removed because DRF doesnt know how to deal with unique
+        # validation on nested serializers when updating data
+        extra_kwargs = {
+            'id_nip': {'validators' : []},
+            'phone_no': {'validators': []}
+        }
 
 class DynamicFieldsModelSerializer(serializers.ModelSerializer):
 
