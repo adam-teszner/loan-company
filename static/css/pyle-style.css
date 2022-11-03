@@ -791,7 +791,7 @@ a.fill-th {
     /* border: 1px var(--secondary-backgroud-color) solid; */
     box-shadow: 2px 4px 8px 0px rgba(0,0,0,0.2);
     background: var(--color-1);
-    color: var(--secondary-backgroud-color)
+    color: var(--secondary-backgroud-color);
     text-align: center;
     font-weight: 200;
     font-size: .9em;

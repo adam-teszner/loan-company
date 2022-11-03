@@ -2,7 +2,10 @@ const modal = document.getElementsByClassName('pyl-modal-background')[0];
 const form = document.getElementById('edit-form');
 const left = document.getElementsByClassName('pyl-modal-left')[0];
 const right = document.getElementsByClassName('pyl-modal-right')[0];
+const inputs = document.getElementById('form-inputs');
 let dataObj;
+
+let res;
 
 editModal = (url) => {
     let dataObj;
@@ -17,7 +20,9 @@ editModal = (url) => {
         dataObj = data
         drawForms(dataObj.schema)
             .then(initialFill(dataObj.initial));
-        modal.style.display = 'block'
+        document.getElementById('pyl-modal-save').setAttribute('url', url);
+        listenForId();
+        modal.style.display = 'block';
       })
       .catch(error => console.log('error', error));
 }
@@ -60,7 +65,8 @@ drawForms = (jsonData, parentId) => {
         if (v.type === 'choice') {
             
             left.innerHTML += `<label for=${id+'-id'}>${v.label}</label>`
-            right.innerHTML += `<select id=${id+'-id'} name=${k} ${req}><option value selected></option>`
+            right.innerHTML += `<select disabled id=${id+'-id'} name=${k} ${req}><option value selected></option>
+                                <div id=${id+'-msg'}</div>`
             let selTag = document.getElementById(`${id+'-id'}`)
             for (let i of v.choices) {
                 selTag.innerHTML += `<option value=${i.value}>${i.display_name}</option>`
@@ -76,7 +82,8 @@ drawForms = (jsonData, parentId) => {
             }
             
             left.innerHTML += `<label for=${id+'-id'}>${v.label}</label>`;
-            right.innerHTML += `<input type=${inputType} name=${k} id=${id+'-id'} ${req} ${attributes}>`;
+            right.innerHTML += `<input disabled type=${inputType} name=${k} id=${id+'-id'} ${req} ${attributes}>
+                                <div id=${id+'-msg'}></div>`;
         }
     }
     modal.style.display = 'block'
@@ -101,10 +108,9 @@ initialFill = (initial, parentId) => {
             // console.log(v)
             initialFill(v, id);
             continue;
-        }else{
+        }
         formInput = document.getElementById(`${id+'-id'}`);
         formInput.value = v;
-        }
     }
 }
 
@@ -116,39 +122,158 @@ formToJson = (inputsDivId) => {
     let form = document.getElementById(`${inputsDivId}`);
     let formKeys;
     let value;
+    let value2;
 
 
     let formObj = {}
+    let fomrObjHuman = {}
     for (let child of form.children) {
 
+        if (child.disabled) {
+            continue;
+        }
+
         formKeys = child.id.slice(0, -3).split('__');
-        // finalKey = formKeys.pop();
         value = child.value
-        // console.log(formKeys)
-        assign(formObj, formKeys, value)
+        if (child.type === 'select-one') {
+            value2 = child.options[child.selectedIndex].text;
+        }else if (child.type === 'date') {
+            value2 = child.valueAsDate.toDateString().slice(4);
+        }else {
+            value2 = child.value
+        }
+        
+        assign(formObj, fomrObjHuman, formKeys, value, value2)
 
     }
-    console.log(formObj)
-    console.log(JSON.stringify(formObj))
+    // console.log(formObj)
+    // console.log(JSON.stringify(formObj))
+    return [formObj, fomrObjHuman]
 
 }
 
-function assign(obj, keyPath, value) {
+assign = (obj, obj2, keyPath, value, value2) => {
     const lastKeyIndex = keyPath.length-1;
         for (let i = 0; i < lastKeyIndex; i++) {
             const key = keyPath[i];
             if (!(key in obj)){
             obj[key] = {}
+            obj2[key] = {}
             }
         obj = obj[key];
+        obj2 = obj2[key];
     }
     obj[keyPath[lastKeyIndex]] = value;
+    obj2[keyPath[lastKeyIndex]] = value2;
 }
 
+saveFormData = (inputsDivId, url) => {
+    const cookieValue = document.cookie
+        .split('; ')
+        .find((row) => row.startsWith('csrftoken='))
+        ?.split('=')[1];
+    // console.log(cookieValue)
+    let headers = new Headers();
+    headers.append("Content-Type", "application/json");
+    headers.append("X-CSRFToken", cookieValue);
+    let formResultArray = formToJson(inputsDivId);
+    let rawData = formResultArray[0];
+    let humanData = formResultArray[1];
+    let formData = JSON.stringify(rawData);
+    console.log(formData)
+    
+    let requestOptions = {
+        method: 'PATCH',
+        headers: headers,
+        body: formData,
+        redirect: 'follow'
+      };
 
+    let responseStatus;
+    fetch(url, requestOptions)
+      .then(response => {
+        responseStatus = response.status;
+        let result = response.json()
+        res = result
+        // console.log(res, 'PIERWSZA WERSJA')
+        return result
+      })
+      .then(result => {
+        switch (responseStatus) {
+            case 200:
+                // console.log(result);
+                closeEdit();
+                updateOldData(humanData);
+                break
+            case 400:
+                // console.log(result, 'DRUGA WERSJA');
+                // console.log(typeof result)
+                // res = result
+                validationError(result);
+                break
+            case 500:
+                console.log('500 ERROR - unique nested validator')
+                break
+        }
+      })
+      .catch(error => console.log('error', error.toString()));
+}
 
+//// not very efficient solution because its copied from above... 
+//// should have made one function like getID () => 
+//// and then call it now and then... do zmiany w przyszlosci !
+updateOldData = (humanData, parentId) => {
+    parentId = (parentId === undefined) ? '' : `${parentId}__`;
+    // console.log(humanData)
+    let id;
+    let formInput;
+    // console.log(parentId)
+    for (let [k,v] of Object.entries(humanData)) {
+        id =`${parentId}${k}`;
+        // console.log(id)
+        if (typeof v == 'object') {
+            updateOldData(v, id);
+            continue;
+        }else{
+        formInput = document.getElementById(`${id}`);
+        formInput.innerHTML = v;
+        }
+        if (id === 'first_name' || id === 'last_name') {
+            document.getElementById(`${id+'-h1'}`).innerHTML = v+' ';
+        }
+    }
 
-// na jutro - NAJPIERW ZMIENIC ID Z LABELI na ID z Key - DONE
+}
+
+validationError = (result, parentId) => {
+    parentId = (parentId === undefined) ? '' : `${parentId}__`;
+    let id;
+    let message;
+    for (let [k,v] of Object.entries(result)) {
+        id =`${parentId}${k}`;
+        // console.log(id, 'ID')
+        // console.log(typeof v, 'value!!')
+        if (typeof v == 'object' && !Array.isArray(v)) {            
+            validationError(v, id);
+            continue;
+        }        
+        message = document.getElementById(`${id+'-msg'}`);
+        message.innerHTML += `${v}`
+    }
+}
+
+listenForId = () => {
+    inputs.addEventListener('click', (e) => {
+        document.getElementById(e.target.id).disabled = false;
+    })
+}
+
+// removeListen = () =>{
+//     inputs.removeEventListener('click', (e) => {
+//         document.getElementById(e.target.id).disabled = false;
+//     })
+// }
+// na jutro - NAJPIERW ZMIENhIC ID Z LABELI na ID z Key - DONE
 // pomyslec nad generowaniem unikatowych id dla kazdych pol - tak zeby mozna bylo - DONE
 // wypełnic formy initial data - DONE
 // wygenerować Json ze zmienionych form:
@@ -157,7 +282,25 @@ function assign(obj, keyPath, value) {
     // x.slice(0, -3) (zostanie adress__street)
     // x.split('__') (zostanie [adress] [street])
     // no i z tego mozna tworzyc jsona
-// fetch Patch
-// EWENTUALNIE ! SUBMIT w form-data !!! ????
+// fetch Patch - DONE
 
-// na koncu - aktualizacja danych !!!
+// na koncu - aktualizacja danych !!! - DONE
+
+
+// problem z validacja unique w workplace nip i phone no .... i tylko tam !! 
+// albo rozwiazanie w backend - wskazane ! - DONE (rozwiazanie dorazne- patrz serializers)
+// ewentualnie na front-end (pomysl: 
+    // zrobić do kazdego inputa dodatkowy atrybut - np. data
+    // i w funkcji formToJson zbadać czy 'child'.data === value
+    // jesli jest to 'continue' iteracje - czyli pomijamy)
+
+    // moze w przyszlosci...
+
+// dodatkowo - zrobić wszystkie pola DISABLED - i DISABLED nie updatetowac bo po co ? 
+// po kliknięciu - pole zrobi się enabled - i tylko enabled będą brane pod uwagę
+// przy generowaniu jsona
+
+// DONE
+
+// napisać validation errors massages ! gdzieś muszą się pokazywać ! najlepiej na podstawie
+// odpowiedzi error - wskazać trzeba ID znowu ...

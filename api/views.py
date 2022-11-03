@@ -17,7 +17,7 @@ from .serializers import (AdressSerializer, CustomerSerializer,
                             WorkplaceSerializer)
 
 
-from rest_framework import exceptions, serializers
+from rest_framework import exceptions, serializers, status
 from rest_framework.utils.field_mapping import ClassLookupDict
 from django.utils.encoding import force_str
 
@@ -323,15 +323,13 @@ class CustomerUpdateFetchApiView(RetrieveModelMixin,
         serializer = self.get_serializer(instance=instance, 
                                         data=self.request.data, partial=True, 
                                         fields=self.field_params[mode])
-        # print(self.request.data)
-        # super().update(*args, **kwargs)
         if serializer.is_valid():
             self.perform_update(serializer=serializer)
             # serializer.save()
-            return Response(data=serializer.data)
-        else:
-            return Response(data=serializer.errors)
-        # return super().partial_update(request, *args, **kwargs)
+            return Response(data=serializer.data, status=status.HTTP_200_OK)
+        # print(serializer.errors)
+        # return Response(data=serializer.errors, status=status.is_client_error())
+        return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
     def patch(self, request, *args, **kwargs):
