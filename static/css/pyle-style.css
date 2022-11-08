@@ -957,6 +957,41 @@ a.fill-th {
     margin: .3em;
 } */
 
-.pyl-modal-left, .pyl-modal-right > input, label {
+/* .pyl-modal-left, .pyl-modal-right > input, label {
     margin: .3em;
+} */
+
+#form-inputs > div {
+    position: relative;
 }
+
+/* .error-msg {
+    position: absolute;
+    top: -3em;
+    display: none;
+    background-color: red;
+} */
+
+.error-msg {
+    display: none;
+}
+
+.pyl-edit-inputs > input:hover + div.error-msg, .pyl-edit-inputs > input:focus + div.error-msg, 
+.pyl-edit-inputs > select:hover + div.error-msg, .pyl-edit-inputs > select:focus + div.error-msg {
+    position: absolute;
+    top: -3em;
+    display: block;
+    background-color: red;
+}
+/* #form-inputs div[error-msg]::after {
+    content: attr(error-msg);
+    position: absolute;
+    top: -3em;
+    display: block;
+    background-color: red;
+} */
+
+
+/* .pyl-edit-inputs {
+    display: flex;
+} */
