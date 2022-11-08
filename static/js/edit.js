@@ -1,13 +1,11 @@
 const modal = document.getElementsByClassName('pyl-modal-background')[0];
 const form = document.getElementById('edit-form');
-const left = document.getElementsByClassName('pyl-modal-left')[0];
-const right = document.getElementsByClassName('pyl-modal-right')[0];
 const inputs = document.getElementById('form-inputs');
 let dataObj;
 
 let res;
 
-editModal = (url) => {
+editModal = (url, headerText) => {
     let dataObj;
     let requestOptions = {
         method: 'GET',
@@ -22,6 +20,8 @@ editModal = (url) => {
             .then(initialFill(dataObj.initial));
         document.getElementById('pyl-modal-save').setAttribute('url', url);
         listenForId();
+        document.getElementById('modal-header').innerHTML = 
+        `Edit ${headerText.charAt(0).toUpperCase()+headerText.slice(1)}`;
         modal.style.display = 'block';
       })
       .catch(error => console.log('error', error));
@@ -29,8 +29,7 @@ editModal = (url) => {
 
 closeEdit = () => {
     document.getElementsByClassName('pyl-modal-background')[0].removeAttribute('style');
-    left.innerHTML = '';
-    right.innerHTML = '';
+    inputs.innerHTML = '';
 }
 
 
@@ -57,21 +56,21 @@ drawForms = (jsonData, parentId) => {
         let inputType = (inputTypes[v.type] !== undefined) ? inputTypes[v.type] : v.type;
         let req = (v.required) ? 'required' : '';
 
-
         if (v.type === 'nested object') {
             drawForms(v.children, id)
             continue;
         }
         if (v.type === 'choice') {
             
-            left.innerHTML += `<label for=${id+'-id'}>${v.label}</label>`
-            right.innerHTML += `<div class="pyl-edit-inputs"><select disabled id=${id+'-id'} name=${k} ${req}><option value selected></option>
+            inputs.innerHTML += `<div class="pyl-edit-inputs">
+                                <label class="pyl-label-text" for=${id+'-id'}>${v.label}</label>
+                                <select disabled class="pyl-input" id=${id+'-id'} name=${k} ${req}><option value selected></option>
                                 <div class="error-msg" id=${id+'-msg'}</div>`
             let selTag = document.getElementById(`${id+'-id'}`)
             for (let i of v.choices) {
                 selTag.innerHTML += `<option value=${i.value}>${i.display_name}</option>`
             }
-            right.innerHTML += '</select></div>'
+            inputs.innerHTML += '</select></div>'
             
         }else {
             // To trzeba zmienic - za duzo for loopow ! 
@@ -80,9 +79,9 @@ drawForms = (jsonData, parentId) => {
                 let attr = (simpleVal[a] !== undefined) ? `${simpleVal[a]}=${b}` : '';
                 attributes += attr+' ';
             }
-            
-            left.innerHTML += `<label for=${id+'-id'}>${v.label}</label>`;
-            right.innerHTML += `<div class="pyl-edit-inputs"><input disabled type=${inputType} name=${k} id=${id+'-id'} ${req} ${attributes}>
+            inputs.innerHTML += `<div class="pyl-edit-inputs">
+                                <label class="pyl-label-text" for=${id+'-id'}>${v.label}</label>
+                                <input disabled class="pyl-input" type=${inputType} name=${k} id=${id+'-id'} ${req} ${attributes}>
                                 <div class="error-msg" id=${id+'-msg'}></div></div>`;
         }
     }
@@ -168,7 +167,8 @@ assign = (obj, obj2, keyPath, value, value2) => {
 }
 
 saveFormData = (inputsDivId, url) => {
-    (() => document.querySelectorAll('.error-msg').forEach(element => element.innerHTML = ''))();
+    // (() => document.querySelectorAll('.error-msg').forEach(element => element.innerHTML = ''))();
+    removeValidationErorrs();
     const cookieValue = document.cookie
         .split('; ')
         .find((row) => row.startsWith('csrftoken='))
@@ -202,7 +202,7 @@ saveFormData = (inputsDivId, url) => {
       .then(result => {
         switch (responseStatus) {
             case 200:
-                console.log(result);
+                // console.log(result);
                 closeEdit();
                 updateOldData(humanData);
                 break
@@ -231,7 +231,7 @@ updateOldData = (humanData, parentId) => {
     // console.log(parentId)
     for (let [k,v] of Object.entries(humanData)) {
         id =`${parentId}${k}`;
-        console.log(id)
+        // console.log(id)
         if (typeof v == 'object') {
             updateOldData(v, id);
             continue;
@@ -250,6 +250,7 @@ validationError = (result, parentId) => {
     parentId = (parentId === undefined) ? '' : `${parentId}__`;
     let id;
     let message;
+    let inpt;
     for (let [k,v] of Object.entries(result)) {
         id =`${parentId}${k}`;
         // console.log(id, 'ID')
@@ -260,8 +261,16 @@ validationError = (result, parentId) => {
         }        
         message = document.getElementById(`${id+'-msg'}`);
         message.innerHTML += `${v}`
+        inpt = document.getElementById(`${id+'-id'}`);
+        inpt.classList.add('val-err');
         // message.setAttribute('error-msg', v);
     }
+}
+
+removeValidationErorrs = () => {
+    document.querySelectorAll('.error-msg').forEach(element => element.innerHTML = '');
+    document.querySelectorAll('.pyl-input').forEach(element => element.classList.remove('val-err'));
+
 }
 
 
@@ -271,11 +280,6 @@ listenForId = () => {
     })
 }
 
-// removeListen = () =>{
-//     inputs.removeEventListener('click', (e) => {
-//         document.getElementById(e.target.id).disabled = false;
-//     })
-// }
 // na jutro - NAJPIERW ZMIENhIC ID Z LABELI na ID z Key - DONE
 // pomyslec nad generowaniem unikatowych id dla kazdych pol - tak zeby mozna bylo - DONE
 // wypełnic formy initial data - DONE
@@ -307,3 +311,4 @@ listenForId = () => {
 
 // napisać validation errors massages ! gdzieś muszą się pokazywać ! najlepiej na podstawie
 // odpowiedzi error - wskazać trzeba ID znowu ...
+// DONE

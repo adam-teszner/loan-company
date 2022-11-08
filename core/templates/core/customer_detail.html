@@ -1,31 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-{% comment %} {% block title %}
-<h4>{{customer}}</h4>
-{% endblock title %} {% endcomment %}
-
 {% block content %}
-{% comment %} <table>
-    {% for label, value in object.get_fields %}
-        <tr>
-            <td>{{ label }}</td>
-            <td>{{ value }}</td>
-        </tr>
-    {% endfor %}
-</table>
-<ol>
-{% for item in customer.product_set.all %}
-<li>{{item}}</li>
-{% empty %}
-<p>No products sold yet ! </p>
-{% endfor %}
-</ol>
-<div class="w3-container"><a href='{% url 'add_product' object.id %}'class="w3-button w3-theme-d5 w3-hover-theme">Add Product</a></div>
-<ul>
-    <li>{{customer.adress.street}}</li>
-</ul> {% endcomment %}
-
-
 
 <div class="pyl-container">
     <div class="form-header" id='customer-details'>
@@ -51,8 +26,7 @@
                 <div class="pyl-box left">ID or Passport<span id="id_passport" class="right">{{customer.id_passport}}</span></div>
             </div>
             <div class="pyl-box-buttons">
-                {% comment %} <a href="{% url 'customer_update' pk=customer.pk %}?mode=basic"><button id='basic' class="pyl-btn">Edit</button></a> {% endcomment %}
-                <button data="{% url 'customer_update' pk=customer.pk %}?mode=basic" id='basic' class="pyl-btn" onclick="editModal(this.getAttribute('data'))">Edit</button>
+                <button data="{% url 'customer_update' pk=customer.pk %}?mode=basic" id='basic' class="pyl-btn" onclick="editModal(this.getAttribute('data'), this.getAttribute('id'))">Edit</button>
             </div>
         </div>
         <div class="pyl-information-box personal-info">
@@ -68,8 +42,7 @@
                 <div class="pyl-box left">Email<span id="email" class="right">{{customer.email}}</span></div>
             </div>
             <div class="pyl-box-buttons">
-                {% comment %} <a href="{% url 'customer_update' pk=customer.pk %}?mode=contact"><button onclick='openModal()' id='contact' class="pyl-btn">Edit</button></a> {% endcomment %}
-                <button data="{% url 'customer_update' pk=customer.pk %}?mode=contact" id='contact' class="pyl-btn" onclick="editModal(this.getAttribute('data'))">Edit</button>
+                <button data="{% url 'customer_update' pk=customer.pk %}?mode=contact" id='contact' class="pyl-btn" onclick="editModal(this.getAttribute('data'), this.getAttribute('id'))">Edit</button>
             </div>
         </div>
         <div class="pyl-information-box personal-info">
@@ -91,8 +64,7 @@
                 <div class="pyl-box left">Email<span id="workplace__email" class="right">{{customer.workplace.email}}</span></div>
             </div>
             <div class="pyl-box-buttons">
-                {% comment %} <button id='income' class="pyl-btn" data-url="{% url 'customer_update' pk=customer.pk %}?mode=contact">Edit</button> {% endcomment %}
-                <button data="{% url 'customer_update' pk=customer.pk %}?mode=workplace" id='workplace' class="pyl-btn" onclick="editModal(this.getAttribute('data'))">Edit</button>
+                <button data="{% url 'customer_update' pk=customer.pk %}?mode=workplace" id='workplace' class="pyl-btn" onclick="editModal(this.getAttribute('data'), this.getAttribute('id'))">Edit</button>
             </div>
         </div>
     </div>
@@ -181,26 +153,26 @@
         {% endfor %}
     </div>
 </div>
-{% comment %} Modal {% endcomment %}
+
+{% comment %} Edit modal {% endcomment %}
 
 <div class="pyl-modal-background" id='pyl-modal'>
     <div class="pyl-modal pyl-card">
-        <h1>Edit</h1>
+        <h1 id="modal-header"></h1>
         <div class="pyl-modal-text">
-
+            Click on greyed-out field to edit information.
         </div>
         <div>
-            <form class='pyl-modal-data' method="post" id='edit-form'>
-                <div class="pyl-modal-left">
-
-                </div>
-                <div class="pyl-modal-right" id="form-inputs">
+            <form method="post" id='edit-form'>
+                <div class="form-inputs" id="form-inputs">
     
                 </div>
             </form>
         </div>
-        <span class="pyl-modal-button"><button class="pyl-btn" id='pyl-modal-save' onclick="saveFormData('form-inputs', this.getAttribute('url'))">Save</button></span>
-        <span class="pyl-modal-button"><button class="pyl-btn" id='pyl-modal-cancel' onclick="closeEdit()">Cancel</button></span>
+        <div class="pyl-modal-button">
+        <button class="pyl-btn" id='pyl-modal-cancel' onclick="closeEdit()">Cancel</button>
+        <button class="pyl-btn" id='pyl-modal-save' onclick="saveFormData('form-inputs', this.getAttribute('url'))">Save</button>
+        </div>
     </div>
 </div>
 

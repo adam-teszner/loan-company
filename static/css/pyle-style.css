@@ -467,7 +467,7 @@ a.fill-th {
 }
 
 .form-header > svg {
-    /* float:left; */
+    float:left;
     margin: 0;
     padding-top: .5em;
 }
@@ -577,6 +577,7 @@ a.fill-th {
     border: 1px solid var(--secondary-backgroud-color);
     border-radius: 4px;
     color: var(--secondary-backgroud-color);
+    background-color: transparent;
     font-weight: 200;
     font-size: 15px;
     font-family: 'Ubuntu';
@@ -662,10 +663,18 @@ a.fill-th {
     -webkit-transition: 0.5s;
     transition: 0.5s;
     outline: none;
+    margin: 0px;
+    padding: 0px;
  }
 
- .form-fields > .pyl-input:focus {
+ .pyl-input:focus {
     border: 1px solid var(--color-1-alt);
+ }
+
+ .pyl-input:disabled {
+    background-color: transparent;
+    color: rgb(170, 170, 170);
+    opacity: 0.7;
  }
 
 .pyl-modal-background {
@@ -758,7 +767,7 @@ a.fill-th {
 
 .pyl-modal-button {
     display: flex;
-    justify-content: center;
+    justify-content: space-evenly;
     padding: .6em;
 }
 
@@ -952,46 +961,75 @@ a.fill-th {
     display: none;
 }
 
-
-/* #edit-form > label {
-    margin: .3em;
-} */
-
-/* .pyl-modal-left, .pyl-modal-right > input, label {
-    margin: .3em;
-} */
+#edit-form {
+    margin: 1.3em;
+    font-size: smaller;
+}
 
 #form-inputs > div {
     position: relative;
 }
 
-/* .error-msg {
-    position: absolute;
-    top: -3em;
-    display: none;
-    background-color: red;
-} */
+#form-inputs {
+    display: flex;
+    flex-direction: column;
+}
+
+.pyl-edit-inputs {
+    display: flex;
+    flex-direction: row;
+    margin-top: .5em;
+    column-gap: 3em;
+}
+
+.pyl-edit-inputs > label {
+    flex-grow: 1;
+    flex-basis: 0;
+}
+
+.pyl-edit-inputs > input, .pyl-edit-inputs > select {
+    flex-grow: 1;
+    flex-basis: 0;
+}
 
 .error-msg {
     display: none;
 }
 
-.pyl-edit-inputs > input:hover + div.error-msg, .pyl-edit-inputs > input:focus + div.error-msg, 
-.pyl-edit-inputs > select:hover + div.error-msg, .pyl-edit-inputs > select:focus + div.error-msg {
-    position: absolute;
-    top: -3em;
+
+.pyl-edit-inputs > input:hover + div.error-msg:not(:empty), .pyl-edit-inputs > input:focus + div.error-msg:not(:empty), 
+.pyl-edit-inputs > select:hover + div.error-msg:not(:empty), .pyl-edit-inputs > select:focus + div.error-msg:not(:empty) {
     display: block;
-    background-color: red;
+    position: absolute;
+    padding: .6em;
+    text-align: center;
+    /* top: -160%;
+    left: 50%; */
+    background-color: rgb(255, 71, 71);
+    border: darkred 2px solid;
+    box-shadow: 2px 4px 8px 0px rgba(0,0,0,0.2);
+    border-radius: 5px;
+    font-weight: 300;
+    font-family: system-ui;
+    z-index: 1;
+    right: 0%;
+    bottom: calc(100% + 25px);
+    transform: translateX(-15%);
+    max-width: 150px;
 }
-/* #form-inputs div[error-msg]::after {
-    content: attr(error-msg);
-    position: absolute;
-    top: -3em;
-    display: block;
-    background-color: red;
-} */
 
 
-/* .pyl-edit-inputs {
+.val-err {
+    border: 2px dashed red;
+    transition: 0.1s;
+}
+
+
+#add-product-image {
+    order: 2;
+}
+
+#add-product-btns {
     display: flex;
-} */
+    justify-content: space-between;
+}

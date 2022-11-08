@@ -113,6 +113,13 @@ class CustomWorkplaceForm(forms.ModelForm):
 
 class AddNewProductForm(forms.ModelForm):
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for name in self.fields.keys():
+            self.fields[name].widget.attrs.update({
+                'class' : 'pyl-input'
+            })    
+
     class Meta():
         model = Product
         exclude = ('created_date', 'owner',)
