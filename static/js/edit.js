@@ -65,13 +65,13 @@ drawForms = (jsonData, parentId) => {
         if (v.type === 'choice') {
             
             left.innerHTML += `<label for=${id+'-id'}>${v.label}</label>`
-            right.innerHTML += `<select disabled id=${id+'-id'} name=${k} ${req}><option value selected></option>
-                                <div id=${id+'-msg'}</div>`
+            right.innerHTML += `<div class="pyl-edit-inputs"><select disabled id=${id+'-id'} name=${k} ${req}><option value selected></option>
+                                <div class="error-msg" id=${id+'-msg'}</div>`
             let selTag = document.getElementById(`${id+'-id'}`)
             for (let i of v.choices) {
                 selTag.innerHTML += `<option value=${i.value}>${i.display_name}</option>`
             }
-            right.innerHTML += '</select>'
+            right.innerHTML += '</select></div>'
             
         }else {
             // To trzeba zmienic - za duzo for loopow ! 
@@ -82,8 +82,8 @@ drawForms = (jsonData, parentId) => {
             }
             
             left.innerHTML += `<label for=${id+'-id'}>${v.label}</label>`;
-            right.innerHTML += `<input disabled type=${inputType} name=${k} id=${id+'-id'} ${req} ${attributes}>
-                                <div id=${id+'-msg'}></div>`;
+            right.innerHTML += `<div class="pyl-edit-inputs"><input disabled type=${inputType} name=${k} id=${id+'-id'} ${req} ${attributes}>
+                                <div class="error-msg" id=${id+'-msg'}></div></div>`;
         }
     }
     modal.style.display = 'block'
@@ -127,7 +127,7 @@ formToJson = (inputsDivId) => {
 
     let formObj = {}
     let fomrObjHuman = {}
-    for (let child of form.children) {
+        for (let child of form.querySelectorAll('input, select, textarea')) {
 
         if (child.disabled) {
             continue;
@@ -168,6 +168,7 @@ assign = (obj, obj2, keyPath, value, value2) => {
 }
 
 saveFormData = (inputsDivId, url) => {
+    (() => document.querySelectorAll('.error-msg').forEach(element => element.innerHTML = ''))();
     const cookieValue = document.cookie
         .split('; ')
         .find((row) => row.startsWith('csrftoken='))
@@ -201,7 +202,7 @@ saveFormData = (inputsDivId, url) => {
       .then(result => {
         switch (responseStatus) {
             case 200:
-                // console.log(result);
+                console.log(result);
                 closeEdit();
                 updateOldData(humanData);
                 break
@@ -230,7 +231,7 @@ updateOldData = (humanData, parentId) => {
     // console.log(parentId)
     for (let [k,v] of Object.entries(humanData)) {
         id =`${parentId}${k}`;
-        // console.log(id)
+        console.log(id)
         if (typeof v == 'object') {
             updateOldData(v, id);
             continue;
@@ -259,8 +260,10 @@ validationError = (result, parentId) => {
         }        
         message = document.getElementById(`${id+'-msg'}`);
         message.innerHTML += `${v}`
+        // message.setAttribute('error-msg', v);
     }
 }
+
 
 listenForId = () => {
     inputs.addEventListener('click', (e) => {
