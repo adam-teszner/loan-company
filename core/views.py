@@ -31,8 +31,7 @@ UserInfoFormSet = inlineformset_factory(User, UserInfo, fields='__all__')
 '''
 
 
-def index(request): 
-  
+def index(request):  
 
     return render(request, 'base.html')
 
@@ -541,7 +540,8 @@ class AddNewProductView(LoginRequiredMixin, View):
             s.save()
             return redirect('customer_detail', pk=id)
         else:
-            return render(request, self.template_name, self.initial)
+            print(add_prod.errors)
+            return render(request, self.template_name, context={'add_product': add_prod, 'customer_id': customer_instance.id})
 
 class jsonTestView(View):
     def get(self, request):
