@@ -103,11 +103,13 @@ class CustomWorkplaceForm(forms.ModelForm):
 
     class Meta():
         model = Workplace
-        exclude = ('adress',) 
+        exclude = ['adress']
+        # fields = '__all__' 
 
         labels = {
             'id_nip': 'NIP',
             'name': 'Company Name',
+            'email': 'Email adress'
         }
         
 
