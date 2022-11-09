@@ -257,7 +257,7 @@ function checkPesel () {
 
                     // filling workplace
                     for (let [key, value] of Object.entries(json_data[2]['fields'])) {
-                        let chng_value = document.getElementById('workplace_id_'+key);
+                        let chng_value = document.getElementById('workplace_id_workplace_form-'+key);
                         if (chng_value !== null && chng_value.children.length === 0) {
                             chng_value.value = value;
                             // console.log(value);
@@ -274,7 +274,7 @@ function checkPesel () {
                             }
                         }else{}
                     }
-                    // filling customer adress
+                    // filling workplace adress
                     for (let [key, value] of Object.entries(json_data[3]['fields'])) {
                         let chng_value = document.getElementById('id_workplace_adr_form-'+key);
                         if (chng_value !== null) {

@@ -57,9 +57,15 @@ def custom_customer(request):
     customer_form = CustCreatePersonalInfo(request.POST)
     customer_adress = CustCreateAdressForm(request.POST, prefix='customer_adress')
     workplace_adr_form = CustCreateAdressForm(request.POST, prefix='workplace_adr_form')    #prefix dlatego bo jest adress 2 instatncje - workplace i zwykly !!
-    workplace_form = CustomWorkplaceForm(request.POST)
+    workplace_form = CustomWorkplaceForm(request.POST, prefix='workplace_form')
     pesel_check = request.GET.get('pesel')
-    
+
+    context = {
+                'customer_form': customer_form,
+                'customer_adress': customer_adress,
+                'workplace_adr_form': workplace_adr_form,
+                'workplace_form': workplace_form,
+            }    
 
     if request.method == 'GET' and pesel_check:
         try:
@@ -82,18 +88,10 @@ def custom_customer(request):
 
             merged_json = json.dumps(data_2, indent=2)
 
-            # print(merged_json)
             return HttpResponse(merged_json, content_type='application/json')
 
         except:
             print('BRAK')
-            context = {
-                'customer_form': customer_form,
-                'customer_adress': customer_adress,
-                'workplace_adr_form': workplace_adr_form,
-                'workplace_form': workplace_form,
-            }
-            # return HttpResponse('Error')
             return render(request, 'core/custom_create.html', context) 
     
     
@@ -102,7 +100,6 @@ def custom_customer(request):
 
         if customer_form.is_valid() and customer_adress.is_valid() and workplace_adr_form.is_valid() and workplace_form.is_valid():
 
-            
             x = customer_form.save(commit=False)
             z = customer_adress.save(commit=False)
             y = workplace_adr_form.save(commit=False)
@@ -120,16 +117,7 @@ def custom_customer(request):
 
             return redirect('customer_detail', pk=x.id)
 
-        else:
-            context = {
-                'customer_form': customer_form,
-                'customer_adress': customer_adress,
-                'workplace_adr_form': workplace_adr_form,
-                'workplace_form': workplace_form,
-            }
-
-
-            return render(request, 'core/custom_create.html', context)
+        return render(request, 'core/custom_create.html', context)
 
             
     elif request.method == 'POST' and request.POST.get('customer_id_value') != '':
@@ -139,8 +127,8 @@ def custom_customer(request):
 
         cust_update = CustCreatePersonalInfoUpdate(request.POST, instance=customer_instance)
         cust_adress_update = CustCreateAdressForm(request.POST, prefix='customer_adress', instance=customer_instance.adress)
-        workplace_adr_update = CustCreateAdressForm(request.POST, prefix='customer_adress', instance=customer_instance.workplace.adress)
-        workplace_update = CustomWorkplaceForm(request.POST, instance=customer_instance.workplace)
+        workplace_adr_update = CustCreateAdressForm(request.POST, prefix='workplace_adr_form', instance=customer_instance.workplace.adress)
+        workplace_update = CustomWorkplaceForm(request.POST, prefix='workplace_form', instance=customer_instance.workplace)
 
 
         cust_update.save()
@@ -150,15 +138,7 @@ def custom_customer(request):
         
         return redirect('customer_detail', pk=customer_id)   
     
-    
     else:
-        context = {
-            'customer_form': customer_form,
-            'customer_adress': customer_adress,
-            'workplace_adr_form': workplace_adr_form,
-            'workplace_form': workplace_form,
-        }
-
         return render(request, 'core/custom_create.html', context)
 
 
@@ -271,10 +251,10 @@ class UserProfileEditView(LoginRequiredMixin, UpdateView):
     def post(self, request, *args, **kwargs):
         object = self.get_object()
         forms = [
-        CustCreateAdressForm(self.request.POST, instance=object.adress),
-        ChangeUsername(self.request.POST, instance=object.user),
-        CustomSignUpForm(self.request.POST, self.request.FILES or None,  instance=object)
-        ]
+                CustCreateAdressForm(self.request.POST, instance=object.adress),
+                ChangeUsername(self.request.POST, instance=object.user),
+                CustomSignUpForm(self.request.POST, self.request.FILES or None,  instance=object)
+                ]
         for form in forms:
             if form.is_valid():
                 form.save()
