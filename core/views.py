@@ -60,12 +60,24 @@ def custom_customer(request):
     workplace_form = CustomWorkplaceForm(request.POST, prefix='workplace_form')
     pesel_check = request.GET.get('pesel')
 
+    cust_inst = CustCreatePersonalInfo()
+    cust_adr_inst = CustCreateAdressForm(prefix='customer_adress')
+    wrk_adr_inst = CustCreateAdressForm(prefix='workplace_adr_form')    #prefix dlatego bo jest adress 2 instatncje - workplace i zwykly !!
+    wrk_inst = CustomWorkplaceForm(prefix='workplace_form')
+
+    initial = {
+                'customer_form': cust_inst,
+                'customer_adress': cust_adr_inst,
+                'workplace_adr_form': wrk_adr_inst,
+                'workplace_form': wrk_inst,
+            }
+
     context = {
                 'customer_form': customer_form,
                 'customer_adress': customer_adress,
                 'workplace_adr_form': workplace_adr_form,
                 'workplace_form': workplace_form,
-            }    
+            } 
 
     if request.method == 'GET' and pesel_check:
         try:
@@ -92,7 +104,7 @@ def custom_customer(request):
 
         except:
             print('BRAK')
-            return render(request, 'core/custom_create.html', context) 
+            return render(request, 'core/custom_create.html', initial) 
     
     
     if request.method == 'POST' and request.POST.get('customer_id_value') == '':
@@ -116,7 +128,7 @@ def custom_customer(request):
             x.save()
 
             return redirect('customer_detail', pk=x.id)
-
+        print('JEDEN')
         return render(request, 'core/custom_create.html', context)
 
             
@@ -139,7 +151,8 @@ def custom_customer(request):
         return redirect('customer_detail', pk=customer_id)   
     
     else:
-        return render(request, 'core/custom_create.html', context)
+        print('DWA!!')
+        return render(request, 'core/custom_create.html', initial)
 
 
         ### SKROCIC TO - ZROBIC LADNIEJSZE, EFEKTYWNE BARDZIEJ ###
@@ -234,16 +247,7 @@ class UserProfileEditView(LoginRequiredMixin, UpdateView):
         data['user_info'] = CustomSignUpForm(instance=self.object)
         data['user_adress'] = CustCreateAdressForm(instance=self.object.adress)
         data['user_basic'] = ChangeUsername(instance=self.object.user)
-        '''
-        if self.request.POST:
-            data['user_info'] = CustomSignUpForm(self.request.POST, instance=self.object)
-            data['user_adress'] = CustCreateAdressForm(self.request.POST, instance=self.object.adress)
-            # data['user_basic'] = UserCreationForm(self.request.POST, instance=self.object.user)
-        else:
-            data['user_info'] = CustomSignUpForm(instance=self.object)
-            data['user_adress'] = CustCreateAdressForm(instance=self.object.adress)
-            # data['user_basic'] = UserCreationForm(instance=self.object.user)
-        '''
+
         if self.kwargs['id'] != self.request.user.id:
             raise PermissionDenied
         return data
@@ -267,32 +271,6 @@ class UserProfileEditView(LoginRequiredMixin, UpdateView):
                 })
         return redirect('user_profile', id=self.kwargs['id'])
 
-    # def form_valid(self, form):
-    #     context = self.get_context_data()
-    #     userinfo = context['user_info']
-    #     useradress = context['user_adress']
-    #     print(userinfo)
-    #     print(form)
-    #     self.object = form.save()
-    #     if userinfo.is_valid() and useradress.is_valid():
-    #         print('OK')
-    #         useradress.save()
-    #         userinfo.save()
-    #     else:
-    #         print('NOT OK')
-            
-        
-    #     return super().form_valid(form)
-
-
-    # def get(self, request, *args, **kwargs):
-    #     print(self.kwargs)
-    #     print(self.request)
-    #     print(self.args)
-    #     print(self.form_class)
-    #     return super().get(request, *args, **kwargs)
-
-    # pass
 
 class UserChangePassword(LoginRequiredMixin, PasswordChangeView):
     template_name = 'registration/password_change.html'
@@ -319,54 +297,6 @@ class UserResetPasswordForm(PasswordResetConfirmView):
     template_name = 'registration/reset_password_form.html'
     success_url = reverse_lazy('login')
 
-    
-
-
-'''
-
-### Trying Inline FormSet ###
-
-class UserProfileEditView(LoginRequiredMixin, UpdateView):
-    model = User
-    # fields = '__all__'
-    fields = [
-        'username',
-        'last_login',
-        'email'
-    ]
-    template_name = 'registration/profile_edit.html'
-    queryset = User.objects.all()
-
-    def get_object(self, queryset=None):
-        queryset = self.queryset
-        id = self.kwargs['id']
-        obj = queryset.get(id=id)
-        return obj
-
-    def get_context_data(self, **kwargs):
-        data = super().get_context_data(**kwargs)
-        if self.request.POST:
-            data['userinfo'] = UserInfoFormSet(self.request.POST, instance=self.object)
-        else:
-            data['userinfo'] = UserInfoFormSet(instance=self.object)
-        return data
-
-    def form_valid(self, form):
-        context = self.get_context_data()
-        userinfo = context['userinfo']
-        self.object = form.save()
-        if userinfo.is_valid():
-            userinfo.instance = self.object
-            userinfo.save()
-        return super().form_valid(form)
-
-    def get_success_url(self):
-        return reverse('user_profile', kwargs={'id': self.kwargs['id']})
-
-
-    
-'''
-
 
 
 class CustomerListView(LoginRequiredMixin, ListView):
@@ -386,118 +316,6 @@ class CustomerDetailView(LoginRequiredMixin, DetailView):
 
     model = Customer
     template_name = 'core/customer_detail.html'
-
-
-## using Django Rest Framework for update
-'''
-
-class CustomerUpdateView(LoginRequiredMixin, UpdateView):
-    template_name = 'core/customer_update.html'
-
-
-    ### The same as model = Customer ###
-
-
-    # def get_object(self):
-        # self.object = Customer.objects.get(pk=self.kwargs['pk'])
-        # print(self.object)
-        # print('test')
-        # return Customer.objects.get(pk=self.kwargs['pk'])
-
-    # fields = field_choice['some']
-    # initial = {'first_name' : Customer.objects.get(pk=self.kwargs['pk']).first_name}
-
-    ### End ###
-    
-    basic_form = CustCreatePersonalInfoUpdate
-    adress_form = CustCreateAdressForm
-    workplace_form = CustomWorkplaceForm
-
-    
-
-
-    def get(self, request, pk):
-        mode = self.request.GET.getlist('mode', default=None)
-        object = Customer.objects.get(pk=self.kwargs['pk'])
-
-        basic_form_inst = self.basic_form()
-        adress_form_inst = self.adress_form()
-        workplace_form_inst = self.workplace_form()
-        
-        # basic_initial = {}
-        # for f in basic_form_inst.fields.keys():
-        #     basic_initial[str(f)] = getattr(object, f)
-
-        basic_initial = { str(f): getattr(object, f) for f in basic_form_inst.fields.keys() }
-        adress_initial = { str(f): getattr(object.adress, f) for f in adress_form_inst.fields.keys() }
-        workplace_initial = { str(f): getattr(object.workplace, f) for f in workplace_form_inst.fields.keys() }
-        workplace_adress_initial = { str(f): getattr(object.workplace.adress, f) for f in adress_form_inst.fields.keys() }
-
-        context_var = {
-            'basic': { 
-                'basic' : self.basic_form(initial=basic_initial) },
-            'contact' : {
-                'adress' : self.adress_form(initial=adress_initial),
-                'form': self.basic_form(initial=basic_initial),
-                },
-            'workplace' : {
-                'form': self.basic_form(initial=basic_initial)
-                }
-    }
-        
-
-        if mode[0] == 'basic' and len(mode) == 1:
-            print('jeden')
-            print(object)
-
-            # print(obj)
-            
-            return render(request, self.template_name, context=context_var['basic'])
-        elif mode[0] == 'contact' and len(mode) == 1:
-            print('dwa')
-            print(mode)
-            print(request.GET)
-            # return render(request, self.template_name, context=context_var['contact'])
-            print(context_var)
-            print(basic_initial)
-            return HttpResponse(context_var['basic'], content_type='application/text')
-
-        elif mode[0] == 'workplace' and len(mode) == 1:
-            print('cztery')
-            print(mode)
-            print(request.GET)
-            return render(request, self.template_name)
-        
-        else: 
-            print('TRZY else wyszlo')
-            print(request.GET)
-            return render(request, self.template_name)
-
-
-
-
-    def post(self, request, pk):
-        object = Customer.objects.get(pk=self.kwargs['pk'])
-        basic_form_post = self.basic_form(request.POST, instance=object)
-        adress_form_post = self.adress_form(request.POST, instance=object.adress)
-        workplace_form_post = self.workplace_form(request.POST, instance=object.workplace)
-        workplace_adress_form_post = self.adress_form(request.POST, instance=object.workplace.adress)
-        if basic_form_post.is_valid():
-            basic_form_post.save()
-            
-        if adress_form_post.is_valid():
-            adress_form_post.save()
-        
-        if workplace_form_post.is_valid():
-            workplace_form_post.save()
-
-        if workplace_adress_form_post.is_valid():
-            workplace_adress_form_post.save()
-
-        return HttpResponseRedirect(reverse('customer_detail', kwargs={'pk':pk}))
-        # return redirect('customer_detail', pk=pk)
-
-'''
 
 
 class AddNewProductView(LoginRequiredMixin, View):
