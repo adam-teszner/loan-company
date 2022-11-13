@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
+<link rel="stylesheet" href="{% static 'css/cropper.css' %}">
 
 <h1>edit profile</h1>
 <form method="post" enctype="multipart/form-data" >{% csrf_token %}
@@ -18,8 +19,35 @@
 
     {{user_adress.errors}}
     {{user_basic.errors}}
-</form>
 
+    {% comment %} {{user_info.profile_pic}} {% endcomment %}
+</form>
 <a type='button' href="{% url 'user_password' user.id %}" class="pyl-btn">Change Password</a>
 {% comment %} <a type='button' href="{% url 'user_pic' user.id %}" class="pyl-btn">Profile Picture</a> {% endcomment %}
+
+{% comment %} <div style="border: red 2px dashed;"> {% endcomment %}
+    {% comment %} <img style="display:block; max-width:100%;" id="test" alt="#"> {% endcomment %}
+{% comment %} </div> {% endcomment %}
+{% comment %} <button id='crop-btn' class='pyl-btn'>CROP</button> {% endcomment %}
+
+{% comment %} <img style="display:block; max-width:100%;" id="test-22" alt="#"> {% endcomment %}
+
+
+<div id="pyl-cropper-modal-background">
+    <div class="pyl-cropper-modal pyl-card">
+        <h1 id="modal-header">Crop the image before upload.</h1>
+        <div class="image-container">
+            
+        </div>
+
+        <div class="pyl-modal-button">
+        <button class="pyl-btn" id='crop-image-cancel'>Cancel</button>
+        <button class="pyl-btn" id='crop-image-ok'>OK</button>
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'js/cropper.js' %}"></script>
+<script src="{% static 'js/crop.js' %}"></script>
+
 {% endblock content %}
