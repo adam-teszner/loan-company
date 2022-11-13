@@ -134,9 +134,12 @@ class CustomSignUpForm(forms.ModelForm):
                 'social_security_no_pesel', 'id_passport', 'phone_no',
                 'information', 'profile_pic']
 
-        # widgets = {
-        #     'profile_pic': FileInput
-        # }
+        widgets = {
+            'profile_pic': FileInput(attrs={
+                                    'class': 'img-field',
+                                    'accept': 'image/*',})
+                                    # 'onchange': 'crop()'})
+        }
 
 class ChangeUsername(UserChangeForm):
     username = forms.CharField(max_length=100, label='')
