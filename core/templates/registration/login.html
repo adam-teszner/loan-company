@@ -3,7 +3,43 @@
 <h3>Login information</h3>
 {% endblock title %}
 {% block content %}
-{% if form.errors %}
+
+<div id="login-cont" class="pyl-container pyl-padding">
+    <div class="pyl-card login-form">
+        <h2>Please Login</h2>
+        <form action="{% url 'login' %}" method="post">
+            {%csrf_token%}
+            <div class="form-fields">
+                <label class="pyl-label-text" for="{{form.username.auto_id}}">{{form.username.label}}</label>
+                {{form.username}}
+            </div>
+            <div class="form-fields">
+                <label class="pyl-label-text" for="{{form.password.auto_id}}">{{form.password.label}}</label>
+                {{form.password}}
+            </div>
+            <div class="form-fields">
+                {% if form.errors %}
+                <p>Username or Password are invalid !</p>
+                {% else %}
+                <p></p>
+                {% endif %}
+            </div>
+            <div class="form-buttons">
+                <input class="pyl-btn" type="submit" value='Login'>
+                <input type="hidden" name='next' value='{{request.GET.next}}'>
+                <a type="button" href="{% url 'user_password_reset' %}" class="pyl-btn">Reset Password</a>
+            </div>
+        </form>
+        <div id="login-sign_up">
+            If You don't have an account, <a href="{% url 'sign_up' %}">click here</a> to create one
+        </div>
+    </div>
+</div>
+
+
+
+
+{% comment %} {% if form.errors %}
 <h3>Username or password are invalid. Try again !</h3>
 {% endif %}
 <form action="{% url 'login' %}" method="post">
@@ -21,7 +57,7 @@
 <p><a href="{% url 'sign_up' %}">Sign Up</a></p>
 <br><br>
 <h4>Forgot password ?</h4>
-<p><a href="{% url 'user_password_reset' %}">Reset password</a></p>
+<p><a href="{% url 'user_password_reset' %}">Reset password</a></p> {% endcomment %}
 
 
 {% endblock content %}

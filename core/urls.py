@@ -9,6 +9,7 @@ dev_settings = static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) if 
 
 urlpatterns = [
     path('', views.index, name='index'),
+    path('accounts/login/', views.LoginUser.as_view(), name='login'),
     path('accounts/sign_up/', views.RegisterUser.as_view(), name='sign_up'),
     path('accounts/user/<int:id>', views.UserProfileView.as_view(), name='user_profile'),
     path('accounts/user/<int:id>/edit', views.UserProfileEditView.as_view(), name='user_profile_edit'),

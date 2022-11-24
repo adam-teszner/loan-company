@@ -1,0 +1,34 @@
+{% comment %} {% if widget.is_initial %}{{ widget.initial_text }}: <a href="{{ widget.value.url }}">{{ widget.value }}</a>
+
+{% if not widget.required %}
+<input type="checkbox" name="{{ widget.checkbox_name }}" id="{{ widget.checkbox_id }}"{% if widget.attrs.disabled %} disabled{% endif %}>
+<label for="{{ widget.checkbox_id }}">{{ widget.clear_checkbox_label }}</label>{% endif %}<br>
+{{ widget.input_text }}:{% endif %}
+<input type="{{ widget.type }}" name="{{ widget.name }}"{% include "django/forms/widgets/attrs.html" %}> {% endcomment %}
+
+{% if widget.is_initial %}
+<div class="pic-ovr-cont">
+    <img src="{{widget.value.url}}" alt="#" class="profile-picture" id="{{widget.name}}-id-image">
+    <div class="pic-overlay" id="{{widget.name}}-ovr-id">Edit</div>
+</div>
+{% else %}
+<div class="pic-ovr-cont">
+    <img src="/static/images/icon-4399701_640.png" alt="#" class="profile-picture" id="{{widget.name}}-id-image">
+    <!-- Above !! this is wrong ! but using {%static} throws an error ! to resolve ! May not WORK IN PRODUCTION -->
+    <div class="pic-overlay" id="{{widget.name}}-ovr-id">Edit</div>
+</div>
+{% if not widget.required %}
+<br>
+<div class="file-inputs-container">
+    <input type="checkbox" name="{{ widget.checkbox_name }}" id="{{ widget.checkbox_id }}"{% if widget.attrs.disabled %} disabled{% endif %}>
+    <label for="{{ widget.checkbox_id }}">{{ widget.clear_checkbox_label }}</label>{% endif %}
+    {{ widget.input_text }}:{% endif %}
+    <label for="id_{{widget.name}}">{{widget.label_name}}</label>
+    <input type="{{ widget.type }}" name="{{ widget.name }}"{% include "django/forms/widgets/attrs.html" %}>
+</div>
+
+
+
+{% comment %} <svg ns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+    <path d="M51 149q12-8 23-13Q87 131 101 131q14 0 26 5 12 5 23 13 9-9 14-21t5-26q0-29-20-49T101 32q-29 0-49 20T32 101q0 14 5 26t14 21ZM101 105q-11 0-18-7-7-7-7-18t7-18q7-7 18-7t18 7q7 7 7 18t-7 18Q112 105 101 105ZM101 177q-16 0-30-6-14-6-24-16-10-10-16-24Q25 117 25 101t6-30q6-14 16-24 10-10 24-16Q85 25 101 25t30 6q14 6 24 16 10 10 16 24Q177 85 177 101t-6 30q-6 14-16 24-10 10-24 16Q117 177 101 177Zm0-7q12 0 23-4 12-4 21-12-9-7-20-11-11-4-24-4t-24 4q-11 4-20 11 9 8 21 12 12 4 23 4Zm0-72q8 0 13-5t5-13q0-8-5-13-5-5-13-5t-13 5q-5 5-5 13t5 13Q94 98 101 98Zm0-18Zm0 75Z"/>
+</svg> {% endcomment %}

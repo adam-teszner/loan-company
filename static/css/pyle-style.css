@@ -487,6 +487,7 @@ a.fill-th {
 #customer-details {
     display: flex;
     justify-content: space-between;
+    margin-top: .5rem;
 }
 
 #customer-details > a {
@@ -599,7 +600,7 @@ a.fill-th {
     transition: 0.1s;
 }
 
-.pyl-form > .form-hide {
+.form-hide {
     display: none;
 }
 
@@ -717,6 +718,11 @@ a.fill-th {
     .pyl-modal {
       width: auto;
       margin: 10% calc(100% - 40em);
+    }
+
+    .file-inputs-container {
+        display: flex !important;
+        justify-content: center;
     }
   }
 
@@ -1046,7 +1052,7 @@ a.fill-th {
 
 }
 
-.collumn > h2 {
+.prf-pag > h2 {
     font-weight: 400;
     font-family: var(--font-raj);
     font-size: 1.8em;
@@ -1059,7 +1065,7 @@ a.fill-th {
     flex-basis: 25%;
 }
 
-.collumn > div {
+.prf-pag > div {
     font-family: var(--font-raj);
     font-weight: 200;
     font-size: 1.2em;
@@ -1068,7 +1074,7 @@ a.fill-th {
     margin-bottom: 1em;
 }
 
-.collumn > div > p {
+.prf-pag > div > p {
     font-family: 'Ubuntu', sans-serif;
     font-weight: 200;
     font-size: .8em;
@@ -1078,13 +1084,13 @@ a.fill-th {
     text-align: center;
 }
 
-.collumn > div > p > svg {
+.prf-pag > div > p > svg {
     float: left;
     clear: both;
     transform: translateY(-3px);
 }
 
-.collumn > div > p > span {
+.prf-pag > div > p > span {
     float: left;
     clear: both;
     font-size: 1em;
@@ -1092,10 +1098,14 @@ a.fill-th {
     font-family: var(--font-raj);
 }
 
-#profile-picture {
+.profile-picture {
     border-radius: 50%;
-    margin-left: auto;
-    margin-right: auto;
+    /* margin-left: auto; */
+    /* margin-right: auto; */
+    box-shadow: 3px 5px 20px -6px;
+    width: 100%;
+    display: flex;
+    /* experimental -  for profile edit */
     
 }
 
@@ -1169,4 +1179,167 @@ a.fill-th {
 #edit-profile:hover path {
     d: path("M24.5 41.5v-3.05l10.6-10.6 3.05 3.05-10.6 10.6Zm-18-10.35v-2.3h14.75v2.3Zm33.6-2.2-3.05-3.05 1.45-1.45q.3-.3.775-.3.475 0 .825.3l1.45 1.45q.3.35.3.825t-.3.775Zm-33.6-6v-2.3h23.1v2.3Zm0-8.2V12.5h23.1v2.25Z");
 
+}
+
+.profile-edit-picture{
+    align-items: center;
+    margin: 2rem auto;
+    width: 50vw;
+}
+
+.profile-edit-layout {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    align-items: flex-start;
+    column-gap: 1.5rem;
+}
+
+.pyl-text-area {
+    box-sizing: border-box;
+    height: 40vh;
+    border-radius: 4px;
+    border: 1px solid var(--ad-one-color);
+    font-family: 'Rajdhani';
+    font-weight: 400;
+    font-size: .9rem;
+    text-indent: 0.5em;
+    -webkit-transition: 0.5s;
+    transition: 0.5s;
+    outline: none;
+    margin: 0px;
+    padding: 0px;
+}
+
+.pyl-text-area:focus {
+    border: 1px solid var(--color-1-alt);
+}
+
+
+.pic-ovr-cont {
+    /* width: 50%; */
+    max-width: 20vw;
+    margin: 0 auto;
+    position: relative;
+    border-radius: 50%;
+    overflow: hidden;
+    box-shadow: 3px 5px 20px -6px;
+}
+
+.pic-ovr-cont:hover .pic-overlay {
+    top:70%;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.pic-ovr-cont:hover #profile_pic-id-image {
+    opacity: .5;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.pic-overlay {
+    opacity: .8;
+    position: absolute;
+    bottom: 0;
+    color: whitesmoke;
+    background-color: black;
+    font-size: min(3vw, 2rem);
+    width: 100%;
+    top:100%;
+    text-align: center;
+    padding-top: .5vh;
+}
+
+.file-inputs-container{
+    margin: 0 auto;
+    display: none;
+    /* justify-content: center; */
+}
+
+.prf-edit {
+    max-width: 40%;
+    min-width: max(25%, 18rem);
+}
+
+.prf-edit h2 {
+    font-family: var(--font-raj);
+    text-align: center;
+    font-weight: 200;
+}
+
+.edt-prf-pass {
+    margin-top: .5em;
+}
+
+.prf-edit-save {
+    text-align: center;
+    padding: 2rem;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem .5rem;
+    margin: .5rem auto;
+    max-width: 35%;
+    min-width: max-content;
+    background-color: var(--ad-two-color);
+}
+
+.login-form h2 {
+    text-align: center;
+    font-size: 1.8rem;
+    font-weight: 500;
+    font-family: var(--font-raj);
+    color: var(--secondary-backgroud-color);
+}
+
+.login-form > form > div {
+    padding: .3rem 1.5rem;
+}
+
+.login-form > form > div > p {
+    text-align: center;
+    font-family: var(--font-raj);
+    font-size: 1.1rem;
+}
+
+.login-form > form > .form-buttons {
+    display: flex;
+    justify-content: space-around;
+    padding-bottom: 3rem;
+}
+
+#login-sign_up {
+    font-family: var(--font-raj);
+    letter-spacing: 1px;
+    text-align: center;
+}
+
+#login-sign_up a {
+    font-weight: 600;
+    text-decoration: underline;
+}
+
+#login-cont {
+    padding-top: 10vh;
+}
+
+.password-help-text ul li {
+    color: var(--secondary-backgroud-color);
+    font-family: var(--font-raj);
+    font-size: 1.1rem;
+
+}
+
+.password-help-text ul li::marker {
+    color: var(--secondary-backgroud-color);
+    content: '*     ';
+    font-size: 1.3rem;
+}
+
+.flex-column {
+    flex-direction: column;
 }

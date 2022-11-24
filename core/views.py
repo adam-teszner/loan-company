@@ -10,14 +10,17 @@ from .models import Customer, Adress, UserInfo
 from .forms import (CustCreatePersonalInfo, CustCreateAdressForm,
                     CustomSignUpForm, CustomWorkplaceForm,
                     AddNewProductForm, CustCreatePersonalInfoUpdate,
-                    ChangeUsername)
+                    ChangeUsername, CustomLogin, CustomPasswordResetFrorm,
+                    CustomSetPasswordForm, CustomPasswordChangeForm, 
+                    CustomUserCreationForm)
 from django.views import View
 from django.core import serializers
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.views import (PasswordChangeView,
                                 PasswordChangeDoneView, PasswordResetView,
-                                PasswordResetDoneView, PasswordResetConfirmView)                                                                    
+                                PasswordResetDoneView, PasswordResetConfirmView,
+                                LoginView)                                                                    
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -157,31 +160,30 @@ def custom_customer(request):
 
         ### SKROCIC TO - ZROBIC LADNIEJSZE, EFEKTYWNE BARDZIEJ ###
 
-    
+class LoginUser(LoginView):
+    authentication_form = CustomLogin
 
     
 class RegisterUser(View):
     user_info_form = CustomSignUpForm
-    user_create_form = UserCreationForm
+    user_create_form = CustomUserCreationForm
     user_adress_form = CustCreateAdressForm
     template_name = 'registration/sign_up.html'
-    initial =   {
-                'user_info_form': user_info_form,
-                'user_create_form': user_create_form,
-                'user_adress_form': user_adress_form,
-                }
+    data = {}
+    data['user_info_form'] = CustomSignUpForm()
+    data['user_create_form'] = CustomUserCreationForm()
+    data['user_adress_form'] = CustCreateAdressForm()
 
     def get(self, request):
-        self.user_create_form(initial = self.initial)
-        self.user_info_form(initial = self.initial)
-        self.user_adress_form(initial=self.initial)
-        return render(request, self.template_name, self.initial)
+
+        return render(request, self.template_name, context=self.data)
+
 
     def post(self, request):
         
-        user_info = self.user_info_form(request.POST, request.FILES or None)
-        user_create = self.user_create_form(request.POST)
-        user_adress = self.user_adress_form(request.POST)
+        user_info = self.user_info_form(self.request.POST, request.FILES or None)
+        user_create = self.user_create_form(self.request.POST)
+        user_adress = self.user_adress_form(self.request.POST)
         if user_info.is_valid() and user_create.is_valid():
             z = user_info.save(commit=False)
             x = user_create.save(commit=False)
@@ -195,8 +197,13 @@ class RegisterUser(View):
             # WYMYSLIC KROTSZA WERSJĘ !!! !! z comitem itd 
 
             return HttpResponseRedirect(reverse('index'))
-
-        return render(request, self.template_name, self.initial)
+        context = {}
+        context['user_info_form'] = user_info
+        context['user_create_form'] = user_create
+        context['user_adress_form'] = user_adress
+        
+        print('ERRORS')
+        return render(request, self.template_name, context)
             
 
 
@@ -247,6 +254,7 @@ class UserProfileEditView(LoginRequiredMixin, UpdateView):
         data['user_info'] = CustomSignUpForm(instance=self.object)
         data['user_adress'] = CustCreateAdressForm(instance=self.object.adress)
         data['user_basic'] = ChangeUsername(instance=self.object.user)
+        # data['user_profile_image'] = UserInfo.objects.get(id=self.kwargs['id']).profile_pic
 
         if self.kwargs['id'] != self.request.user.id:
             raise PermissionDenied
@@ -273,6 +281,7 @@ class UserProfileEditView(LoginRequiredMixin, UpdateView):
 
 
 class UserChangePassword(LoginRequiredMixin, PasswordChangeView):
+    form_class = CustomPasswordChangeForm
     template_name = 'registration/password_change.html'
     # success_url = reverse_lazy('user_password_done', kwargs={'id': })
 
@@ -287,13 +296,16 @@ class UserChangePasswordDone(LoginRequiredMixin, PasswordChangeDoneView):
 
 
 class UserResetPassword(SuccessMessageMixin, PasswordResetView):
+    form_class = CustomPasswordResetFrorm
     success_message = 'Email has been sent to %(email)s'
     email_template_name = 'registration/reset_password_email.html'
     template_name = 'registration/reset_password.html'
     success_url = reverse_lazy('index')
-    
 
-class UserResetPasswordForm(PasswordResetConfirmView):
+
+class UserResetPasswordForm(SuccessMessageMixin, PasswordResetConfirmView):
+    form_class = CustomSetPasswordForm
+    success_message = 'Password changed succesfully'
     template_name = 'registration/reset_password_form.html'
     success_url = reverse_lazy('login')
 
