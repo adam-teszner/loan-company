@@ -26,8 +26,7 @@ body {
 }
 
 .pyl-container {
-    /* margin: .5em; */
-    /* padding: .5em; */
+    padding: 0 1em;
     max-width: 1350px;
     margin-left: auto;
     margin-right: auto;
@@ -467,7 +466,7 @@ a.fill-th {
 }
 
 .form-header > svg {
-    /* float:left; */
+    float:left;
     margin: 0;
     padding-top: .5em;
 }
@@ -488,6 +487,7 @@ a.fill-th {
 #customer-details {
     display: flex;
     justify-content: space-between;
+    margin-top: .5rem;
 }
 
 #customer-details > a {
@@ -577,6 +577,7 @@ a.fill-th {
     border: 1px solid var(--secondary-backgroud-color);
     border-radius: 4px;
     color: var(--secondary-backgroud-color);
+    background-color: transparent;
     font-weight: 200;
     font-size: 15px;
     font-family: 'Ubuntu';
@@ -599,7 +600,7 @@ a.fill-th {
     transition: 0.1s;
 }
 
-.pyl-form > .form-hide {
+.form-hide {
     display: none;
 }
 
@@ -662,10 +663,18 @@ a.fill-th {
     -webkit-transition: 0.5s;
     transition: 0.5s;
     outline: none;
+    margin: 0px;
+    padding: 0px;
  }
 
- .form-fields > .pyl-input:focus {
+ .pyl-input:focus {
     border: 1px solid var(--color-1-alt);
+ }
+
+ .pyl-input:disabled {
+    background-color: transparent;
+    color: rgb(170, 170, 170);
+    opacity: 0.7;
  }
 
 .pyl-modal-background {
@@ -709,6 +718,11 @@ a.fill-th {
     .pyl-modal {
       width: auto;
       margin: 10% calc(100% - 40em);
+    }
+
+    .file-inputs-container {
+        display: flex !important;
+        justify-content: center;
     }
   }
 
@@ -758,7 +772,7 @@ a.fill-th {
 
 .pyl-modal-button {
     display: flex;
-    justify-content: center;
+    justify-content: space-evenly;
     padding: .6em;
 }
 
@@ -791,7 +805,7 @@ a.fill-th {
     /* border: 1px var(--secondary-backgroud-color) solid; */
     box-shadow: 2px 4px 8px 0px rgba(0,0,0,0.2);
     background: var(--color-1);
-    color: var(--secondary-backgroud-color)
+    color: var(--secondary-backgroud-color);
     text-align: center;
     font-weight: 200;
     font-size: .9em;
@@ -950,4 +964,382 @@ a.fill-th {
 
 .pyl-hidden {
     display: none;
+}
+
+#edit-form {
+    margin: 1.3em;
+    font-size: smaller;
+}
+
+#form-inputs > div {
+    position: relative;
+}
+
+#form-inputs {
+    display: flex;
+    flex-direction: column;
+}
+
+.pyl-edit-inputs {
+    display: flex;
+    flex-direction: row;
+    margin-top: .5em;
+    column-gap: 3em;
+}
+
+.pyl-edit-inputs > label {
+    flex-grow: 1;
+    flex-basis: 0;
+}
+
+.pyl-edit-inputs > input, .pyl-edit-inputs > select {
+    flex-grow: 1;
+    flex-basis: 0;
+}
+
+.error-msg {
+    display: none;
+}
+
+
+.pyl-edit-inputs > input:hover + div.error-msg:not(:empty), .pyl-edit-inputs > input:focus + div.error-msg:not(:empty), 
+.pyl-edit-inputs > select:hover + div.error-msg:not(:empty), .pyl-edit-inputs > select:focus + div.error-msg:not(:empty) {
+    display: block;
+    position: absolute;
+    padding: .6em;
+    text-align: center;
+    /* top: -160%;
+    left: 50%; */
+    background-color: rgb(255, 71, 71);
+    border: darkred 2px solid;
+    box-shadow: 2px 4px 8px 0px rgba(0,0,0,0.2);
+    border-radius: 5px;
+    font-weight: 300;
+    font-family: system-ui;
+    z-index: 1;
+    right: 0%;
+    bottom: calc(100% + 25px);
+    transform: translateX(-15%);
+    max-width: 150px;
+}
+
+
+.val-err {
+    border: 2px dashed red;
+    transition: 0.1s;
+}
+
+
+#add-product-image {
+    order: 2;
+}
+
+#add-product-btns {
+    display: flex;
+    justify-content: space-between;
+}
+
+.profile-page-layout {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.collumn {
+    color: var(--secondary-backgroud-color);
+    border-radius: 15px;
+    padding: .5em 2em 2em 2em;
+
+}
+
+.prf-pag > h2 {
+    font-weight: 400;
+    font-family: var(--font-raj);
+    font-size: 1.8em;
+    text-align: center;
+    margin-top: .5em;
+}
+
+.col-darker {
+    background-color: var(--ad-two-color);
+    flex-basis: 25%;
+}
+
+.prf-pag > div {
+    font-family: var(--font-raj);
+    font-weight: 200;
+    font-size: 1.2em;
+    padding-bottom: 1em;
+    text-align: left;
+    margin-bottom: 1em;
+}
+
+.prf-pag > div > p {
+    font-family: 'Ubuntu', sans-serif;
+    font-weight: 200;
+    font-size: .8em;
+    margin-top: .4em;
+    margin-bottom: .4em;
+    letter-spacing: .1em;
+    text-align: center;
+}
+
+.prf-pag > div > p > svg {
+    float: left;
+    clear: both;
+    transform: translateY(-3px);
+}
+
+.prf-pag > div > p > span {
+    float: left;
+    clear: both;
+    font-size: 1em;
+    letter-spacing: normal;
+    font-family: var(--font-raj);
+}
+
+.profile-picture {
+    border-radius: 50%;
+    /* margin-left: auto; */
+    /* margin-right: auto; */
+    box-shadow: 3px 5px 20px -6px;
+    width: 100%;
+    display: flex;
+    /* experimental -  for profile edit */
+    
+}
+
+#pyl-cropper-modal-background {
+    display: none; 
+    position: fixed;
+    z-index: 10;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: scroll;
+    /* background-color: rgb(0,0,0); */
+    background-color: rgba(0,0,0,0.4);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+}
+
+.pyl-cropper-modal {
+
+    position: relative;
+    z-index: 99;
+    opacity: 1;
+    width: fit-content;
+    max-width: 95vw;
+    background-color: var(--color-1);
+    padding: 0 1rem;
+    color: var(--secondary-backgroud-color);
+    margin-inline: auto;
+    box-sizing: border-box;
+
+}
+
+.image-container {
+    margin-inline: auto;
+    box-sizing: border-box;
+    max-height: 80vh;
+    
+}
+
+#image {
+    box-sizing: border-box;
+    max-width: 100%;
+}
+
+.pyl-cropper-modal h1 {
+    font-size: 1.5;
+    text-align: center;
+    padding-top: .5em;
+    font-family: var(--font-raj);
+    font-weight: 400;
+}
+
+#h1-edit {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 2em;
+}
+
+#h1-edit > h1 {
+    margin-top: 5%;
+    color: var(--secondary-backgroud-color);
+    text-align: center;
+    font-family: var(--font-raj);
+    font-weight: 300;
+    font-size: 3em;
+    flex-grow: 1;
+}
+
+#edit-profile:hover path {
+    d: path("M24.5 41.5v-3.05l10.6-10.6 3.05 3.05-10.6 10.6Zm-18-10.35v-2.3h14.75v2.3Zm33.6-2.2-3.05-3.05 1.45-1.45q.3-.3.775-.3.475 0 .825.3l1.45 1.45q.3.35.3.825t-.3.775Zm-33.6-6v-2.3h23.1v2.3Zm0-8.2V12.5h23.1v2.25Z");
+
+}
+
+.profile-edit-picture{
+    align-items: center;
+    margin: 2rem auto;
+    width: 50vw;
+}
+
+.profile-edit-layout {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    align-items: flex-start;
+    column-gap: 1.5rem;
+}
+
+.pyl-text-area {
+    box-sizing: border-box;
+    height: 40vh;
+    border-radius: 4px;
+    border: 1px solid var(--ad-one-color);
+    font-family: 'Rajdhani';
+    font-weight: 400;
+    font-size: .9rem;
+    text-indent: 0.5em;
+    -webkit-transition: 0.5s;
+    transition: 0.5s;
+    outline: none;
+    margin: 0px;
+    padding: 0px;
+}
+
+.pyl-text-area:focus {
+    border: 1px solid var(--color-1-alt);
+}
+
+
+.pic-ovr-cont {
+    /* width: 50%; */
+    max-width: 20vw;
+    margin: 0 auto;
+    position: relative;
+    border-radius: 50%;
+    overflow: hidden;
+    box-shadow: 3px 5px 20px -6px;
+}
+
+.pic-ovr-cont:hover .pic-overlay {
+    top:70%;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.pic-ovr-cont:hover #profile_pic-id-image {
+    opacity: .5;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.pic-overlay {
+    opacity: .8;
+    position: absolute;
+    bottom: 0;
+    color: whitesmoke;
+    background-color: black;
+    font-size: min(3vw, 2rem);
+    width: 100%;
+    top:100%;
+    text-align: center;
+    padding-top: .5vh;
+}
+
+.file-inputs-container{
+    margin: 0 auto;
+    display: none;
+    /* justify-content: center; */
+}
+
+.prf-edit {
+    max-width: 40%;
+    min-width: max(25%, 18rem);
+}
+
+.prf-edit h2 {
+    font-family: var(--font-raj);
+    text-align: center;
+    font-weight: 200;
+}
+
+.edt-prf-pass {
+    margin-top: .5em;
+}
+
+.prf-edit-save {
+    text-align: center;
+    padding: 2rem;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem .5rem;
+    margin: .5rem auto;
+    max-width: 35%;
+    min-width: max-content;
+    background-color: var(--ad-two-color);
+}
+
+.login-form h2 {
+    text-align: center;
+    font-size: 1.8rem;
+    font-weight: 500;
+    font-family: var(--font-raj);
+    color: var(--secondary-backgroud-color);
+}
+
+.login-form > form > div {
+    padding: .3rem 1.5rem;
+}
+
+.login-form > form > div > p {
+    text-align: center;
+    font-family: var(--font-raj);
+    font-size: 1.1rem;
+}
+
+.login-form > form > .form-buttons {
+    display: flex;
+    justify-content: space-around;
+    padding-bottom: 3rem;
+}
+
+#login-sign_up {
+    font-family: var(--font-raj);
+    letter-spacing: 1px;
+    text-align: center;
+}
+
+#login-sign_up a {
+    font-weight: 600;
+    text-decoration: underline;
+}
+
+#login-cont {
+    padding-top: 10vh;
+}
+
+.password-help-text ul li {
+    color: var(--secondary-backgroud-color);
+    font-family: var(--font-raj);
+    font-size: 1.1rem;
+
+}
+
+.password-help-text ul li::marker {
+    color: var(--secondary-backgroud-color);
+    content: '*     ';
+    font-size: 1.3rem;
+}
+
+.flex-column {
+    flex-direction: column;
 }

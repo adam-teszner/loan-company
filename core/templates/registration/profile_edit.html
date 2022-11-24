@@ -1,25 +1,84 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
+<link rel="stylesheet" href="{% static 'css/cropper.css' %}">
 
-<h1>edit profile</h1>
-<form method="post" enctype="multipart/form-data" >{% csrf_token %}
-    <h2>BASIC</h2>
-    {% comment %} {{ user_basic.as_p }} {% endcomment %}
-    <label for="{{ user_basic.username.auto_id }}">{{ user_basic.username.label }}</label>{{ user_basic.username }}
-    <label for="{{ user_basic.email.auto_id }}">{{ user_basic.email.label }}</label>{{ user_basic.email }}
-    {% comment %} {{user_basic.as_p}} {% endcomment %}
-    {% comment %} {{ user_basic.email}} {% endcomment %}
-    <h2>USERINFO</h2>
-    {{ user_info.as_p }}
-    <h2>ADRESS</h2>
-    {{ user_adress.as_p }}
-    <input type="submit" value="Save">
 
-    {{user_adress.errors}}
-    {{user_basic.errors}}
-</form>
 
-<a type='button' href="{% url 'user_password' user.id %}" class="pyl-btn">Change Password</a>
-{% comment %} <a type='button' href="{% url 'user_pic' user.id %}" class="pyl-btn">Profile Picture</a> {% endcomment %}
+<div class="pyl-container">
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% comment %} <div>
+            <img src="{{user_profile_image.url}}" alt="#" class="profile-picture">
+            <label for="{{user_info.profile_pic.auto_id}}" >{{user_info.profile_pic.label}}</label>{{user_info.profile_pic}}
+        </div> {% endcomment %}
+        <div class="profile-edit-picture">
+            {{user_info.profile_pic}}
+        </div>
+        <div class="profile-edit-layout">
+            <div class="pyl-information-box collumn prf-edit">
+                <h2>Basic information</h2>
+                {% for field in user_info %}
+                    {% if field is not user_info.profile_pic and field is not user_info.information %}
+                    <div class="form-fields">
+                        <label class='pyl-label-text' for="{{field.auto_id}}">{{field.label}}</label>{{field}}
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+            <div class="pyl-information-box collumn prf-edit">
+                <h2>Contact</h2>
+                {% for f in user_adress %}
+                <div class="form-fields">
+                    <label class='pyl-label-text' for="{{f.auto_id}}">{{f.label}}</label>{{f}}
+                </div> 
+                {% endfor %}
+            </div>
+
+            <div class="pyl-information-box collumn prf-edit">
+                <h2>About</h2>
+                <div class="form-fields">
+                    <label class='pyl-label-text' for="{{user_info.information.auto_id}}">{{user_info.information.label}}</label>{{user_info.information}}
+                </div>
+            </div>
+
+            <div class="pyl-information-box collumn prf-edit">
+                <h2>Login information</h2>
+                <div class="form-fields">
+                        <label class='pyl-label-text' for="{{user_basic.username.auto_id}}">{{user_basic.username.label}}</label>{{user_basic.username}}
+                </div>
+                <div class="form-fields">
+                    <label class='pyl-label-text' for="{{user_basic.email.auto_id}}">{{user_basic.email.label}}</label>{{user_basic.email}}
+                </div>
+                <div class="edt-prf-pass">
+                    <label class='pyl-label-text' for="{{user_basic.password.auto_id}}">{{user_basic.password.label}}</label>
+                    <div class="edt-prf-pass"><a type='button' href="{% url 'user_password' user.id %}" class="pyl-btn">Change Password</a></div>
+                </div>
+            </div>
+        </div>
+        <div class="prf-edit-save">
+            <input class="pyl-btn" type="submit" value="Save"> 
+        </div>
+    </form>
+</div>
+
+<!-- image modal -->
+<div id="pyl-cropper-modal-background">
+    <div class="pyl-cropper-modal pyl-card">
+        <h1 id="modal-header">Crop the image before upload.</h1>
+        <div class="image-container">
+            
+        </div>
+
+        <div class="pyl-modal-button">
+        <button class="pyl-btn" id='crop-image-cancel'>Cancel</button>
+        <button class="pyl-btn" id='crop-image-ok'>OK</button>
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'js/cropper.js' %}"></script>
+<script src="{% static 'js/crop.js' %}"></script>
+
 {% endblock content %}

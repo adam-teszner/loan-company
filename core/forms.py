@@ -1,7 +1,13 @@
-from .models import Customer, Adress, UserInfo, Workplace, Product
+from .models import (Customer, Adress, UserInfo,
+                     Workplace, Product)
 from django import forms
 from django.forms.widgets import *
-from django.contrib.auth.forms import UserChangeForm
+from django.contrib.auth.forms import (UserChangeForm,
+                                AuthenticationForm, PasswordResetForm,
+                                SetPasswordForm, PasswordChangeForm,
+                                UserCreationForm)
+from django.contrib.auth.models import User
+from .widgets import MyFileInput
 
 
 
@@ -103,15 +109,24 @@ class CustomWorkplaceForm(forms.ModelForm):
 
     class Meta():
         model = Workplace
-        exclude = ('adress',) 
+        exclude = ['adress']
+        # fields = '__all__' 
 
         labels = {
             'id_nip': 'NIP',
             'name': 'Company Name',
+            'email': 'Email adress'
         }
         
 
 class AddNewProductForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for name in self.fields.keys():
+            self.fields[name].widget.attrs.update({
+                'class' : 'pyl-input'
+            })    
 
     class Meta():
         model = Product
@@ -119,21 +134,104 @@ class AddNewProductForm(forms.ModelForm):
 
 
 class CustomSignUpForm(forms.ModelForm):
+
+    # profile_pic = FileInput()
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for name in self.fields.keys():
+            if name == 'profile_pic':
+                self.fields[name].widget.attrs.update({
+                    'class': 'img-field',
+                    'accept': 'image/*'
+                })
+                continue
+            if name == 'information':
+                self.fields[name].widget.attrs.update({
+                    'class': 'pyl-text-area'
+                })
+                continue
+            self.fields[name].widget.attrs.update({
+                'class' : 'pyl-input'
+            })
+
     class Meta():
         model = UserInfo
         fields = ['first_name', 'last_name', 'dob', 'gender',
                 'social_security_no_pesel', 'id_passport', 'phone_no',
                 'information', 'profile_pic']
 
+        widgets = {
+            'profile_pic': MyFileInput
+        }
         # widgets = {
-        #     'profile_pic': FileInput
+        #     'profile_pic': MyFileInput(attrs={
+        #                             'class': 'img-field',
+        #                             'accept': 'image/*',})
         # }
 
 class ChangeUsername(UserChangeForm):
-    username = forms.CharField(max_length=100, label='')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['username'].widget.attrs.update({
+            'class': 'pyl-input',
+            'label': 'User login'
+        })
+        self.fields['email'].widget.attrs.update({
+            'class': 'pyl-input'
+        })
 
     class Meta(UserChangeForm.Meta):
         fields = ['username', 'email']
-        # fields = '__all__'
 
+class CustomLogin(AuthenticationForm):
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for name in self.fields.keys():
+            self.fields[name].widget.attrs.update({
+                'class': 'pyl-input'
+            })
+        
+class CustomPasswordResetFrorm(PasswordResetForm):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['email'].widget.attrs.update({
+                'class': 'pyl-input'
+            })
+
+class CustomSetPasswordForm(SetPasswordForm):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for name in self.fields.keys():
+            self.fields[name].widget.attrs.update({
+                'class': 'pyl-input'
+            })
+
+class CustomPasswordChangeForm(PasswordChangeForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for name in self.fields.keys():
+            self.fields[name].widget.attrs.update({
+                'class': 'pyl-input'
+            })
+
+class CustomUserCreationForm(UserCreationForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for name in self.fields.keys():
+            self.fields[name].widget.attrs.update({
+                'class': 'pyl-input'
+            })
+
+    class Meta:
+        model = User
+        fields = [
+            'username',
+            'email',
+            'password1',
+            'password2'
+        ]
