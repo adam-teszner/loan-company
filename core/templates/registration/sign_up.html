@@ -1,9 +1,8 @@
 {% extends 'base.html' %}
-{% block title %}
-<h3>Register New User</h3>
-{% endblock title %}}
+{% load static %}
 {% block content %}
-<form method="post" enctype="multipart/form-data">
+<link rel="stylesheet" href="{% static 'css/cropper.css' %}">
+{% comment %} <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{user_create_form.as_p}}
     <h4>Dalej</h4>
@@ -13,5 +12,102 @@
     <h1>ADRESS</h1>
     {{user_adress_form.as_p}}
     <button type='submit'>SUB</button>
-</form>
+</form> {% endcomment %}
+
+
+<div class="pyl-container pyl-padding">
+    <div class="pyl-card form-container">
+        <div class="form-image" style="background-image: url('{% static "images/office-1486358_1280.jpg" %}')"></div>
+        <form class="pyl-form" method='post' id='form-ajax' enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-header">
+                <div class="pyl-tooltip" data-text='Click here if You wish to start over'>
+                    <svg class ='refresh-form' xmlns="http://www.w3.org/2000/svg" height="48" width="48" fill='whitesmoke' onclick='resetForm()'>
+                        <path d="M22.25 39.8q-5.25-.6-8.75-4.525Q10 31.35 10 26q0-3.05 1.325-5.775Q12.65 17.5 15 15.55l1.05 1.1q-2.2 1.65-3.35 4.125T11.55 26q0 4.7 3.05 8.15t7.65 4.15Zm3.55.1v-1.55q4.6-.8 7.625-4.25 3.025-3.45 3.025-8.1 0-5.2-3.6-8.825-3.6-3.625-8.85-3.625h-1.65l3.6 3.6-1.15 1.1-5.45-5.45 5.45-5.5 1.15 1.15-3.6 3.55H24q5.85 0 9.925 4.1Q38 20.2 38 26q0 5.35-3.5 9.25-3.5 3.9-8.7 4.65Z"/>
+                    </svg>
+                </div>
+                <h1>Sign Up</h1>
+            </div>
+            <div class="step-panel">
+                <div class="step step-color" step-name='Personal'>1</div>
+                <div class="step-line"></div>
+                <div class="step" step-name='Contact'>2</div>
+                <div class="step-line"></div>
+                <div class="step" step-name='Additional'>3</div>
+            </div>
+            <div class="form-step">
+                <div class="form-content">
+                    {% for f in user_create_form %}
+                    <div class="form-fields">
+                        <label class='pyl-label-text' for="{{f.auto_id}}">{{f.label}}</label>
+                        {{f}}
+                        <div>{{f.errors}}</div>
+                    </div>
+                    {% endfor %}
+
+                    {% for field in user_info_form %}
+                        {% if field is not user_info_form.profile_pic and field is not user_info_form.information and field is not user_info_form.phone_no %}
+                            <div class="form-fields">
+                                <label class='pyl-label-text' for="{{field.auto_id}}">{{field.label}}</label>
+                                {{field}}
+                                <div>{{field.errors}}</div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                    </div>
+                </div>
+            <div class="form-step form-hide">
+                <div class="form-content">
+                    {% for f in user_adress_form %}
+                    <div class="form-fields">
+                        <label class='pyl-label-text' for="{{f.auto_id}}">{{f.label}}</label>
+                        {{f}}
+                        <div>{{f.errors}}</div>
+                    </div>
+                    {% endfor %}
+                    <div class="form-fields">
+                        <label class='pyl-label-text' for="{{user_info_form.phone_no.auto_id}}">{{user_info_form.phone_no.label}}</label>
+                        {{user_info_form.phone_no}}
+                        <div>{{user_info_form.phone_no.errors}}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-step form-hide">
+                <div class="form-content flex-column">
+                    <div class="form-fields">
+                        <label class='pyl-label-text' for="{{user_info_form.information.auto_id}}">{{user_info_form.information.label}}</label>
+                        {{user_info_form.information}}
+                        <div>{{user_info_form.information.errors}}</div>
+                    </div>
+                    <div class="profile-edit-picture">
+                        {{user_info_form.profile_pic}}
+                    </div>
+                </div>
+            </div>
+            <div class="form-buttons">
+                <button onclick='formPreviousPage()' type='button' class='pyl-btn btn-hide' id='btn-prev'>Previous</button>
+                <button onclick='formNextPage()' type='button' class='pyl-btn' id='btn-next'>Next</button>
+                <button type='submit' class='pyl-btn btn-hide' id='btn-finish'>Finish</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- image modal -->
+<div id="pyl-cropper-modal-background">
+    <div class="pyl-cropper-modal pyl-card">
+        <h1 id="modal-header">Crop the image before upload.</h1>
+        <div class="image-container">
+            
+        </div>
+
+        <div class="pyl-modal-button">
+        <button class="pyl-btn" id='crop-image-cancel'>Cancel</button>
+        <button class="pyl-btn" id='crop-image-ok'>OK</button>
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'js/cropper.js' %}"></script>
+<script src="{% static 'js/crop.js' %}"></script>
 {% endblock content %}

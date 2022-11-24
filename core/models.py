@@ -1,11 +1,13 @@
-import datetime
+import datetime, os
 from decimal import Decimal
 from email.policy import default
 import random
 from xml.sax.handler import property_declaration_handler
+from loan_co_site.storage import OverwriteUploadStorage
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.core.exceptions import ObjectDoesNotExist
 from dateutil.relativedelta import relativedelta
 from django.urls import reverse
 from django.contrib.auth.models import User
@@ -13,8 +15,11 @@ from core.helper_methods import ProductMethods
 
 ## other
 
+
 def user_pic_path(instance, filename):
-    return 'user_{0}/profile_pic/{1}'.format(instance.user.id, filename)
+    user_id = instance.user.id
+    return f'user_{user_id}/profile_pic/u{user_id}pp.jpeg'
+    # not sure if i force .jpeg file extension it will work always... to be tested...
 
 def account_generator():
     return random.randint(10000000, 99999999)
@@ -41,8 +46,8 @@ class UserInfo(models.Model):
     phone_no = models.IntegerField(unique=True)
     created_date = models.DateField(auto_now_add=True)
     information = models.TextField(null=True, blank=True)
-    profile_pic = models.FileField(upload_to=user_pic_path, null=True, blank=True)
-    
+    profile_pic = models.FileField(upload_to=user_pic_path, null=True, blank=True, storage=OverwriteUploadStorage)
+ 
 
     def __str__(self):
         return self.user.username

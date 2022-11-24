@@ -1,6 +1,8 @@
 const imgInput = document.getElementById('id_profile_pic');
 const modal = document.getElementById('pyl-cropper-modal-background');
-// image.src = url;
+const changeImg = document.getElementById('profile_pic-id-image');
+const changeImgOvr = document.getElementById('profile_pic-ovr-id');
+// const changeImg = document.querySelectorAll('.multi-select');
 
 
 
@@ -33,6 +35,7 @@ imgInput.addEventListener('change', () => {
             let container = new DataTransfer();
             container.items.add(file);
             fileInput.files = container.files;
+            changeImg.src = URL.createObjectURL(blob)
             // destroy the cropper and close modal
             cropper.destroy();
             modal.style.display = 'none';
@@ -45,3 +48,7 @@ imgInput.addEventListener('change', () => {
         imgInput.value = '';
     })
 });
+
+changeImg.addEventListener('click', () => imgInput.click());
+changeImgOvr.addEventListener('click', () => imgInput.click());
+// changeImg.forEach(elem => addEventListener('click', () => imgInput.click()));

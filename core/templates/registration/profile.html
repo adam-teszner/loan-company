@@ -10,7 +10,7 @@
         {% comment %} </h1> {% endcomment %}
     </div>
     <div class="profile-page-layout">
-        <div class="collumn col-darker">
+        <div class="collumn prf-pag col-darker">
             <h2>Details</h2>
             <div>
                 Name
@@ -37,16 +37,16 @@
             </div>
 
         </div>
-        <div class="collumn">
+        <div class="collumn prf-pag">
             <h2>Picture</h2>
                 {% if userinfo.profile_pic %}
-                <img src="{{userinfo.profile_pic.url}}" alt="#" id="profile-picture">
+                <img src="{{userinfo.profile_pic.url}}" alt="#" class="profile-picture">
                 {% else %}
                 <h4>NONE</h4>
                 {% endif %}
 
         </div>
-        <div class="collumn col-darker">
+        <div class="collumn prf-pag col-darker">
             <h2>About</h2>
             <p>{{userinfo.information}}</p>
 
