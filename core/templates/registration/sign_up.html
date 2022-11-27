@@ -2,18 +2,6 @@
 {% load static %}
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/cropper.css' %}">
-{% comment %} <form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{user_create_form.as_p}}
-    <h4>Dalej</h4>
-    {{user_info_form.as_p}}
-
-    <br><hr>
-    <h1>ADRESS</h1>
-    {{user_adress_form.as_p}}
-    <button type='submit'>SUB</button>
-</form> {% endcomment %}
-
 
 <div class="pyl-container pyl-padding">
     <div class="pyl-card form-container">
@@ -74,13 +62,14 @@
             </div>
             <div class="form-step form-hide">
                 <div class="form-content flex-column">
+                    <div class="profile-edit-picture">
+                        {{user_info_form.profile_pic}}
+                        <div>{{user_info_form.profile_pic.errors}}</div>
+                    </div>
                     <div class="form-fields">
                         <label class='pyl-label-text' for="{{user_info_form.information.auto_id}}">{{user_info_form.information.label}}</label>
                         {{user_info_form.information}}
                         <div>{{user_info_form.information.errors}}</div>
-                    </div>
-                    <div class="profile-edit-picture">
-                        {{user_info_form.profile_pic}}
                     </div>
                 </div>
             </div>
