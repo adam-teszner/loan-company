@@ -14,6 +14,7 @@
         </div> {% endcomment %}
         <div class="profile-edit-picture">
             {{user_info.profile_pic}}
+            {% if user_info.profile_pic.errors %}<div>{{user_info.profile_pic.errors}}</div>{% endif %}
         </div>
         <div class="profile-edit-layout">
             <div class="pyl-information-box collumn prf-edit">

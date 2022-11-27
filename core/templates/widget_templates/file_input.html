@@ -6,7 +6,7 @@
 {{ widget.input_text }}:{% endif %}
 <input type="{{ widget.type }}" name="{{ widget.name }}"{% include "django/forms/widgets/attrs.html" %}> {% endcomment %}
 
-{% if widget.is_initial %}
+{% comment %} {% if widget.is_initial %}
 <div class="pic-ovr-cont">
     <img src="{{widget.value.url}}" alt="#" class="profile-picture" id="{{widget.name}}-id-image">
     <div class="pic-overlay" id="{{widget.name}}-ovr-id">Edit</div>
@@ -17,9 +17,34 @@
     <!-- Above !! this is wrong ! but using {%static} throws an error ! to resolve ! May not WORK IN PRODUCTION -->
     <div class="pic-overlay" id="{{widget.name}}-ovr-id">Edit</div>
 </div>
-{% if not widget.required %}
 <br>
 <div class="file-inputs-container">
+{% if not widget.required %}
+    <input type="checkbox" name="{{ widget.checkbox_name }}" id="{{ widget.checkbox_id }}"{% if widget.attrs.disabled %} disabled{% endif %}>
+    <label for="{{ widget.checkbox_id }}">{{ widget.clear_checkbox_label }}</label>{% endif %}
+    {{ widget.input_text }}:{% endif %}
+    <label for="id_{{widget.name}}">{{widget.label_name}}</label>
+    <input type="{{ widget.type }}" name="{{ widget.name }}"{% include "django/forms/widgets/attrs.html" %}>
+</div> {% endcomment %}
+
+
+
+{% if not widget.is_initial %}
+<div class="pic-ovr-cont">
+    <img src="/static/images/icon-4399701_640.png" alt="#" class="profile-picture" id="{{widget.name}}-id-image">
+    <!-- Above !! this is wrong ! but using {%static} throws an error ! to resolve ! May not WORK IN PRODUCTION -->
+    <div class="pic-overlay" id="{{widget.name}}-ovr-id">Edit</div>
+</div>
+<br>
+<div class="file-inputs-container">
+{% else %}
+<div class="pic-ovr-cont">
+    <img src="{{widget.value.url}}" alt="#" class="profile-picture" id="{{widget.name}}-id-image">
+    <div class="pic-overlay" id="{{widget.name}}-ovr-id">Edit</div>
+</div>
+<br>
+<div class="file-inputs-container">
+{% if not widget.required %}
     <input type="checkbox" name="{{ widget.checkbox_name }}" id="{{ widget.checkbox_id }}"{% if widget.attrs.disabled %} disabled{% endif %}>
     <label for="{{ widget.checkbox_id }}">{{ widget.clear_checkbox_label }}</label>{% endif %}
     {{ widget.input_text }}:{% endif %}
