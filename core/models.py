@@ -4,6 +4,7 @@ from email.policy import default
 import random
 from xml.sax.handler import property_declaration_handler
 from loan_co_site.storage import OverwriteUploadStorage
+from core.validators import validate_file_size
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
 from django.core.validators import MinValueValidator, MaxValueValidator
@@ -46,7 +47,7 @@ class UserInfo(models.Model):
     phone_no = models.IntegerField(unique=True)
     created_date = models.DateField(auto_now_add=True)
     information = models.TextField(null=True, blank=True)
-    profile_pic = models.FileField(upload_to=user_pic_path, null=True, blank=True, storage=OverwriteUploadStorage)
+    profile_pic = models.FileField(upload_to=user_pic_path, null=True, blank=True, storage=OverwriteUploadStorage, validators=[validate_file_size])
  
 
     def __str__(self):
@@ -182,4 +183,3 @@ class Payment(models.Model):
 
     def __str__(self):
         return f'Product: {self.product.id}, amount: {self.amount}, date: {self.created_date} '
-
