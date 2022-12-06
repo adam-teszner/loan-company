@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.forms',
     'rest_framework',
     'django_extensions',
+    'localflavor',
     'core',
 ]
 

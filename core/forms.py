@@ -9,8 +9,11 @@ from django.contrib.auth.forms import (UserChangeForm,
 from django.contrib.auth.models import User
 from .widgets import MyFileInput
 
-
-
+# localflavor
+from .validators import (PESELwithoutChecksum,
+                        IDwithoutChecksum,
+                        NIPwithoutChecksum,
+                        PhoneNumberField)
 
 class CustCreateAdressForm(forms.ModelForm):
 
@@ -39,7 +42,9 @@ class CustCreateAdressForm(forms.ModelForm):
 
 class CustCreatePersonalInfo(forms.ModelForm):
 
-
+    social_security_no_pesel = PESELwithoutChecksum()
+    id_passport = IDwithoutChecksum()
+    phone_no = PhoneNumberField()
 
     def __init__(self, *args, **kwargs):
         super(CustCreatePersonalInfo, self).__init__(*args, **kwargs)
@@ -99,6 +104,9 @@ class CustCreatePersonalInfoUpdate(CustCreatePersonalInfo):
 
 class CustomWorkplaceForm(forms.ModelForm):
 
+    id_nip = NIPwithoutChecksum()
+    phone_no = PhoneNumberField()
+
     def __init__(self, *args, **kwargs):
         super(CustomWorkplaceForm, self).__init__(*args, **kwargs)
         self.auto_id = 'workplace_id_%s'
@@ -136,6 +144,10 @@ class AddNewProductForm(forms.ModelForm):
 class CustomSignUpForm(forms.ModelForm):
 
     # profile_pic = FileInput()
+
+    social_security_no_pesel = PESELwithoutChecksum()
+    id_passport = IDwithoutChecksum()
+    phone_no = PhoneNumberField()
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
