@@ -9,8 +9,8 @@ from localflavor.pl.forms import (PLPESELField,
 def validate_file_size(value):
     filesize = value.size
 
-    if filesize > 524288:
-        raise ValidationError("Max file size is 0.5 MB")
+    if filesize > 1048576:
+        raise ValidationError("File must be smaller than 1.0 MB")
     else:
         return value
 
@@ -31,7 +31,7 @@ class NIPwithoutChecksum(PLNIPField):
 class PhoneNumberField(RegexField):
 
     default_error_messages = {
-        'invalid': _('Use the following format: XXX-XXX-XXX, XX-XXX-XX-XX or XXXXXXXXX.'),
+        'invalid': _('Use the following format: XXX-XXX-XXX or XX-XXX-XX-XX or XXXXXXXXX'),
     }    
 
     def __init__(self, **kwargs):

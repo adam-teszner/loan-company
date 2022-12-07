@@ -139,17 +139,7 @@ class Product(models.Model, ProductMethods):
       
     owner = models.ForeignKey('Customer', on_delete=models.CASCADE,
                                     null=True, blank=True)
-    '''
-    ### old part ###
-    global_interest_rate = models.FloatField('Central banks\n interest rate in % - OLD', 
-                                    validators=[MinValueValidator(0), 
-                                    MaxValueValidator(30)], blank=False,
-                                    default=5.25)
-    lombard_rate = models.FloatField('Central banks lombard\n interest rate in % - OLD',
-                                    validators=[MinValueValidator(0), 
-                                    MaxValueValidator(30)], blank=False,
-                                    default=5.75)
-    '''                                
+                               
     global_interest_rate_dec = models.DecimalField('Central banks\n interest rate in %',
                                     validators=[MinValueValidator(0),
                                     MaxValueValidator(30)], blank=False, default=Decimal('5.25'),
