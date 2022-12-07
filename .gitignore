@@ -5,6 +5,7 @@ db.sqlite3
 .venv
 .env
 prod_settings.py
+debug.log
 core/.DS_Store
 migrations/
 __pycache__/
