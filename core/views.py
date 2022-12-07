@@ -106,7 +106,7 @@ def custom_customer(request):
             return HttpResponse(merged_json, content_type='application/json')
 
         except:
-            print('BRAK')
+            # print('BRAK')
             return render(request, 'core/custom_create.html', initial) 
     
     
@@ -131,7 +131,7 @@ def custom_customer(request):
             x.save()
 
             return redirect('customer_detail', pk=x.id)
-        print('JEDEN')
+        # print('JEDEN')
         return render(request, 'core/custom_create.html', context)
 
             
@@ -154,7 +154,7 @@ def custom_customer(request):
         return redirect('customer_detail', pk=customer_id)   
     
     else:
-        print('DWA!!')
+        # print('DWA!!')
         return render(request, 'core/custom_create.html', initial)
 
 
@@ -202,7 +202,7 @@ class RegisterUser(View):
         context['user_create_form'] = user_create
         context['user_adress_form'] = user_adress
         
-        print('ERRORS')
+        # print('ERRORS')
         return render(request, self.template_name, context)
             
 
@@ -287,7 +287,7 @@ class UserChangePassword(LoginRequiredMixin, PasswordChangeView):
 
     def get_success_url(self, *args, **kwargs):
         id = self.kwargs['id']
-        print(id)
+        # print(id)
         return reverse('user_password_done', kwargs={'id': id})
     
 
@@ -350,7 +350,7 @@ class AddNewProductView(LoginRequiredMixin, View):
             s.save()
             return redirect('customer_detail', pk=id)
         else:
-            print(add_prod.errors)
+            # print(add_prod.errors)
             return render(request, self.template_name, context={'add_product': add_prod, 'customer_id': customer_instance.id})
 
 class jsonTestView(View):

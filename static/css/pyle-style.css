@@ -9,6 +9,7 @@
     --ad-two-color: #E8E8E8;
     --ad-two-color-darker: #c9c9c9;
     --font-raj: 'Rajdhani', sans-serif;
+    --font-ubu: 'Ubuntu';
 
     
 }
@@ -1342,4 +1343,47 @@ a.fill-th {
 
 .flex-column {
     flex-direction: column;
+}
+
+.errorlist {
+    text-align: center;
+    font-family: var(--font-ubu);
+    font-size: .9rem;
+    font-weight: 200;
+
+    color: whitesmoke;
+    background-color: #333A56;
+    border-radius: 5px;
+    padding: .5rem 1.5rem;
+}
+
+.errorlist::before {
+    position: absolute;
+    content: "";
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 7px solid var(--secondary-backgroud-color);
+    margin-top: -.9rem;
+
+  }
+
+#file-size {
+    text-align: center;
+    font-family: var(--font-ubu);
+    font-size: .9rem;
+    font-weight: 200;
+    margin-bottom: 2rem;
+    color: #333A56;
+}
+
+.bold-big {
+    font-weight: 500;
+}
+
+.red-underline {
+    color: red;
+    text-decoration-line: underline;
+    text-decoration-style: dotted;
 }

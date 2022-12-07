@@ -166,6 +166,9 @@ class CustomSignUpForm(forms.ModelForm):
             self.fields[name].widget.attrs.update({
                 'class' : 'pyl-input'
             })
+        self.fields['social_security_no_pesel'].widget.attrs.update({
+            'type': 'number'
+        })
 
     class Meta():
         model = UserInfo
@@ -174,7 +177,9 @@ class CustomSignUpForm(forms.ModelForm):
                 'information', 'profile_pic']
 
         widgets = {
-            'profile_pic': MyFileInput
+            'profile_pic': MyFileInput,
+            'dob': DateInput(format='%Y-%m-%d', attrs={ 
+                                    'type': 'date'})
         }
         # widgets = {
         #     'profile_pic': MyFileInput(attrs={

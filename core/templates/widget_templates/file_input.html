@@ -30,6 +30,7 @@
 
 
 {% if not widget.is_initial %}
+<div id="file-size"></div>
 <div class="pic-ovr-cont">
     <img src="/static/images/icon-4399701_640.png" alt="#" class="profile-picture" id="{{widget.name}}-id-image">
     <!-- Above !! this is wrong ! but using {%static} throws an error ! to resolve ! May not WORK IN PRODUCTION -->
@@ -38,6 +39,7 @@
 <br>
 <div class="file-inputs-container">
 {% else %}
+<div id="file-size"></div>
 <div class="pic-ovr-cont">
     <img src="{{widget.value.url}}" alt="#" class="profile-picture" id="{{widget.name}}-id-image">
     <div class="pic-overlay" id="{{widget.name}}-ovr-id">Edit</div>
