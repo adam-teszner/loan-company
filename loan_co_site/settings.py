@@ -66,6 +66,11 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'loan_co_site.urls'
 
+# session settings
+
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+SESSION_COOKIE_AGE = 3600
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -164,6 +169,13 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 # Login Redirect url
 
 LOGIN_REDIRECT_URL = '/'
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+    ],
+}
 
 if production == True:
     from loan_co_site.prod_settings import *
