@@ -54,6 +54,9 @@ class CustCreatePersonalInfo(forms.ModelForm):
             self.fields[name].widget.attrs.update({
                 'class' : 'pyl-input'
             })
+        self.fields['social_security_no_pesel'].widget.attrs.update({
+            'onfocusout': 'checkPesel()'
+        })
 
 
 

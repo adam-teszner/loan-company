@@ -193,14 +193,14 @@ function checkPesel () {
 
     // PESEL quick validation
 
-    // if (peselInput.length === 11) {
-    //     peselInput = document.getElementById('id_social_security_no_pesel').value;
-    //     peselCheck.open('GET', 'custom_create?pesel='+peselInput);
-    //     peselCheck.send()
-    // }else {}
+    if (peselInput.length === 11) {
+        peselInput = document.getElementById('id_social_security_no_pesel').value;
+        peselCheck.open('GET', 'custom_create?pesel='+peselInput);
+        peselCheck.send()
+    } else {}
 
-    peselCheck.open('GET', 'custom_create?pesel='+peselInput);
-    peselCheck.send()
+    // peselCheck.open('GET', 'custom_create?pesel='+peselInput);
+    // peselCheck.send()
 
     peselCheck.onreadystatechange = function success () {
         var DONE = 4;
