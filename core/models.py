@@ -39,12 +39,12 @@ class UserInfo(models.Model):
                                 null=True)
     dob = models.DateField('Date of Birth')
     gender = models.CharField(choices=gender_choices, max_length=2)
-    social_security_no_pesel = models.IntegerField('PESEL', unique=True, 
-                                blank=False, null=False)
-    id_passport = models.CharField('ID serial number or Passport serial number',
-                                max_length=10, unique=True, blank=False, 
+    social_security_no_pesel = models.CharField('PESEL', unique=True, 
+                                blank=False, null=False, max_length=11)
+    id_passport = models.CharField('ID serial number',
+                                max_length=9, unique=True, blank=False, 
                                 null=False)
-    phone_no = models.IntegerField(unique=True)
+    phone_no = models.CharField(unique=True, max_length=9)
     created_date = models.DateField(auto_now_add=True)
     information = models.TextField(null=True, blank=True)
     profile_pic = models.FileField(upload_to=user_pic_path, null=True, blank=True, storage=OverwriteUploadStorage, validators=[validate_file_size])
@@ -81,10 +81,10 @@ class Customer(models.Model):
                                 null=True)
     dob = models.DateField('Date of Birth')
     gender = models.CharField(choices=gender_choices, max_length=2)
-    social_security_no_pesel = models.IntegerField('PESEL', unique=True, 
-                                blank=False, null=False)
-    id_passport = models.CharField('ID serial number or Passport serial number',
-                                max_length=10, unique=True, blank=False, 
+    social_security_no_pesel = models.CharField('PESEL', unique=True, 
+                                blank=False, null=False, max_length=11)
+    id_passport = models.CharField('ID serial number',
+                                max_length=9, unique=True, blank=False, 
                                 null=False)
     martial_status = models.CharField(choices=martial_choices, max_length=2)
     work_status = models.CharField(choices=status_choices, max_length=2)
@@ -93,7 +93,7 @@ class Customer(models.Model):
     esd = models.DateField('Employment start date')
     salaty = models.IntegerField(blank=True, null=True)
     position = models.CharField(max_length=50, blank=True, null=True)
-    phone_no = models.IntegerField(unique=True)
+    phone_no = models.CharField(unique=True, max_length=9)
     email = models.EmailField(max_length=50, blank=True, null=True)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, 
                                 null=True)
@@ -121,10 +121,10 @@ class Adress(models.Model):
 
 class Workplace(models.Model):
 
-    id_nip = models.IntegerField(unique=True)
+    id_nip = models.CharField(unique=True, max_length=10)
     name = models.CharField(max_length=50)
     adress = models.ForeignKey('Adress', on_delete=models.SET_NULL, null=True)
-    phone_no = models.IntegerField(unique=True)
+    phone_no = models.CharField(unique=True, max_length=9)
     email = models.EmailField(max_length=50, blank=True, null=True)
 
     def __str__(self):
@@ -139,17 +139,7 @@ class Product(models.Model, ProductMethods):
       
     owner = models.ForeignKey('Customer', on_delete=models.CASCADE,
                                     null=True, blank=True)
-    '''
-    ### old part ###
-    global_interest_rate = models.FloatField('Central banks\n interest rate in % - OLD', 
-                                    validators=[MinValueValidator(0), 
-                                    MaxValueValidator(30)], blank=False,
-                                    default=5.25)
-    lombard_rate = models.FloatField('Central banks lombard\n interest rate in % - OLD',
-                                    validators=[MinValueValidator(0), 
-                                    MaxValueValidator(30)], blank=False,
-                                    default=5.75)
-    '''                                
+                               
     global_interest_rate_dec = models.DecimalField('Central banks\n interest rate in %',
                                     validators=[MinValueValidator(0),
                                     MaxValueValidator(30)], blank=False, default=Decimal('5.25'),

@@ -1,8 +1,8 @@
-function openMenu() {
-    let nav = document.getElementById('navbar').classList;
-    let menu = document.getElementById('menu-ic').classList;
-    let closeMen = document.getElementById('close-ic').classList;
+const nav = document.getElementById('navbar').classList;
+const menu = document.getElementById('menu-ic').classList;
+const closeMen = document.getElementById('close-ic').classList;
 
+function openMenu() {
     if (nav.contains('menu-invisible') && closeMen.contains('menu-invisible')) {
         var cl = nav.remove('menu-invisible'); closeMen.remove('menu-invisible'); menu.add('menu-invisible');
         return cl
@@ -22,7 +22,7 @@ const userIcon = document.getElementById('account_icon');
 var timeout;
 
 function userTooltipShow () {
-    if(window.innerWidth > 1050) {
+    if(window.innerWidth > 949) {
         clearTimeout(timeout);
         userInfoTooltip.style.display = 'block';
         // console.log('one');
@@ -30,7 +30,7 @@ function userTooltipShow () {
 }
 
 function userTooltipHide () {
-    if(window.innerWidth > 1050) {
+    if(window.innerWidth > 949) {
         timeout = setTimeout(() => {userInfoTooltip.style.display = 'none';},300);
     } else {}
 }
@@ -193,14 +193,14 @@ function checkPesel () {
 
     // PESEL quick validation
 
-    // if (peselInput.length === 11) {
-    //     peselInput = document.getElementById('id_social_security_no_pesel').value;
-    //     peselCheck.open('GET', 'custom_create?pesel='+peselInput);
-    //     peselCheck.send()
-    // }else {}
+    if (peselInput.length === 11) {
+        peselInput = document.getElementById('id_social_security_no_pesel').value;
+        peselCheck.open('GET', 'custom_create?pesel='+peselInput);
+        peselCheck.send()
+    } else {}
 
-    peselCheck.open('GET', 'custom_create?pesel='+peselInput);
-    peselCheck.send()
+    // peselCheck.open('GET', 'custom_create?pesel='+peselInput);
+    // peselCheck.send()
 
     peselCheck.onreadystatechange = function success () {
         var DONE = 4;
@@ -358,22 +358,31 @@ function shrinkTable (id) {
     
 }
 
+const showUserMenu = document.getElementById('account_icon');
+const mobileAccTooltip = document.querySelectorAll('.mob-acc-tooltip')[0];
+const accIcon = document.querySelectorAll('.account-icon-2')[0].innerHTML;
+const currentUser = document.querySelectorAll('.user-names')[0].innerHTML;
 
+showUserMenu.addEventListener('click', () => {
+    if (window.innerWidth < 950 ){
+        if (mobileAccTooltip.classList.contains('menu-invisible') === true ) {
+            showUserMenu.innerHTML = `${currentUser}`;
+            showUserMenu.classList.add('acc-wide');
+        } else {
+            showUserMenu.innerHTML = `${accIcon}`;
+            showUserMenu.classList.remove('acc-wide');
+        }
+        mobileAccTooltip.classList.toggle('menu-invisible');
+    }
+})
 
-// const btnTest = document.getElementById('income');
-// btnTest.addEventListener('click', fetchTest);
-
-// // document.getElementById('income').addEventListener('click', fetchTest);
-
-// function fetchTest () {
-//     var url = btnTest.getAttribute('data-url')
-//     fetch(url)
-//         // .then(response => response.text())
-//         // .then(text => console.log(text))
-//         // .then(res => {
-//         //     console.log(res.body)
-//         // })
-//         .then(res => res.text())
-//         .then(text => console.log(text))
-
-// }
+window.addEventListener('resize', () => {
+    if (window.innerWidth > 950  &&  !nav.contains('menu-invisible') && !closeMen.contains('menu-invisible')) {
+        mobileAccTooltip.classList.add('menu-invisible');
+        nav.add('menu-invisible');
+        closeMen.add('menu-invisible');
+        menu.remove('menu-invisible');
+    }
+    showUserMenu.innerHTML = accIcon;
+    showUserMenu.classList.remove('acc-wide');
+})

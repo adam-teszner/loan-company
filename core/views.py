@@ -25,6 +25,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
+from django.contrib import messages
 
 '''
 ### Trying Inline Formset ###
@@ -164,7 +165,8 @@ class LoginUser(LoginView):
     authentication_form = CustomLogin
 
     
-class RegisterUser(View):
+class RegisterUser(SuccessMessageMixin, View):
+    success_message = 'Account created succesufully !'
     user_info_form = CustomSignUpForm
     user_create_form = CustomUserCreationForm
     user_adress_form = CustCreateAdressForm
@@ -195,7 +197,7 @@ class RegisterUser(View):
             z.save()
 
             # WYMYSLIC KROTSZA WERSJĘ !!! !! z comitem itd 
-
+            messages.success(self.request, self.success_message)
             return HttpResponseRedirect(reverse('index'))
         context = {}
         context['user_info_form'] = user_info
@@ -227,7 +229,8 @@ class UserProfileView(LoginRequiredMixin, DetailView):
         current_user = self.request.user.id
 
         if current_user != id:
-            return render(self.request, self.template_name, context={'massage': 'You dont have permissions to see that !!'})
+            # return render(self.request, self.template_name, context={'massage': 'You dont have permissions to see that !!'})
+            raise PermissionDenied
         return super().get(*args, **kwargs)
 
 
@@ -313,7 +316,7 @@ class UserResetPasswordForm(SuccessMessageMixin, PasswordResetConfirmView):
 
 class CustomerListView(LoginRequiredMixin, ListView):
 
-    paginate_by = 8
+    paginate_by = 1
 
     def get_queryset(self):
 
@@ -327,7 +330,14 @@ class CustomerListView(LoginRequiredMixin, ListView):
 class CustomerDetailView(LoginRequiredMixin, DetailView):
 
     model = Customer
+    queryset = Customer.objects.all()
     template_name = 'core/customer_detail.html'
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        if self.request.user.id != self.object.created_by.id:
+            raise PermissionDenied
+        return super().get(request, *args, **kwargs)
 
 
 class AddNewProductView(LoginRequiredMixin, View):
@@ -339,6 +349,8 @@ class AddNewProductView(LoginRequiredMixin, View):
     def get(self, request, id):    
         self.add_product_form(initial=self.initial)
         customer_instance = Customer.objects.get(id=id)
+        if self.request.user.id != customer_instance.created_by.id:
+            raise PermissionDenied
         return render(request, self.template_name, context={'add_product': self.add_product_form, 'customer_id': customer_instance.id})
 
     def post(self, request, id):

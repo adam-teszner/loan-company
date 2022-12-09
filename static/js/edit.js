@@ -126,7 +126,7 @@ formToJson = (inputsDivId) => {
 
     let formObj = {}
     let fomrObjHuman = {}
-        for (let child of form.querySelectorAll('input, select, textarea')) {
+    for (let child of form.querySelectorAll('input, select, textarea')) {
 
         if (child.disabled) {
             continue;

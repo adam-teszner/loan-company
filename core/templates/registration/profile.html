@@ -14,17 +14,17 @@
             <h2>Details</h2>
             <div>
                 Name
-                <p>{{userinfo.first_name}} {{userinfo.last_name}}</p>
+                <p id="name">{{userinfo.first_name}} {{userinfo.last_name}}</p>
             </div>
             <div>
                 Contact
-                <p><svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" fill="#333A56"><path d="M6 19h3.7v-5.875h4.6V19H18v-9l-6-4.55L6 10Zm-1 1V9.5l7-5.3 7 5.3V20h-5.7v-5.875h-2.6V20Zm7-7.775Z"/></svg>{{userinfo.adress.street}} {{userinfo.adress.building_no}}</p>
-                <p><svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" fill="#333A56"><path d="M6 19h3.7v-5.875h4.6V19H18v-9l-6-4.55L6 10Zm-1 1V9.5l7-5.3 7 5.3V20h-5.7v-5.875h-2.6V20Zm7-7.775Z"/></svg>{{userinfo.adress.zip_code}}, {{userinfo.adress.city}}</p>
-                <p><svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" fill="#333A56"><path d="M18.9 19.875q-2.6 0-5.262-1.325-2.663-1.325-4.788-3.462Q6.725 12.95 5.388 10.3 4.05 7.65 4.05 5.05q0-.45.3-.75T5.1 4h2.45q.45 0 .75.25t.375.675l.5 2.375q.075.4-.012.712-.088.313-.338.538L6.65 10.6q1.325 2.225 3.013 3.887 1.687 1.663 3.937 2.938l2.125-2.2q.25-.25.563-.35.312-.1.662-.025l2.1.425q.4.1.65.4.25.3.25.725v2.425q0 .45-.3.75t-.75.3ZM6.15 9.65 8.075 7.9q.1-.1.125-.225.025-.125 0-.25L7.75 5.3q-.05-.15-.137-.225Q7.525 5 7.375 5h-2.05q-.125 0-.2.075-.075.075-.075.2.025 1.025.313 2.137.287 1.113.787 2.238Zm8.375 8.225q1.025.5 2.175.738 1.15.237 2 .262.1 0 .175-.075.075-.075.075-.2v-2q0-.15-.075-.25t-.225-.15l-1.85-.375q-.1-.025-.187 0-.088.025-.188.125ZM6.15 9.65Zm8.375 8.225Z"/></svg>{{userinfo.phone_no}}</p>
+                <p><img src="{% static 'images/svg/adress.svg' %}" alt="Adress1">{{userinfo.adress.street}} {{userinfo.adress.building_no}}</p>
+                <p><img src="{% static 'images/svg/adress.svg' %}" alt="Adress2">{{userinfo.adress.zip_code}}, {{userinfo.adress.city}}</p>
+                <p><img src="{% static 'images/svg/phone.svg' %}" alt="Phone No.">{{userinfo.phone_no}}</p>
                 {% if userinfo.user.email %}
-                    <p><svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" fill="#333A56"><path d="M4.625 19q-.7 0-1.162-.462Q3 18.075 3 17.375V6.625q0-.7.463-1.162Q3.925 5 4.625 5h14.75q.7 0 1.163.463.462.462.462 1.162v10.75q0 .7-.462 1.163-.463.462-1.163.462ZM12 12.125l-8-5.25v10.5q0 .275.175.45t.45.175h14.75q.275 0 .45-.175t.175-.45v-10.5ZM12 11l7.7-5H4.3ZM4 6.875V6v11.375q0 .275.175.45t.45.175H4v-.625Z"/></svg>{{userinfo.user.email}}</p>
+                <p><img src="{% static 'images/svg/email.svg' %}" alt="Email">{{userinfo.user.email}}</p>
                 {% else %}
-                    <p><svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" fill="#333A56"><path d="M4.625 19q-.7 0-1.162-.462Q3 18.075 3 17.375V6.625q0-.7.463-1.162Q3.925 5 4.625 5h14.75q.7 0 1.163.463.462.462.462 1.162v10.75q0 .7-.462 1.163-.463.462-1.163.462ZM12 12.125l-8-5.25v10.5q0 .275.175.45t.45.175h14.75q.275 0 .45-.175t.175-.45v-10.5ZM12 11l7.7-5H4.3ZM4 6.875V6v11.375q0 .275.175.45t.45.175H4v-.625Z"/></svg>email not provided</p>
+                    <p><img src="{% static 'images/svg/email.svg' %}" alt="Email">email not provided</p>
                 {% endif %}                
             </div>
             <div>
