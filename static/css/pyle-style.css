@@ -9,8 +9,16 @@
     --ad-two-color: #E8E8E8;
     --ad-two-color-darker: #c9c9c9;
     --font-raj: 'Rajdhani', sans-serif;
+    --font-ubu: 'Ubuntu';
+    font-size: min(1.8vw, 16px);
 
     
+}
+
+@media screen and (max-width: 700px) {
+    :root {
+        font-size: 13px;
+    }
 }
 
 a {
@@ -81,6 +89,14 @@ body {
     /* margin-top: 10px; */
     padding: .5em;
 
+    /* EXPERIMENTING... */
+    margin-right: 1rem;
+    z-index: 20;
+    position: fixed;
+    width: -webkit-fill-available;
+    width: -moz-available;
+
+
 }
 
 #navbar a {
@@ -127,6 +143,7 @@ body {
 
 .menu-invisible {
     display: none;
+    /* visibility: hidden; */
 }
 
 
@@ -158,7 +175,9 @@ nav ul li {
 }
 
 
-@media only screen and (min-width: 930px) {
+
+
+@media only screen and (min-width: 950px) {
 
     #menu-ic {
         display: none;
@@ -174,6 +193,8 @@ nav ul li {
         padding: 0;
         background-color: var(--ad-two-color);
         color: var(--secondary-backgroud-color);
+        position: static;
+        
         
     }
     #navbar a {
@@ -216,8 +237,42 @@ nav ul li {
         margin: 0px;
         cursor: pointer;
     }
+
+    .mob-acc-tooltip {
+        display: none;
+    }
+
+    .acc-wide {
+        background: inherit;
+    }
+
+    #login-el {
+        padding-top: 0;
+    }
 }
 
+#login-el {
+    padding-top: 1rem;
+}
+
+.mob-acc-tooltip {
+    font-size: .9rem;
+    font-family: var(--font-raj);
+}
+
+.acc-wide {
+    background: none;
+    padding: 0;
+    font-family: var(--font-raj);
+    text-decoration: underline;
+    text-underline-offset: -1.5rem;
+}
+
+.acc-wide:hover {
+    border: none;
+    font-weight: 500;
+    padding: 0;
+}
 
 #user-info {
     position: absolute;
@@ -417,6 +472,25 @@ a.fill-th {
   
 }
 
+
+.step-links {
+    font-family: var(--font-raj);
+    font-size: 1.3rem;
+    padding: 2rem;
+}
+
+.step-links .list-length {
+    float: left;
+}
+
+.step-links .current {
+    float: right;
+}
+
+.step-nav {
+    float: right;
+}
+
 /* Form layout */
 
 .form-container {
@@ -579,12 +653,12 @@ a.fill-th {
     color: var(--secondary-backgroud-color);
     background-color: transparent;
     font-weight: 200;
-    font-size: 15px;
+    font-size: .9rem;
     font-family: 'Ubuntu';
     letter-spacing: 3px;
     cursor: pointer;
     transition: 0.1s;
-    padding: .4em .8em;
+    padding: .4rem .8rem;
 }
 
 
@@ -811,6 +885,7 @@ a.fill-th {
     font-size: .9em;
     font-family: system-ui;
     display: none;
+    z-index: 20;
 }
 
 .pyl-tooltip:hover::before {
@@ -873,9 +948,10 @@ a.fill-th {
 .pyl-product-table {
     background-color: whitesmoke;
     border: 0px solid black;
-    margin: 0.5em;
+    margin: 0.5em auto;
     padding: 0.5em;
     font-family: 'Rajdhani';
+    width: max-content;
 }
 
 .pyl-product-table > tbody > tr:nth-child(odd) {
@@ -896,6 +972,7 @@ a.fill-th {
     flex: 1 1 47%;
     padding-bottom: .1em;
     align-items: baseline;
+    overflow: scroll;
 }
 
 .pyl-unfold {
@@ -1055,9 +1132,9 @@ a.fill-th {
 .prf-pag > h2 {
     font-weight: 400;
     font-family: var(--font-raj);
-    font-size: 1.8em;
+    font-size: 1.6rem;
     text-align: center;
-    margin-top: .5em;
+    margin-top: .5rem;
 }
 
 .col-darker {
@@ -1068,31 +1145,39 @@ a.fill-th {
 .prf-pag > div {
     font-family: var(--font-raj);
     font-weight: 200;
-    font-size: 1.2em;
-    padding-bottom: 1em;
+    font-size: 1.1rem;
+    padding-bottom: 1rem;
     text-align: left;
-    margin-bottom: 1em;
+    margin-bottom: 1rem;
 }
 
 .prf-pag > div > p {
     font-family: 'Ubuntu', sans-serif;
     font-weight: 200;
-    font-size: .8em;
-    margin-top: .4em;
-    margin-bottom: .4em;
-    letter-spacing: .1em;
+    font-size: .9rem;
+    margin-top: .4rem;
+    margin-bottom: .4rem;
+    letter-spacing: .1rem;
+    /* text-align: center; */
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#name {
+    display: block;
     text-align: center;
 }
 
-.prf-pag > div > p > svg {
-    float: left;
-    clear: both;
-    transform: translateY(-3px);
+
+.prf-pag > div > p > img {
+    width: max(18px, 1.8vw);
 }
 
 .prf-pag > div > p > span {
-    float: left;
-    clear: both;
+    /* float: left;
+    clear: both; */
     font-size: 1em;
     letter-spacing: normal;
     font-family: var(--font-raj);
@@ -1342,4 +1427,47 @@ a.fill-th {
 
 .flex-column {
     flex-direction: column;
+}
+
+.errorlist {
+    text-align: center;
+    font-family: var(--font-ubu);
+    font-size: .9rem;
+    font-weight: 200;
+
+    color: whitesmoke;
+    background-color: #333A56;
+    border-radius: 5px;
+    padding: .5rem 1.5rem;
+}
+
+.errorlist::before {
+    position: absolute;
+    content: "";
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 7px solid var(--secondary-backgroud-color);
+    margin-top: -.9rem;
+
+  }
+
+#file-size {
+    text-align: center;
+    font-family: var(--font-ubu);
+    font-size: .9rem;
+    font-weight: 200;
+    margin-bottom: 2rem;
+    color: #333A56;
+}
+
+.bold-big {
+    font-weight: 500;
+}
+
+.red-underline {
+    color: red;
+    text-decoration-line: underline;
+    text-decoration-style: dotted;
 }

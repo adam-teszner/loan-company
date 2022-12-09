@@ -8,6 +8,8 @@ from api.serializers import DynamicFieldsModelSerializer
 # rest framework imports
 from rest_framework.metadata import SimpleMetadata
 from django.forms.models import model_to_dict
+from rest_framework.authentication import SessionAuthentication
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, parser_classes
 from rest_framework.generics import (UpdateAPIView, GenericAPIView,
@@ -15,8 +17,7 @@ from rest_framework.generics import (UpdateAPIView, GenericAPIView,
 from rest_framework.mixins import UpdateModelMixin, RetrieveModelMixin
 from .serializers import (AdressSerializer, CustomerSerializer,
                             WorkplaceSerializer)
-
-
+from rest_framework import HTTP_HEADER_ENCODING, exceptions
 from rest_framework import exceptions, serializers, status
 from rest_framework.utils.field_mapping import ClassLookupDict
 from django.utils.encoding import force_str
@@ -46,6 +47,7 @@ from django.utils.encoding import force_str
 #         print('ser_info')
 #         print(serializer)
 #         return super().get_serializer_info(serializer, *args, **kwargs)
+'''
 
 class restApi(View):
 
@@ -73,9 +75,7 @@ class restApi(View):
 @api_view(['GET', 'PATCH'])
 def api_home(request, *args, **kwargs):
 
-    '''
-    DRF api view
-    '''
+
     # instance = Customer.objects.all().order_by('?').first() # random ordering, first item only
     
     pk = kwargs['pk']
@@ -181,12 +181,14 @@ class CustomerUpdateApiView(UpdateModelMixin, RetrieveModelMixin, GenericAPIView
         return self.get(self, *args, **kwargs)
 
 
-
+'''
 
 class CustomerUpdateFetchApiView(RetrieveModelMixin,
                                 UpdateModelMixin,
                                 GenericAPIView):
 
+    authentication_classes = [SessionAuthentication]
+    permission_classes = [IsAuthenticated]
     serializer_class = CustomerSerializer
     queryset = Customer.objects.all()
     metadata_class = None
@@ -254,6 +256,9 @@ class CustomerUpdateFetchApiView(RetrieveModelMixin,
         for k in self.field_params[mode]:
             filtered_data[k] = schema.pop(k)
         data['schema'] = filtered_data
+        print(request.user.id)
+        if request.user.id != instance.created_by.id:
+            raise exceptions.PermissionDenied
         return Response(data)
         
         
@@ -323,6 +328,10 @@ class CustomerUpdateFetchApiView(RetrieveModelMixin,
         serializer = self.get_serializer(instance=instance, 
                                         data=self.request.data, partial=True, 
                                         fields=self.field_params[mode])
+        
+        if request.user.id != instance.created_by.id:
+            raise exceptions.PermissionDenied
+
         if serializer.is_valid():
             self.perform_update(serializer=serializer)
             # serializer.save()

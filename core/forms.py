@@ -9,8 +9,11 @@ from django.contrib.auth.forms import (UserChangeForm,
 from django.contrib.auth.models import User
 from .widgets import MyFileInput
 
-
-
+# localflavor
+from .validators import (PESELwithoutChecksum,
+                        IDwithoutChecksum,
+                        NIPwithoutChecksum,
+                        PhoneNumberField)
 
 class CustCreateAdressForm(forms.ModelForm):
 
@@ -39,7 +42,9 @@ class CustCreateAdressForm(forms.ModelForm):
 
 class CustCreatePersonalInfo(forms.ModelForm):
 
-
+    social_security_no_pesel = PESELwithoutChecksum()
+    id_passport = IDwithoutChecksum()
+    phone_no = PhoneNumberField()
 
     def __init__(self, *args, **kwargs):
         super(CustCreatePersonalInfo, self).__init__(*args, **kwargs)
@@ -49,6 +54,9 @@ class CustCreatePersonalInfo(forms.ModelForm):
             self.fields[name].widget.attrs.update({
                 'class' : 'pyl-input'
             })
+        self.fields['social_security_no_pesel'].widget.attrs.update({
+            'onfocusout': 'checkPesel()'
+        })
 
 
 
@@ -99,6 +107,9 @@ class CustCreatePersonalInfoUpdate(CustCreatePersonalInfo):
 
 class CustomWorkplaceForm(forms.ModelForm):
 
+    id_nip = NIPwithoutChecksum()
+    phone_no = PhoneNumberField()
+
     def __init__(self, *args, **kwargs):
         super(CustomWorkplaceForm, self).__init__(*args, **kwargs)
         self.auto_id = 'workplace_id_%s'
@@ -137,6 +148,10 @@ class CustomSignUpForm(forms.ModelForm):
 
     # profile_pic = FileInput()
 
+    social_security_no_pesel = PESELwithoutChecksum()
+    id_passport = IDwithoutChecksum()
+    phone_no = PhoneNumberField()
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for name in self.fields.keys():
@@ -154,6 +169,9 @@ class CustomSignUpForm(forms.ModelForm):
             self.fields[name].widget.attrs.update({
                 'class' : 'pyl-input'
             })
+        self.fields['social_security_no_pesel'].widget.attrs.update({
+            'type': 'number'
+        })
 
     class Meta():
         model = UserInfo
@@ -162,7 +180,9 @@ class CustomSignUpForm(forms.ModelForm):
                 'information', 'profile_pic']
 
         widgets = {
-            'profile_pic': MyFileInput
+            'profile_pic': MyFileInput,
+            'dob': DateInput(format='%Y-%m-%d', attrs={ 
+                                    'type': 'date'})
         }
         # widgets = {
         #     'profile_pic': MyFileInput(attrs={

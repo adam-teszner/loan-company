@@ -68,7 +68,7 @@ class ProductMethods:
         try:
             schedule = []
             for x in range(self.loan_period):
-                schedule.append((x, self.created_date + relativedelta(months=x), self.installments_dec))
+                schedule.append((x, self.created_date + relativedelta(months=x+1), self.installments_dec))
             return schedule
         except TypeError:
             return 'No active Loans'
@@ -156,7 +156,7 @@ class ProductMethods:
                     delay = datetime.date.today() - self.inst_sch[installment_no][1]
                     new.append((installment_no, self.inst_sch[installment_no][2], 
                     self.inst_sch[installment_no][1], payment_no, payment, 
-                    payment_date, installment_remainder, 0, delay.days))
+                    payment_date, installment_remainder, 0, delay.days if delay.days > 0 else ''))
 
                     iter = 0
                 else:
@@ -168,10 +168,10 @@ class ProductMethods:
         except IndexError:
             if iter == 0:
                 delay = payment_date - self.inst_sch[-1][1]
-                new.append((9999, '', '', payment_no, payment, payment_date, 0, payment*Decimal('-1'), delay.days))
+                new.append((9998, '', '', payment_no, payment, payment_date, 0, payment*Decimal('-1'), delay.days))
             else:
                 delay = payment_date - self.inst_sch[-1][1]
-                new.append((9999, '', '', payment_no, payment, payment_date, 0, 0, delay.days))
+                new.append((9998, '', '', payment_no, payment, payment_date, 0, 0, delay.days))
         ### zrobić warunek inny niż try/except do index errrora ###
         
         return new
@@ -191,7 +191,7 @@ class ProductMethods:
         '''
         self.complete = []
         if not self.get_payments:
-            [self.complete.append((a,c,b,'','','','','','')) for (a,b,c) in self.inst_sch]
+            [self.complete.append((a,c,b,'','','','','', self.calc_delay(b))) for (a,b,c) in self.inst_sch]
             return self.complete
         [self.complete.extend(self.count_payment(n, self.get_payments[n][0], self.get_payments[n][1])) for n in range(len(self.get_payments))]
         if self.complete[-1][0] < len(self.inst_sch):
@@ -203,53 +203,3 @@ class ProductMethods:
     def schedule_human(self):
         x = [f'rata: {a} - {b} - {c} // wplata: {d} - {e} - {f} // zost raty: {g} // zost wpl: {h} // zwloka: {i}' for (a,b,c,d,e,f,g,h,i) in self.complete]
         return '\n'.join(x)
-
-    '''
-
-        ### Old part-using floats instead of decimals ###
-
- 
-    @property
-    def total_amount(self):
-        return round(self.installments*self.loan_period,2)
-
-    @property
-    def installments(self):
-              
-        p = (self.global_interest_rate/100*2)/12
-        nu = p*((1+p)**self.loan_period)
-        de = ((1+p)**self.loan_period)-1
-        total = self.amount_requested * (nu/de)
-        if self.product_name == 'L1':
-            return round(total + (0.15*total), 2)
-        else:
-            return round(total, 2)
-    
-    @property
-    def installement_schedule(self):
-        try:
-            z = []
-            for x in range(1, self.loan_period+1):
-                
-                z.append(f'{x} - amount: -- {self.installments} ---- Required by: -- {self.created_date + relativedelta(months=x)}')
-            return '\n'.join(z)
-            # return z
-        except:
-            return 'You must create a loan first ! '
-
-    @property
-    def installment_dict(self):
-        try:
-            installments = {}
-            for x in range(1, self.loan_period+1):
-                installments[x] = {
-                    'amount' : self.installments,
-                    'required by' : str(self.created_date + relativedelta(months=x))
-                }
-                # installments['amount'] = self.installments
-                # installments['required by'] = self.created_date + relativedelta(months=x)
-            return installments
-        except:
-            return 'NO Loans'
-
-    '''
