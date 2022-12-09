@@ -1,18 +1,18 @@
 # loan-company
 
-Website for learning purposes only. 
-Created by self-taught dev
-Site is trying to mimic a loan-company.
-Managing loans, customers, debts etc... thats the goal at least :)
+#### Website for learning purposes only. 
+#### Created by self-taught dev
+#### Site is trying to mimic a loan-company.
+#### Managing loans, customers, debts etc... thats the goal at least :)
 
 
-+++ dev
-Installed packages:
-asgiref==3.5.2
-certifi==2022.9.24
-charset-normalizer==2.1.1
-Django==4.1.2
-django-cors-headers==3.13.0
+- +++ dev
+- Installed packages:
+- asgiref==3.5.2
+- certifi==2022.9.24
+- charset-normalizer==2.1.1
+- Django==4.1.2
+- django-cors-headers==3.13.0
 django-extensions==3.2.1
 django-localflavor==3.1
 djangorestframework==3.14.0
