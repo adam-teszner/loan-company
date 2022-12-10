@@ -316,7 +316,7 @@ class UserResetPasswordForm(SuccessMessageMixin, PasswordResetConfirmView):
 
 class CustomerListView(LoginRequiredMixin, ListView):
 
-    paginate_by = 1
+    paginate_by = 50
 
     def get_queryset(self):
 

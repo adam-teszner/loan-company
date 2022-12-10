@@ -256,7 +256,7 @@ class CustomerUpdateFetchApiView(RetrieveModelMixin,
         for k in self.field_params[mode]:
             filtered_data[k] = schema.pop(k)
         data['schema'] = filtered_data
-        print(request.user.id)
+        # print(request.user.id)
         if request.user.id != instance.created_by.id:
             raise exceptions.PermissionDenied
         return Response(data)

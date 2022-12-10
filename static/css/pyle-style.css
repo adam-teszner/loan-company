@@ -754,7 +754,7 @@ a.fill-th {
 .pyl-modal-background {
     display: none; 
     position: fixed;
-    z-index: 10;
+    z-index: 21;
     left: 0;
     top: 0;
     width: 100%;
