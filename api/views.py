@@ -318,7 +318,8 @@ class CustomerUpdateFetchApiView(RetrieveModelMixin,
         return field_info    
 
     def put(self, *args, **kwargs):
-        return super().partial_update(self.request, *args, **kwargs)
+        # return super().partial_update(self.request, *args, **kwargs)
+        return self.partial_update(self.request, *args, **kwargs)
 
 
 

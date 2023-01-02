@@ -1,6 +1,7 @@
 const modal = document.getElementsByClassName('pyl-modal-background')[0];
 const form = document.getElementById('edit-form');
 const inputs = document.getElementById('form-inputs');
+const pencilIcon = document.getElementsByClassName('edit-ic');
 let dataObj;
 
 let res;
@@ -64,6 +65,7 @@ drawForms = (jsonData, parentId) => {
             
             inputs.innerHTML += `<div class="pyl-edit-inputs">
                                 <label class="pyl-label-text" for=${id+'-id'}>${v.label}</label>
+                                <img class="edit-ic" src=${editIcon}>
                                 <select disabled class="pyl-input" id=${id+'-id'} name=${k} ${req}><option value selected></option>
                                 <div class="error-msg" id=${id+'-msg'}</div>`
             let selTag = document.getElementById(`${id+'-id'}`)
@@ -81,6 +83,7 @@ drawForms = (jsonData, parentId) => {
             }
             inputs.innerHTML += `<div class="pyl-edit-inputs">
                                 <label class="pyl-label-text" for=${id+'-id'}>${v.label}</label>
+                                <img class="edit-ic" src=${editIcon}>
                                 <input disabled class="pyl-input" type=${inputType} name=${k} id=${id+'-id'} ${req} ${attributes}>
                                 <div class="error-msg" id=${id+'-msg'}></div></div>`;
         }
@@ -274,11 +277,21 @@ removeValidationErorrs = () => {
 }
 
 
+// listenForId = () => {
+//     inputs.addEventListener('click', (e) => {
+//         console.log(e.target.id);
+//         document.getElementById(e.target.id).disabled = false;
+//     })
+// }
+
 listenForId = () => {
-    inputs.addEventListener('click', (e) => {
-        document.getElementById(e.target.id).disabled = false;
-    })
-}
+    for (let icon of pencilIcon) {
+        icon.addEventListener('click', (e) => {
+            icon.nextElementSibling.toggleAttribute('disabled');
+            // console.log(icon.nextElementSibling.id);
+        });
+    };
+};
 
 // na jutro - NAJPIERW ZMIENhIC ID Z LABELI na ID z Key - DONE
 // pomyslec nad generowaniem unikatowych id dla kazdych pol - tak zeby mozna bylo - DONE

@@ -394,3 +394,10 @@ class jsonTestView(View):
         # return JsonResponse(context, safe=False, json_dumps_params={'indent':'    '})
         return HttpResponse(merged_json, content_type='application/json')
     
+
+class AboutView(TemplateView):
+    template_name = 'core/about.html'
+
+
+class ContanctView(TemplateView):
+    template_name = 'core/contact.html'

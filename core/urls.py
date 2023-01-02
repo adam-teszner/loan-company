@@ -24,7 +24,9 @@ urlpatterns = [
     path('my_customers_list/<int:pk>', views.CustomerDetailView.as_view(), name='customer_detail'),
     # path('my_customers_list/<int:pk>/update', views.CustomerUpdateView.as_view(), name='customer_update'),
     path('my_customers_list/<int:id>/add_prod', views.AddNewProductView.as_view(), name='add_product'),
-    path('test/', views.jsonTestView.as_view(), name='json_test'),
+    path('contact', views.ContanctView.as_view(), name='contact'),
+    path('about', views.AboutView.as_view(), name='about'),
+    # path('test/', views.jsonTestView.as_view(), name='json_test'),
 
     
 ] + dev_settings
