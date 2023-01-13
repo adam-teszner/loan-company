@@ -15,6 +15,7 @@
     <title>Document</title>
 </head>
 <body>
+
 <!-- Messages -->
 {% if messages %}
     <ul class="messages">
@@ -111,11 +112,11 @@
         <ul>
             <li>My Customers =></li>
                 <ul>
-                    <li>Add New Customer</li>
+                    <li>Add New Customer<sup> 1</sup></li>
                     <li>Edit Customer =></li>
                         <ul>
                             <li>Add product</li>
-                            <li>Edit Customer data</li>
+                            <li>Edit Customer data<sup> 2</sup></li>
                             <li>View current products, including installment scehdule</li>
                         </ul>
                 </ul>
@@ -128,18 +129,32 @@
                 <ul>
                     <li>(View)Profile =></li>
                     <ul>
-                        <li>Edit Profile =></li>
+                        <li>Edit Profile =><sup> 3</sup></li>
                         <ul>
                             <li>Change Password</li>
                         </ul>
                     </ul>
                     <li>Logout/Login =></li>
                         <ul>
-                            <li>Crreate an account</li>
+                            <li>Crreate an account<sup> 3</sup></li>
                         </ul>
                 </ul>
         </ul>
-        <p class="t-size-1-1 t-bold-400">Features to be added:</p>
+        <hr>
+        <p class="t-bold-400 t-fam-raj t-style-ob"><span class="t-bold-600">1</span> - when entering a PESEL number - ajax request is send to check if entered PESEL exists in DB - if so, every field in the form is filled with data and
+            you no longer create a new customer but update an existing one instead.
+            <br>
+            <span class="t-bold-600">2</span> - editing is once again done through ajax but this time, DRF handles this. When GET request is send -> backend responds with one Json that consists of 
+            a SCHEMA, a blueprint to create HTML forms from, and of course data that is going to be edited. JSON will contain only data for selected fields, not all.
+            When response is recieved, JS creates HTML forms, with properties (ie. input-type-date, select field etc) taken from JSON Schema. 
+            When submitting edit, PATCH request is send. Only changed fields are parsed into JSON (user selects fields to edit), so JSON is compact and doesn't
+            contain unchanged, unnecessary data. If there are validation errors - DRF sends JSON with validation errors - and JS creates appropriate information boxes.
+            If everything is OK, JS updates data on website without refreshing it.
+            <br>
+            <span class="t-bold-600">3</span> - when adding profile picture Cropper.js image cropper is used. On the backend - right now, FileField is used -> 
+            this is to be changed for ImageField in the future. Later on, images will be resized on the backend using Celery - user will only have to select aspect-ratio.
+        </p>
+        <p class="t-size-1-1 t-bold-400">Features to be added later:</p>
         <ul>
             <li>Manager account (to manage user accounts)</li>
             <li>Ability to add/remove/edit news, posts on eg. main site</li>

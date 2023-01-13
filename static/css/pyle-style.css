@@ -15,6 +15,7 @@
     
 }
 
+
 @media screen and (max-width: 700px) {
     :root {
         font-size: 13px;
@@ -211,6 +212,8 @@ nav ul li {
         background-color: var(--ad-two-color);
         color: var(--secondary-backgroud-color);
         position: static;
+        /* test - to hide navbar during adding profile pic */
+        z-index: 10;
         
         
     }
@@ -743,6 +746,7 @@ a.fill-th {
     font-weight: 200;
 }
  .pyl-input {
+    width: 100%;
     box-sizing: border-box;
     height: 1.8em;
     border-radius: 4px;
@@ -1214,6 +1218,9 @@ a.fill-th {
     text-align: center;
 }
 
+.prf-pag > div > p > a:visited {
+    color: blue;
+}
 
 .prf-pag > div > p > img {
     width: max(18px, 1.8vw);
@@ -1584,6 +1591,10 @@ a.fill-th {
 
 .t-size-1-5 {
     font-size: 1.5rem;
+}
+
+.t-style-ob {
+    font-style: oblique;
 }
 
 .d-flex-center {
