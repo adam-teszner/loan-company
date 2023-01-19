@@ -4,7 +4,8 @@ from api.validators import (PhoneNumberFieldDRF,
                             PLPESELFieldDRF, PLNationalIDCardNumberFieldDRF,
                             PLNIPFieldDRF)
 
-from core.models import Customer, Adress, Workplace
+from core.models import (Customer, Adress, Workplace,
+                        Product)
 
 
 class AdressSerializer(serializers.ModelSerializer):
@@ -104,7 +105,19 @@ class CustomerSerializer(DynamicFieldsModelSerializer):
         return cust_inst
 
 
+class ProductSerializer(serializers.ModelSerializer):
+    owner = CustomerSerializer()
 
+    class Meta:
+        model = Product
+        fields = [
+            'owner',
+            'id',
+            'amount_requested',
+            'loan_period',
+            'total_amount_dec',
+            'paid_total',
+            ]
 
 
 

@@ -2,8 +2,8 @@ from collections import OrderedDict
 from django.views import View
 from django.http import JsonResponse
 
-from core.models import Customer, Adress, Workplace
-from api.serializers import DynamicFieldsModelSerializer
+from core.models import (Customer, Adress, Workplace,
+                        Product)
 
 # rest framework imports
 from rest_framework.metadata import SimpleMetadata
@@ -13,12 +13,13 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, parser_classes
 from rest_framework.generics import (UpdateAPIView, GenericAPIView,
-                                    RetrieveUpdateAPIView)
+                                    RetrieveUpdateAPIView, ListAPIView)
 from rest_framework.mixins import UpdateModelMixin, RetrieveModelMixin
 from .serializers import (AdressSerializer, CustomerSerializer,
-                            WorkplaceSerializer)
-from rest_framework import HTTP_HEADER_ENCODING, exceptions
-from rest_framework import exceptions, serializers, status
+                            WorkplaceSerializer, DynamicFieldsModelSerializer,
+                            ProductSerializer)
+from rest_framework import (HTTP_HEADER_ENCODING, exceptions,
+                            exceptions, serializers, status, viewsets)
 from rest_framework.utils.field_mapping import ClassLookupDict
 from django.utils.encoding import force_str
 
@@ -348,4 +349,49 @@ class CustomerUpdateFetchApiView(RetrieveModelMixin,
         # mode = self.request.query_params.get('mode', default=None)
         # serializer = self.get_serializer(instance, data=request.data, fields=['first_name', 'last_name'])
         # return self.partial_update(request, serializer)
-        return self.partial_update(request, *args, **kwargs) 
+        return self.partial_update(request, *args, **kwargs)
+
+
+# class SearchApiViewSet(viewsets.ViewSet):
+#     pass
+
+class SearchApiView(ListAPIView):
+    # queryset = Customer.objects.all()
+    # serializer_class = CustomerSerializer
+    serializer_class = ProductSerializer
+
+    # def get_queryset(self):
+    #     print(self.request.query_params)
+    #     user = self.request.user.id
+    #     return Customer.objects.filter(created_by=user)
+
+    # def get_queryset(self):
+    #     allowed_params = [
+    #         'first_name',
+    #         'last_name',
+    #         'adress__city',
+    #         'adress_street',
+    #         'adress__building_no',
+    #         'adress__zip_code',
+    #         'workplace__adress__city'
+    #     ]
+
+    #     params = { k:v for (k,v) in self.request.query_params.items() if k in allowed_params }
+
+    #     # print(params)
+    #     return Customer.objects.filter(**params).order_by('first_name')
+
+    def get_queryset(self):
+        allowed_params = [
+            'id',
+            'owner__first_name',
+            'amount_requested__lte',
+            'amount_requested__gte',
+            'paid_total__gte',
+            'paid_total__gte',
+        ]
+
+        params = { k:v for (k,v) in self.request.query_params.items() if k in allowed_params }
+        print(params)
+
+        return Product.objects.filter(**params).order_by('id')

@@ -401,3 +401,6 @@ class AboutView(TemplateView):
 
 class ContanctView(TemplateView):
     template_name = 'core/contact.html'
+
+class SearchView(LoginRequiredMixin, TemplateView):
+    template_name = 'core/search.html'

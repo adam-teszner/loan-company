@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/jquery.dataTables.min.css' %}">
+
+<div class="pyl-container">
+    <h2>Search Customers or Products</h2>
+      <div class="search-fields">
+        <div class="search-fields">
+            <label for="id">Product ID</label>
+            <input class="search-input" type="text" name="id" id="search-id">
+        </div>
+        <div class="search-fields">
+            <label for="owner__first_name">First Name</label>
+            <input class="search-input" type="text" name="owner__first_name" id="search-first_name">
+        </div>
+        <div class="search-fields">
+            <label for="last_name">Last Name</label>
+            <input class="search-input" type="text" name="last_name" id="search-last_name">
+        </div>
+        <div class="search-fields">
+          <label for="amount_requested__gte">Amount requested (=>)</label>
+          <input class="search-input" type="text" name="amount_requested__gte" id="search-amount-requested-gte">
+      </div>
+        <div class="search-fields">
+          <label for="amount_requested__lte">Amount requested (<=)</label>
+          <input class="search-input" type="text" name="amount_requested__lte" id="search-amount-requested-lte">
+      </div>
+        <div class="search-fields">
+          <label for="paid_total__lte">Paid total (<=)</label>
+          <input class="search-input" type="text" name="paid_total__lte" id="search-paid-total-lte">
+      </div>
+        <div class="search-fields">
+          <label for="paid_total__gte">Paid total (=>)</label>
+          <input class="search-input" type="text" name="paid_total__gte" id="search-paid-total-gte">
+      </div>
+
+        <button id="search-btn" class="pyl-btn">Search</button>
+
+
+      </div>
+
+    <!-- Datatables -->
+    <div class="container">
+        <div class="row">
+          <div class="col-sm-12">
+            <table id="products" class="table table-striped table-bordered" style="width:100%" data-server-side="false" data-ajax="/search/q?format=datatables">
+              <thead>
+                <tr>
+                  <th data-data="owner.first_name">Name</th>
+                  <th data-data="owner.adress.street" data-name="owner.adress.street">Street</th>
+                  <th data-data="owner.workplace.adress.city">Work City</th>
+                  <th data-data="amount_requested">Requested</th>
+                  <th data-data="loan_period">Period</th>
+                  <th data-data="total_amount_dec">Total Amount</th>
+                  <th data-data="paid_total">Paid total</th>
+                </tr>
+              </thead>
+            </table>
+          </div>
+        </div>
+      </div>
+
+</div>
+
+<script src="{% static 'js/jquery-3.6.3.min.js' %}"></script>
+<script src="{% static 'js/jquery.dataTables.min.js' %}"></script>
+<script>
+    $(document).ready(function() {
+        $('#products').DataTable();
+    });
+</script>
+<script src="{% static 'js/search.js' %}"></script>
+{% endblock content %}

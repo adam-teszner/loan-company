@@ -26,6 +26,7 @@ urlpatterns = [
     path('my_customers_list/<int:id>/add_prod', views.AddNewProductView.as_view(), name='add_product'),
     path('contact', views.ContanctView.as_view(), name='contact'),
     path('about', views.AboutView.as_view(), name='about'),
+    path('search', views.SearchView.as_view(), name='search'),
     # path('test/', views.jsonTestView.as_view(), name='json_test'),
 
     
