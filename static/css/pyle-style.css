@@ -15,11 +15,29 @@
     
 }
 
+
 @media screen and (max-width: 700px) {
     :root {
         font-size: 13px;
     }
+    
+    .col-darker {
+        order: 2;
+    }
+
+    .prf-pag {
+        min-width: 60vw;
+        margin-top: 1rem;
+    }
+
+    .pic {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
 }
+
+
 
 a {
     text-decoration: none;
@@ -194,6 +212,8 @@ nav ul li {
         background-color: var(--ad-two-color);
         color: var(--secondary-backgroud-color);
         position: static;
+        /* test - to hide navbar during adding profile pic */
+        z-index: 10;
         
         
     }
@@ -726,6 +746,7 @@ a.fill-th {
     font-weight: 200;
 }
  .pyl-input {
+    width: 100%;
     box-sizing: border-box;
     height: 1.8em;
     border-radius: 4px;
@@ -747,14 +768,14 @@ a.fill-th {
 
  .pyl-input:disabled {
     background-color: transparent;
-    color: rgb(170, 170, 170);
+    /* color: rgb(170, 170, 170); */
     opacity: 0.7;
  }
 
 .pyl-modal-background {
     display: none; 
     position: fixed;
-    z-index: 10;
+    z-index: 21;
     left: 0;
     top: 0;
     width: 100%;
@@ -1061,7 +1082,21 @@ a.fill-th {
     display: flex;
     flex-direction: row;
     margin-top: .5em;
-    column-gap: 3em;
+    /* column-gap: 3em; */
+    column-gap: .3rem;
+    align-items: center;
+}
+
+.pyl-edit-inputs > img {
+    width: max(18px, 1.5vw);
+    border: 1px solid transparent;
+}
+
+.pyl-edit-inputs > img:hover {
+    border: 1px red solid;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: var(--color-1-2-alt);
 }
 
 .pyl-edit-inputs > label {
@@ -1072,6 +1107,19 @@ a.fill-th {
 .pyl-edit-inputs > input, .pyl-edit-inputs > select {
     flex-grow: 1;
     flex-basis: 0;
+    width: 100%;
+}
+
+.pyl-edit-inputs > select {
+    text-indent: 0 !important;
+}
+
+.pyl-edit-inputs > input {
+    text-indent: .3rem;
+}
+
+.pyl-edit-inputs > input[type="date" i]{
+    text-indent: .1rem;
 }
 
 .error-msg {
@@ -1170,6 +1218,9 @@ a.fill-th {
     text-align: center;
 }
 
+.prf-pag > div > p > a:visited {
+    color: blue;
+}
 
 .prf-pag > div > p > img {
     width: max(18px, 1.8vw);
@@ -1190,7 +1241,7 @@ a.fill-th {
     box-shadow: 3px 5px 20px -6px;
     width: 100%;
     display: flex;
-    /* experimental -  for profile edit */
+    max-width: min(20vw, 17rem);
     
 }
 
@@ -1304,7 +1355,7 @@ a.fill-th {
 
 .pic-ovr-cont {
     /* width: 50%; */
-    max-width: 20vw;
+    max-width: min(20vw, 17rem);
     margin: 0 auto;
     position: relative;
     border-radius: 50%;
@@ -1470,4 +1521,88 @@ a.fill-th {
     color: red;
     text-decoration-line: underline;
     text-decoration-style: dotted;
+}
+
+
+/* TEXT STYLES */
+
+.base-col {
+    /* font-family: var(--font-raj); */
+    font-weight: 200;
+}
+
+.base-col a {
+    color: blue;
+    font-weight: 400;
+}
+
+.base-col a:hover {
+    color: var(--secondary-backgroud-color);
+    text-decoration: underline;
+}
+
+.base-col h2 {
+    text-align: center;
+    font-size: 1.5rem;
+    text-decoration: underline;
+    font-weight: 600;
+    letter-spacing: 2px;
+}
+
+.t-bold-600 {
+    font-weight: 600;
+}
+
+.t-bold-400 {
+    font-weight: 400;
+}
+
+.t-bold-200 {
+    font-weight: 200;
+}
+
+.t-fam-raj {
+    font-family: var(--font-raj);
+}
+
+.t-fam-ubu {
+    font-family: var(--font-ubu);
+}
+
+.t-color-secondary {
+    color: var(--secondary-backgroud-color);
+}
+
+.t-color-ad1 {
+    color: var(--ad-one-color);
+}
+
+.t-align-center {
+    text-align: center;
+}
+
+.t-size-1-1 {
+    font-size: 1.1rem;
+}
+
+.t-size-1-3 {
+    font-size: 1.3rem;
+}
+
+.t-size-1-5 {
+    font-size: 1.5rem;
+}
+
+.t-style-ob {
+    font-style: oblique;
+}
+
+.d-flex-center {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.w-30 {
+    width: min(30vw, 30%);
 }

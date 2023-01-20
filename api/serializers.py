@@ -1,8 +1,11 @@
 
 from rest_framework import serializers
+from api.validators import (PhoneNumberFieldDRF,
+                            PLPESELFieldDRF, PLNationalIDCardNumberFieldDRF,
+                            PLNIPFieldDRF)
 
-from core.models import Customer, Adress, Workplace
-
+from core.models import (Customer, Adress, Workplace,
+                        Product)
 
 
 class AdressSerializer(serializers.ModelSerializer):
@@ -18,6 +21,9 @@ class AdressSerializer(serializers.ModelSerializer):
 class WorkplaceSerializer(serializers.ModelSerializer):
 
     adress = AdressSerializer()
+    phone_no = PhoneNumberFieldDRF()
+
+    id_nip = PLNIPFieldDRF()
 
     class Meta:
         model = Workplace
@@ -25,7 +31,7 @@ class WorkplaceSerializer(serializers.ModelSerializer):
         exclude = [
             'id',
         ]
-        # Validators are removed because DRF doesnt know how to deal with unique
+        # Unique Validators are removed because DRF doesnt know how to deal with unique
         # validation on nested serializers when updating data
         extra_kwargs = {
             'id_nip': {'validators' : []},
@@ -62,6 +68,10 @@ class CustomerSerializer(DynamicFieldsModelSerializer):
     adress = AdressSerializer()
     workplace = WorkplaceSerializer()
 
+    phone_no = PhoneNumberFieldDRF()
+    social_security_no_pesel = PLPESELFieldDRF()
+    id_passport = PLNationalIDCardNumberFieldDRF()
+
     class Meta:
         model = Customer
         fields = '__all__'
@@ -95,7 +105,19 @@ class CustomerSerializer(DynamicFieldsModelSerializer):
         return cust_inst
 
 
+class ProductSerializer(serializers.ModelSerializer):
+    owner = CustomerSerializer()
 
+    class Meta:
+        model = Product
+        fields = [
+            'owner',
+            'id',
+            'amount_requested',
+            'loan_period',
+            'total_amount_dec',
+            'paid_total',
+            ]
 
 
 

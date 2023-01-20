@@ -203,3 +203,25 @@ class ProductMethods:
     def schedule_human(self):
         x = [f'rata: {a} - {b} - {c} // wplata: {d} - {e} - {f} // zost raty: {g} // zost wpl: {h} // zwloka: {i}' for (a,b,c,d,e,f,g,h,i) in self.complete]
         return '\n'.join(x)
+
+
+    def debt(self):
+        try:
+            req_index = [i for i in range(len(self.create_schedule())) if self.create_schedule()[i][2] <= datetime.date.today()]
+        except TypeError:
+            return 0
+
+        try:
+            inst_req_today = self.create_schedule()[req_index[-1]][0] + 1
+        except IndexError:
+            return 0
+        debt = (inst_req_today * self.installments_dec) - self.paid_total
+        
+        return debt
+
+    def delay(self):
+        req_installment_no = int(self.paid_total / self.installments_dec)
+        req_installment_date = self.created_date + relativedelta(months=1+req_installment_no)
+        delay = datetime.date.today() - req_installment_date
+        return delay.days if delay.days > 0 else 0
+

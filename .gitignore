@@ -4,6 +4,8 @@ db.sqlite3
 .vscode/
 .venv
 .env
+requirements.txt
+settings.py
 prod_settings.py
 debug.log
 core/.DS_Store
@@ -13,3 +15,4 @@ core/templatetags/__pycache__/
 venv/
 media/
 sent_emails/
+python_requests/

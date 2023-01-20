@@ -34,7 +34,9 @@ class ProductAdmin(admin.ModelAdmin):
                     'payments_human',
                     'paid_by_day_human',
                     'create_schedule',
-                    'schedule_human'                    
+                    'schedule_human',
+                    'debt',
+                    'delay'             
                     ]
 '''
 class ProductBankAccAdmin(admin.ModelAdmin):

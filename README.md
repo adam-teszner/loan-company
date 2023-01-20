@@ -33,4 +33,5 @@ PostgreSQL 14.5.
 gunicorn==20.1.0  
 psycopg2==2.9.4  
 
-PostgreSQL 14.5  
+
+PostgreSQL 14.5

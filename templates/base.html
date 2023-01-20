@@ -15,6 +15,7 @@
     <title>Document</title>
 </head>
 <body>
+
 <!-- Messages -->
 {% if messages %}
     <ul class="messages">
@@ -38,12 +39,12 @@
                 <ul class="pyl-navbar-links">
                     <li><a href="{% url 'customer_list' %}">My Customers</a></li>
                     <li><a href="#">Statistics</a></li>
-                    <li><a href="#">Search</a></li>
+                    <li><a href="{% url 'search' %}">Search</a></li>
                     <li><a href="#">Print to pdf</a></li>
                 </ul>
                 <ul class="pyl-navbar-login-links">
-                    <li><a href="#">About</a></li>
-                    <li><a href="#">Contact</a></li>
+                    <li><a href="{% url 'about' %}">About</a></li>
+                    <li><a href="{% url 'contact' %}">Contact</a></li>
                     {% if user.is_authenticated %}
                     <li id='login-el'><span id='account_icon' class="account-icon">{% user_icon %}</span></li>
                     <li><span class='mob-acc-tooltip menu-invisible'>
@@ -90,9 +91,75 @@
 {% block content%}
 
 <div class="pyl-container">
-    <h2>This is CNN</h2>
-    <div class="collumn col-darker">
-        <p>blalallaa</p>
+    <h1 class="t-color-secondary t-fam-raj t-bold-400 t-align-center">Welcome to Loan Co. Website</h1>
+    <div class="collumn col-darker base-col">
+        {% if not user.is_authenticated %}<h3 class="t-bold t-align-center">You have to be logged in to fully use this website.</h3>{% endif %}
+        <br><h2>DISCLAIMER</h2>
+        <p>This website is for educational purposes only. For more information click <a href="{% url 'about' %}">here</a></p>
+        <br>
+        <p>Cookie policy:</p>
+        <p>This website uses two types of cookies:</p>
+        <ul>
+            <li>Session cookies: Use of session cookies allows this website to function properly. These cookies are deleted when you close your web browser.</li>
+            <li>CSRF token: CSRF (Cross-Site Request Forgery) token to protect against unauthorized requests made to this site. This cookie is a randomly generated string that is sent with every form submission or other request made to this site. It is used to verify that the request is coming from a trusted source.</li>
+        </ul>
+        <p>You can disable cookies by changing the settings on your web browser. Please note that disabling cookies may affect the functionality of this website (and/or other websites)</p>
+        <p>If you have any questions, feel free to <a href="{% url 'contact' %}">contact me.</a></p>
+    </div>
+    <br>
+    <div class="collumn col-darker base-col">
+        <p class="t-size-1-3 t-bold-400">Website map:</p>
+        <ul>
+            <li>My Customers =></li>
+                <ul>
+                    <li>Add New Customer<sup> 1</sup></li>
+                    <li>Edit Customer =></li>
+                        <ul>
+                            <li>Add product</li>
+                            <li>Edit Customer data<sup> 2</sup></li>
+                            <li>View current products, including installment scehdule</li>
+                        </ul>
+                </ul>
+            <li>Statistics => under construction</li>
+            <li>Search => under construction</li>
+            <li>Print to pdf => under construction</li>
+            <li>About</li>
+            <li>Contanct</li>
+            <li>Profile =></li>
+                <ul>
+                    <li>(View)Profile =></li>
+                    <ul>
+                        <li>Edit Profile =><sup> 3</sup></li>
+                        <ul>
+                            <li>Change Password</li>
+                        </ul>
+                    </ul>
+                    <li>Logout/Login =></li>
+                        <ul>
+                            <li>Crreate an account<sup> 3</sup></li>
+                        </ul>
+                </ul>
+        </ul>
+        <hr>
+        <p class="t-bold-400 t-fam-raj t-style-ob"><span class="t-bold-600">1</span> - when entering a PESEL number - ajax request is send to check if entered PESEL exists in DB - if so, every field in the form is filled with data and
+            you no longer create a new customer but update an existing one instead.
+            <br>
+            <span class="t-bold-600">2</span> - editing is once again done through ajax but this time, DRF handles this. When GET request is send -> backend responds with one Json that consists of 
+            a SCHEMA, a blueprint to create HTML forms from, and of course data that is going to be edited. JSON will contain only data for selected fields, not all.
+            When response is recieved, JS creates HTML forms, with properties (ie. input-type-date, select field etc) taken from JSON Schema. 
+            When submitting edit, PATCH request is send. Only changed fields are parsed into JSON (user selects fields to edit), so JSON is compact and doesn't
+            contain unchanged, unnecessary data. If there are validation errors - DRF sends JSON with validation errors - and JS creates appropriate information boxes.
+            If everything is OK, JS updates data on website without refreshing it.
+            <br>
+            <span class="t-bold-600">3</span> - when adding profile picture Cropper.js image cropper is used. On the backend - right now, FileField is used -> 
+            this is to be changed for ImageField in the future. Later on, images will be resized on the backend using Celery - user will only have to select aspect-ratio.
+        </p>
+        <p class="t-size-1-1 t-bold-400">Features to be added later:</p>
+        <ul>
+            <li>Manager account (to manage user accounts)</li>
+            <li>Ability to add/remove/edit news, posts on eg. main site</li>
+            <li>Background worker - that adds "payments" to some (most) products, in random amounts, usually once a month - to simulate payments done by real customers</li>
+        </ul>
     </div>
 </div>
 
