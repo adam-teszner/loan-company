@@ -173,4 +173,3 @@ class Payment(models.Model):
 
     def __str__(self):
         return f'Product: {self.product.id}, amount: {self.amount}, date: {self.created_date} '
-
