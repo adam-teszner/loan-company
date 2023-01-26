@@ -2,10 +2,13 @@
 {% block content %}
 {% load static %}
 <link rel="stylesheet" href="{% static 'css/jquery.dataTables.min.css' %}">
+<link rel="stylesheet" href="{% static 'css/responsive.dataTables.min.css' %}">
 
 <div class="pyl-container">
-    <h2>Search Customers or Products</h2>
-    <div class="pyl-information-box">
+    <div class="form-header">
+      <h1>Search . . .</h1>
+    </div>
+    <div class="pyl-information-box no-max">
       <div class="search-fields">
         <div class="search-fields">
           <label for="sadb">Search all database</label>
@@ -102,7 +105,7 @@
 
 
       </div>
-    </div>
+    
     <!-- Datatables -->
     <div class="container">
         <div class="row">
@@ -132,11 +135,12 @@
           </div>
         </div>
       </div>
-
+    </div>
 </div>
 
 <script src="{% static 'js/jquery-3.6.3.min.js' %}"></script>
 <script src="{% static 'js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'js/dataTables.responsive.min.js' %}"></script>
 {% comment %} <script>
     $(document).ready(function() {
         $('#products').DataTable({

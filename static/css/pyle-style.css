@@ -763,7 +763,7 @@ a.fill-th {
  }
 
  .pyl-input:focus {
-    border: 1px solid var(--color-1-alt);
+    border: 1px solid var(--color-1-alt) !important;
  }
 
  .pyl-input:disabled {
@@ -1523,21 +1523,21 @@ a.fill-th {
     text-decoration-style: dotted;
 }
 
+/* DATATABLES */
+
 .data-table-cont {
     font-family: var(--font-raj);
     font-weight: 400;
     font-size: .8rem;
-    color: var(--ad-two-color);
-    background-color: var(--ad-one-color);
+    background-color: whitesmoke;
     padding: .5rem;
-    border-radius: 5px;
+    border-radius: 10px;
 }
 
 #products th {
-    max-width: 100px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    border: 1px blue solid;
+    font-weight:600;
+    font-family: var(--font-raj);
+    font-size: 1rem;
 }
 
 .cell-width {
@@ -1545,6 +1545,49 @@ a.fill-th {
     max-height: 25px;
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+
+.dataTables_filter {
+    font-size: .9rem;
+}
+
+.rem-btn {
+    border: none !important;
+    background: none !important;
+    font-weight: 400 !important;
+}
+
+.paginate_button {
+    border: none !important;
+    background: none !important;
+    font-weight: 400 !important;
+}
+
+.pyl-dt-search {
+    /* color: white !important; */
+    background: white !important;
+    width: max-content !important;
+}
+
+.dataTables_empty{
+    font-family: var(--font-raj);
+    font-weight: 400;
+    font-size: .9rem;
+}
+
+.table > tbody > tr:nth-child(odd) {
+    background-color: white;
+}
+.table > tbody > tr:hover {
+    background-color: var(--ad-two-color) !important;
+}
+
+.table.dataTable.dtr-inline.collapsed.compact>tbody>tr>td.dtr-control:before {
+    background-color: var(--ad-two-color-darker);
+}
+
+.table.dataTable.dtr-inline.collapsed>tbody>tr.parent>td.dtr-control:before {
+    background-color: red;
 }
 
 /* TEXT STYLES */
@@ -1632,4 +1675,8 @@ a.fill-th {
 
 .w-30 {
     width: min(30vw, 30%);
+}
+
+.no-max {
+    min-width: auto !important;
 }
