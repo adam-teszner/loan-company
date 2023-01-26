@@ -2,8 +2,12 @@ let searchInputField = document.querySelectorAll('.search-input');
 let queryParams = new URLSearchParams();
 const searchBtn = document.querySelector('#search-btn');
 const baseUrl = '/search/q?format=datatables';
-
-const prodTable = $('#products').DataTable();
+const checkBox = document.querySelector('#sadb');
+const prodTable = $('#products').DataTable({
+    'columnDefs': [
+    {className: 't-fam-raj t-size-0-9 cell-width', targets: '_all'},
+    ],
+  });
 
 searchInputField.forEach(input => {
 
@@ -30,8 +34,13 @@ searchBtn.addEventListener('click', () => {
     // reloads the table on clicking "search" button
 
     let queryUrl = baseUrl + '&' + queryParams.toString();
-    console.log(queryUrl);
+    // console.log(queryUrl);
     prodTable.ajax.url(queryUrl);
     prodTable.ajax.reload();
 
 } );
+
+    // switches on/off search all database parameter
+checkBox.addEventListener('click', () =>
+    checkBox.checked === true ? queryParams.append(checkBox.name, 'on') : queryParams.delete(checkBox.name)    
+)

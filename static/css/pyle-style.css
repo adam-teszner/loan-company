@@ -1523,6 +1523,29 @@ a.fill-th {
     text-decoration-style: dotted;
 }
 
+.data-table-cont {
+    font-family: var(--font-raj);
+    font-weight: 400;
+    font-size: .8rem;
+    color: var(--ad-two-color);
+    background-color: var(--ad-one-color);
+    padding: .5rem;
+    border-radius: 5px;
+}
+
+#products th {
+    max-width: 100px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    border: 1px blue solid;
+}
+
+.cell-width {
+    max-width: 100px;
+    max-height: 25px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
 
 /* TEXT STYLES */
 
@@ -1579,6 +1602,10 @@ a.fill-th {
 
 .t-align-center {
     text-align: center;
+}
+
+.t-size-0-9 {
+    font-size: .9rem;
 }
 
 .t-size-1-1 {

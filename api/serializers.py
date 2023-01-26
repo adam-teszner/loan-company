@@ -115,8 +115,11 @@ class ProductSerializer(serializers.ModelSerializer):
             'id',
             'amount_requested',
             'loan_period',
-            'total_amount_dec',
-            'paid_total',
+            'tot_paid',
+            'tot_amout',
+            'tot_debt',
+            'tot_delay',
+            'created_date'
             ]
 
 

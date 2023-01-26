@@ -1,3 +1,4 @@
+import time as t
 import datetime
 from decimal import Decimal
 from dateutil.relativedelta import relativedelta
@@ -17,7 +18,7 @@ class ProductMethods:
         except:
             return 0
 
-    @property
+    # @property
     def total_amount_dec(self):
         return round(self.installments_dec*Decimal(str(self.loan_period)),2)
 
@@ -83,7 +84,7 @@ class ProductMethods:
         # return sorted(payment_list)
         return payment_list
 
-    @property
+    # @property
     def paid_total(self):
         paid_total = 0
         for (a,b) in self.get_payments:
@@ -204,8 +205,10 @@ class ProductMethods:
         x = [f'rata: {a} - {b} - {c} // wplata: {d} - {e} - {f} // zost raty: {g} // zost wpl: {h} // zwloka: {i}' for (a,b,c,d,e,f,g,h,i) in self.complete]
         return '\n'.join(x)
 
-
+    
     def debt(self):
+        start = t.time()
+
         try:
             req_index = [i for i in range(len(self.create_schedule())) if self.create_schedule()[i][2] <= datetime.date.today()]
         except TypeError:
@@ -215,13 +218,58 @@ class ProductMethods:
             inst_req_today = self.create_schedule()[req_index[-1]][0] + 1
         except IndexError:
             return 0
-        debt = (inst_req_today * self.installments_dec) - self.paid_total
+        debt = (inst_req_today * self.installments_dec) - self.paid_total()
         
+        end = t.time()
+        print('debt', end - start, 'sec')
         return debt
-
+    
     def delay(self):
-        req_installment_no = int(self.paid_total / self.installments_dec)
+        start = t.time()
+
+        req_installment_no = int(self.paid_total() / self.installments_dec)
         req_installment_date = self.created_date + relativedelta(months=1+req_installment_no)
         delay = datetime.date.today() - req_installment_date
+
+        end = t.time()
+        print('DELAY', end - start, 'SEC')
         return delay.days if delay.days > 0 else 0
 
+    def test_method(self):
+        paid = self.paid_total()
+        return paid
+
+    def last_payment(self, object):
+        obj = object.objects.filter(product=self.id).latest('created_date')
+        return obj.created_date
+
+
+    def opti_debt(self, tot_paid, complete):
+        # start = t.time()
+
+        try:
+            req_index = [i for i in range(len(complete)) if complete[i][2] <= datetime.date.today()]
+        except TypeError:
+            return 0
+
+        try:
+            inst_req_today = complete[req_index[-1]][0] + 1
+        except IndexError:
+            return 0
+        debt = (inst_req_today * self.installments_dec) - tot_paid
+        
+        # end = t.time()
+        # print('debt', end - start, 'sec')
+        return debt
+
+
+    def opti_delay(self, tot_paid):
+        # start = t.time()
+
+        req_installment_no = int(tot_paid / self.installments_dec)
+        req_installment_date = self.created_date + relativedelta(months=1+req_installment_no)
+        delay = datetime.date.today() - req_installment_date
+
+        # end = t.time()
+        # print('DELAY', end - start, 'SEC')
+        return delay.days if delay.days > 0 else 0
