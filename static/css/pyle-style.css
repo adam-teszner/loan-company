@@ -269,7 +269,11 @@ nav ul li {
     #login-el {
         padding-top: 0;
     }
+    .search-top .search-fields {
+        flex-basis: 30% !important;
+    }
 }
+
 
 #login-el {
     padding-top: 1rem;
@@ -632,7 +636,12 @@ a.fill-th {
     .form-image {
         display: none;
     }
-
+    .search-top .search-fields {
+        flex-basis: 80% !important;
+    }
+    .search-bottom .search-fields {
+        flex-basis: 40% !important;
+    }
 
 }   
 
@@ -641,6 +650,20 @@ a.fill-th {
     .form-content {
         grid-template-columns: auto;
         justify-content: stretch;
+    }
+    .search-top .search-fields {
+        flex-wrap: wrap !important;
+    }
+
+    .search-bottom .search-fields {
+        display: block !important;
+        width: 80% !important;
+        text-align: center !important;
+        align-self: center !important;
+    }
+
+    .search-bottom {
+        flex-direction: column !important;
     }
 
 }
@@ -1523,6 +1546,65 @@ a.fill-th {
     text-decoration-style: dotted;
 }
 
+.search-inputs-box {
+    font-size: .9rem;
+}
+
+.search-fields label {
+    padding-bottom: .1rem !important;
+    margin-top: .1rem !important;
+}
+
+.search-top {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.search-top .search-fields {
+    display: flex;
+    flex-basis: 40%;
+    flex-direction: row;
+    padding: 0 .5rem .3rem;
+    align-items: center;
+}
+
+.search-top .search-fields label {
+    flex-basis: 40%;
+}
+
+.search-bottom {
+    padding-top: 1rem;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.search-bottom .search-fields {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    padding: 0 .5rem .3rem;
+    align-items: center;
+    flex-basis: 25%;
+}
+
+.search-bottom .search-fields input {
+    margin-bottom: .5rem;
+}
+
+.search-bottom .search-fields input::placeholder, .search-bottom .search-fields input[type="date"]::placeholder{
+    color: var(--ad-two-color-darker);
+    font-family: var(--font-ubu);
+    font-weight: 200;
+    font-size: .8rem;
+    text-align: center;
+}
+
+#search-btn {
+    margin: 1rem 1.5rem;
+}
 /* DATATABLES */
 
 .data-table-cont {

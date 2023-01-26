@@ -385,7 +385,7 @@ class SearchApiView(ListAPIView):
         ]
 
         params = { k:v for (k,v) in self.request.query_params.items() if k in allowed_params }
-        print(params)
+        # print(params)
         if self.request.query_params.get('sadb'):
             return Product.objects.filter(**params).order_by('id')
         

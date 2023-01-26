@@ -11,100 +11,96 @@
     <div class="pyl-information-box no-max">
       <div class="search-fields">
         <div class="search-fields">
-          <label for="sadb">Search all database</label>
+          <label for="sadb">Search for all products in database (for testing purposes)</label>
           <input type="checkbox" name="sadb" id='sadb'>
       </div>
-        <div class="search-fields">
-            <label for="id">Product ID</label>
-            <input class="search-input" type="text" name="id" placeholder="product id">
-        </div>
-        <div class="search-fields">
-            <label for="owner__first_name">First Name</label>
-            <input class="search-input" type="text" name="owner__first_name" id="search-first_name">
-        </div>
-        <div class="search-fields">
-            <label for="onwer__last_name">Last Name</label>
-            <input class="search-input" type="text" name="owner__last_name" id="search-last_name">
-        </div>
-        <div class="search-fields">
-          <label for="owner__social_security_no_pesel">PESEL</label>
-          <input class="search-input" type="text" name="owner__social_security_no_pesel" id="search-social_security_no_pesel">
-        </div>
-        <div class="search-fields">
-          <label for="owner__adress__city">City</label>
-          <input class="search-input" type="text" name="owner__adress__city" id="search-city">
-        </div>
-        <div class="search-fields">
-          <label for="owner__adress__zip_code">Zip code</label>
-          <input class="search-input" type="text" name="owner__adress__zip_code" id="search-zip_code">
-        </div>
-        <div class="search-fields">
-          <label for="owner__workplace__name">Workplace name</label>
-          <input class="search-input" type="text" name="owner__workplace__name" id="search-workplace">
-        </div>
-        <div class="search-fields">
-          <label for="owner__workplace__id_nip">Workplace NIP</label>
-          <input class="search-input" type="text" name="owner__workplace__id_nip" id="search-workplace-nip">
-        </div>
-        <div class="search-fields">
-          <label for="owner__work_status">Employment status</label>
-          <input class="search-input" type="text" name="owner__work_status" id="search-work-status">
-        </div>
+      <hr>
 
-
-        <div class="search-fields">
-          <label for="amount_requested__gte">Amount requested (>=)</label>
-          <input class="search-input" type="text" name="amount_requested__gte" id="search-amount-requested-gte">
-        </div>
+      <div class="search-inputs-box">
+        <div class="search-top">
           <div class="search-fields">
-            <label for="amount_requested__lte">Amount requested (<=)</label>
-            <input class="search-input" type="text" name="amount_requested__lte" id="search-amount-requested-lte">
-        </div>
-        <div class="search-fields">
-          <label for="tot_amount__gte">Total Amount (>=)</label>
-          <input class="search-input" type="text" name="tot_amount__gte" id="search-tot_amount-gte">
-        </div>
+              <label class="pyl-label-text" for="id">Product ID</label>
+              <input class="pyl-input search-input" type="number" min="1" name="id"ś>
+          </div>
           <div class="search-fields">
-            <label for="tot_amount__lte">Total Amount (<=)</label>
-            <input class="search-input" type="text" name="tot_amount__lte" id="search-tot_amount-lte">
-        </div>
-        <div class="search-fields">
-          <label for="tot_paid__lte">Total Paid (<=)</label>
-          <input class="search-input" type="text" name="tot_paid__lte" id="search-tot_paid-lte">
-        </div>
+              <label class="pyl-label-text" for="owner__first_name">First Name</label>
+              <input class="pyl-input search-input" type="text" name="owner__first_name" id="search-first_name">
+          </div>
           <div class="search-fields">
-            <label for="tot_paid__gte">Total Paid (>=)</label>
-            <input class="search-input" type="text" name="tot_paid__gte" id="search-tot_paid-gte">
+              <label class="pyl-label-text" for="onwer__last_name">Last Name</label>
+              <input class="pyl-input search-input" type="text" name="owner__last_name" id="search-last_name">
+          </div>
+          <div class="search-fields">
+            <label class="pyl-label-text" for="owner__social_security_no_pesel">PESEL</label>
+            <input class="pyl-input search-input" type="text" name="owner__social_security_no_pesel" id="search-social_security_no_pesel">
+          </div>
+          <div class="search-fields">
+            <label class="pyl-label-text" for="owner__adress__city">City</label>
+            <input class="pyl-input search-input" type="text" name="owner__adress__city" id="search-city">
+          </div>
+          <div class="search-fields">
+            <label class="pyl-label-text" for="owner__adress__zip_code">Zip code</label>
+            <input class="pyl-input search-input" type="text" name="owner__adress__zip_code" id="search-zip_code">
+          </div>
+          <div class="search-fields">
+            <label class="pyl-label-text" for="owner__workplace__name">Workplace name</label>
+            <input class="pyl-input search-input" type="text" name="owner__workplace__name" id="search-workplace">
+          </div>
+          <div class="search-fields">
+            <label class="pyl-label-text" for="owner__workplace__id_nip">Workplace NIP</label>
+            <input class="pyl-input search-input" type="text" name="owner__workplace__id_nip" id="search-workplace-nip">
+          </div>
+          <div class="search-fields">
+            <label class="pyl-label-text" for="owner__work_status">Employment status</label>
+            <select class="pyl-input search-input" name="owner__work_status" id="search-work-status">
+              <option value="">- - -</option>
+              <option value="ft">Full-time</option>
+              <option value="pt">Part-time</option>
+              <option value="rt">Retired</option>
+              <option value="dp">Disabled pension</option>
+            </select>
+          </div>
         </div>
-        <div class="search-fields">
-          <label for="tot_debt__lte">Total Debt (<=)</label>
-          <input class="search-input" type="text" name="tot_debt__lte" id="search-tot_debt-lte">
+        <hr>
+        <div class="search-bottom">
+          <div class="search-fields">
+            <label class="pyl-label-text" for="amount_requested__gte">Amount requested</label>
+            <input class="pyl-input search-input" type="text" name="amount_requested__gte" id="search-amount-requested-gte" placeholder="more than or equal">
+            <input class="pyl-input search-input" type="text" name="amount_requested__lte" id="search-amount-requested-lte" placeholder="less than or equal">
+          </div>
+          <div class="search-fields">
+            <label class="pyl-label-text" for="tot_amount__gte">Total Amount</label>
+            <input class="pyl-input search-input" type="text" name="tot_amount__gte" id="search-tot_amount-gte" placeholder="more than or equal">
+            <input class="pyl-input search-input" type="text" name="tot_amount__lte" id="search-tot_amount-lte" placeholder="less than or equal">
+          </div>
+          <div class="search-fields">
+            <label  class="pyl-label-text"for="tot_paid__lte">Total Paid</label>
+            <input class="pyl-input search-input" type="text" name="tot_paid__gte" id="search-tot_paid-gte" placeholder="more than or equal">
+            <input class="pyl-input search-input" type="text" name="tot_paid__lte" id="search-tot_paid-lte" placeholder="less than or equal">
+          </div>
+          <div class="search-fields">
+            <label class="pyl-label-text" for="tot_debt__lte">Total Debt</label>
+            <input class="pyl-input search-input" type="text" name="tot_debt__gte" id="search-tot_debt-gte" placeholder="more than or equal">
+            <input class="pyl-input search-input" type="text" name="tot_debt__lte" id="search-tot_debt-lte" placeholder="less than or equal">
+          </div>
+          <div class="search-fields">
+            <label class="pyl-label-text" for="tot_delay__lte">Total Delay</label>
+            <input class="pyl-input search-input" type="text" name="tot_delay__gte" id="search-tot_delay-gte" placeholder="more than or equal">
+            <input class="pyl-input search-input" type="text" name="tot_delay__lte" id="search-tot_delay-lte" placeholder="less than or equal">
+          </div>
+          <div class="search-fields">
+            <label class="pyl-label-text" for="created_date__gte">Date Sold</label>
+            <input class="pyl-input search-input" type="date" name="created_date__gte" id="search-created_date-gte" placeholder="more than or equal">
+            <input class="pyl-input search-input" type="date" name="created_date__lte" id="search-created_date-lte" placeholder="less than or equal">
+            
+          </div>
         </div>
-        <div class="search-fields">
-          <label for="tot_debt__gte">Total Debt (>=)</label>
-          <input class="search-input" type="text" name="tot_debt__gte" id="search-tot_debt-gte">
-        </div>
-        <div class="search-fields">
-          <label for="tot_delay__lte">Total Delay (<=)</label>
-          <input class="search-input" type="text" name="tot_delay__lte" id="search-tot_delay-lte">
-        </div>
-        <div class="search-fields">
-          <label for="tot_delay__gte">Total Delay (>=)</label>
-          <input class="search-input" type="text" name="tot_delay__gte" id="search-tot_delay-gte">
-        </div>
-        <div class="search-fields">
-          <label for="created_date__gte">Date Sold (>=)</label>
-          <input class="search-input" type="date" name="created_date__gte" id="search-created_date-gte">
-        </div>
-        <div class="search-fields">
-          <label for="created_date__gte">Date Sold (>=)</label>
-          <input class="search-input" type="date" name="created_date__gte" id="search-created_date-gte">
-        </div>
-
-        <button id="search-btn" class="pyl-btn">Search</button>
-
+        
 
       </div>
+      <hr>
+      <button id="search-btn" class="pyl-btn">Search</button>
+    </div>
     
     <!-- Datatables -->
     <div class="container">
