@@ -356,42 +356,37 @@ class CustomerUpdateFetchApiView(RetrieveModelMixin,
 #     pass
 
 class SearchApiView(ListAPIView):
-    # queryset = Customer.objects.all()
-    # serializer_class = CustomerSerializer
+
     serializer_class = ProductSerializer
-
-    # def get_queryset(self):
-    #     print(self.request.query_params)
-    #     user = self.request.user.id
-    #     return Customer.objects.filter(created_by=user)
-
-    # def get_queryset(self):
-    #     allowed_params = [
-    #         'first_name',
-    #         'last_name',
-    #         'adress__city',
-    #         'adress_street',
-    #         'adress__building_no',
-    #         'adress__zip_code',
-    #         'workplace__adress__city'
-    #     ]
-
-    #     params = { k:v for (k,v) in self.request.query_params.items() if k in allowed_params }
-
-    #     # print(params)
-    #     return Customer.objects.filter(**params).order_by('first_name')
 
     def get_queryset(self):
         allowed_params = [
             'id',
             'owner__first_name',
+            'owner__last_name',
+            'owner__social_security_no_pesel',
+            'owner__adress__city',
+            'owner__adress__zip_code',
+            'owner__workplace__name',
+            'owner__workplace__id_nip',
+            'owner__work_status',
             'amount_requested__lte',
             'amount_requested__gte',
-            'paid_total__gte',
-            'paid_total__gte',
+            'tot_paid__gte',
+            'tot_paid__lte',
+            'tot_amount__gte',
+            'tot_amount__lte',
+            'tot_debt__gte',
+            'tot_debt__lte',
+            'tot_delay__gte',
+            'tot_delay__lte',
+            'created_date__gte',
+            'created_date__lte'
         ]
 
         params = { k:v for (k,v) in self.request.query_params.items() if k in allowed_params }
-        print(params)
-
-        return Product.objects.filter(**params).order_by('id')
+        # print(params)
+        if self.request.query_params.get('sadb'):
+            return Product.objects.filter(**params).order_by('id')
+        
+        return Product.objects.filter(owner__created_by__userinfo__user__id=self.request.user.id).filter(**params).order_by('id')

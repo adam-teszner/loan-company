@@ -156,15 +156,33 @@ class Product(models.Model, ProductMethods):
     loan_period = models.IntegerField(choices=list(zip(range(6, 49), range(6, 49))),
                                     blank=False, default=24)
     created_date = models.DateField(auto_now_add=True)
+    
+    
+    # new fields -> calculated from methods
+
+    tot_amout = models.DecimalField('Total Amount', blank=True, null=True, default=0, 
+                                    max_digits=9, decimal_places=2, editable=False)
+    tot_paid = models.DecimalField('Total Paid', blank=True, null=True, default=0, 
+                                    max_digits=9, decimal_places=2, editable=False)
+    tot_debt = models.DecimalField('Total Debt', blank=True, null=True, default=0, 
+                                    max_digits=9, decimal_places=2, editable=False)
+    tot_delay = models.IntegerField('Delay', default=0, blank=True, null=True, editable=False)
+    
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.payments_query = Payment.objects.filter(product=self.id)
         self.complete = []
+              
 
     def __str__(self):
         return f'ID: {self.id}, Owner {self.owner.id}, amount: {self.amount_requested}, period: {self.loan_period}'
 
+
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            self.tot_amout = ProductMethods.total_amount_dec(self)
+        super().save(*args, **kwargs)
 
 class Payment(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True)
@@ -173,3 +191,23 @@ class Payment(models.Model):
 
     def __str__(self):
         return f'Product: {self.product.id}, amount: {self.amount}, date: {self.created_date} '
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        self.product.tot_paid = self.product.paid_total()
+        self.product.tot_debt = self.product.debt()
+        self.product.tot_delay = self.product.delay()
+        self.product.save()
+
+    def delete(self, *args, **kwargs):
+        super().delete(*args, **kwargs)
+        self.product.tot_paid = self.product.paid_total()
+        self.product.tot_debt = self.product.debt()
+        self.product.tot_delay = self.product.delay()
+        self.product.save()
+
+
+    
+        
+
+
