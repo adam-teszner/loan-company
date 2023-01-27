@@ -16,3 +16,4 @@ venv/
 media/
 sent_emails/
 python_requests/
+data/
