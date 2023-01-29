@@ -105,8 +105,22 @@ class CustomerSerializer(DynamicFieldsModelSerializer):
         return cust_inst
 
 
+class CustomerDetailsSerializer(serializers.ModelSerializer):
+    adress = AdressSerializer()
+    workplace = WorkplaceSerializer()
+    url = serializers.HyperlinkedIdentityField(
+        view_name='customer_detail',
+        read_only=True,
+        lookup_field='pk'
+    )
+
+    class Meta:
+        model = Customer
+        fields = '__all__'
+
 class ProductSerializer(serializers.ModelSerializer):
-    owner = CustomerSerializer()
+    # owner = CustomerSerializer()
+    owner = CustomerDetailsSerializer()
 
     class Meta:
         model = Product

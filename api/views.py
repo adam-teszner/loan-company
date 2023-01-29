@@ -17,7 +17,7 @@ from rest_framework.generics import (UpdateAPIView, GenericAPIView,
 from rest_framework.mixins import UpdateModelMixin, RetrieveModelMixin
 from .serializers import (AdressSerializer, CustomerSerializer,
                             WorkplaceSerializer, DynamicFieldsModelSerializer,
-                            ProductSerializer)
+                            ProductSerializer, CustomerDetailsSerializer)
 from rest_framework import (HTTP_HEADER_ENCODING, exceptions,
                             exceptions, serializers, status, viewsets)
 from rest_framework.utils.field_mapping import ClassLookupDict
@@ -357,6 +357,8 @@ class CustomerUpdateFetchApiView(RetrieveModelMixin,
 
 class SearchApiView(ListAPIView):
 
+    # authentication_classes = [SessionAuthentication]
+    # permission_classes = [IsAuthenticated]
     serializer_class = ProductSerializer
 
     def get_queryset(self):
@@ -374,8 +376,8 @@ class SearchApiView(ListAPIView):
             'amount_requested__gte',
             'tot_paid__gte',
             'tot_paid__lte',
-            'tot_amount__gte',
-            'tot_amount__lte',
+            'tot_amout__gte',
+            'tot_amout__lte',
             'tot_debt__gte',
             'tot_debt__lte',
             'tot_delay__gte',

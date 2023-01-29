@@ -108,3 +108,54 @@ last_names = [
     "Edwards", 
     "Collins"
 ]
+
+
+
+
+customer_params = {
+    'adress_id': None,
+    'created_by_id': 4,
+    'created_date': None,
+    'dob': None,
+    'email': None,
+    'esd': None,
+    'first_name': '',
+    'gender': '',
+    'id': None,
+    'id_passport': '',
+    'last_name': '',
+    'martial_status': '',
+    'phone_no': '',
+    'position': None,
+    'salaty': None,
+    'social_security_no_pesel': '',
+    'work_status': '',
+    'workplace_id': None
+    }
+
+product_params = {
+    'owner_id': 1,
+    'global_interest_rate_dec': Decimal('5.25'),
+    'lombard_rate_dec': Decimal('5.75'),
+    'product_name': 'L1',
+    'amount_requested': 10000,
+    'loan_period': 24,
+    'created_date': datetime.date.today(),
+}
+
+workplace_params = {
+    'adress_id': None,
+    'email': None,
+    'id': None,
+    'id_nip': '',
+    'name': '',
+    'phone_no': ''
+    }
+
+adress_params = {
+    'building_no': '',
+    'city': '',
+    'id': None,
+    'street': '',
+    'zip_code': ''
+    }

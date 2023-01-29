@@ -51,7 +51,7 @@
     </table>
     </div>
     <div class="step-links">
-        <span class='list-length'>{{page_obj|length}} customers total</span>
+        <span class='list-length'>Showing {{page_obj.start_index}} - {{page_obj.end_index}} of {{page_obj.paginator.count}} customers total</span>
         <span class="current">
             Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
         </span>

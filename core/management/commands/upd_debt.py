@@ -10,10 +10,8 @@ class Command(BaseCommand):
 
 
     def launch_methods(self, object):
-        # object.debt()
-        object.opti_debt(object.tot_paid, object.complete)
-        # object.delay()
-        object.opti_delay(object.tot_paid)
+        object.tot_debt = object.opti_debt(object.tot_paid, object.inst_sch)
+        object.tot_delay = object.opti_delay(object.tot_paid)
         object.save()
 
     def handle(self, *args, **kwargs):

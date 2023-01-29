@@ -511,8 +511,17 @@ a.fill-th {
     float: right;
 }
 
+.dataTables_wrapper .dataTables_paginate .paginate_button.current.pyl-dt-current {
+    color: black !important;
+    font-weight: 600 !important;
+}
+
 .step-nav {
     float: right;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button.pyl-dt-step-hover:hover {
+    color: black !important;
+    font-weight: 600 !important;
 }
 
 /* Form layout */
@@ -718,7 +727,7 @@ a.fill-th {
 }
 
 .form-hide {
-    display: none;
+    display: none !important;
 }
 
 .step-panel > .step-color {

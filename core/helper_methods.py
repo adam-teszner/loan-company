@@ -221,7 +221,7 @@ class ProductMethods:
         debt = (inst_req_today * self.installments_dec) - self.paid_total()
         
         end = t.time()
-        print('debt', end - start, 'sec')
+        # print('debt', end - start, 'sec')
         return debt
     
     def delay(self):
@@ -232,28 +232,23 @@ class ProductMethods:
         delay = datetime.date.today() - req_installment_date
 
         end = t.time()
-        print('DELAY', end - start, 'SEC')
+        # print('DELAY', end - start, 'SEC')
         return delay.days if delay.days > 0 else 0
 
     def test_method(self):
         paid = self.paid_total()
         return paid
 
-    def last_payment(self, object):
-        obj = object.objects.filter(product=self.id).latest('created_date')
-        return obj.created_date
-
-
-    def opti_debt(self, tot_paid, complete):
+    def opti_debt(self, tot_paid, inst_sch):
         # start = t.time()
 
         try:
-            req_index = [i for i in range(len(complete)) if complete[i][2] <= datetime.date.today()]
+            req_index = [i for i in range(len(inst_sch)) if inst_sch[i][1] <= datetime.date.today()]
         except TypeError:
             return 0
 
         try:
-            inst_req_today = complete[req_index[-1]][0] + 1
+            inst_req_today = inst_sch[req_index[-1]][0] + 1
         except IndexError:
             return 0
         debt = (inst_req_today * self.installments_dec) - tot_paid
@@ -261,6 +256,7 @@ class ProductMethods:
         # end = t.time()
         # print('debt', end - start, 'sec')
         return debt
+
 
 
     def opti_delay(self, tot_paid):

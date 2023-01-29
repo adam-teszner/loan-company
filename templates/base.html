@@ -93,7 +93,13 @@
 <div class="pyl-container">
     <h1 class="t-color-secondary t-fam-raj t-bold-400 t-align-center">Welcome to Loan Co. Website</h1>
     <div class="collumn col-darker base-col">
-        {% if not user.is_authenticated %}<h3 class="t-bold t-align-center">You have to be logged in to fully use this website.</h3>{% endif %}
+        {% if not user.is_authenticated %}
+        <h3 class="t-bold t-align-center">You have to be logged in to fully use this website.</h3>
+        <p>If you don't want to create an account, please login as a guest:
+            <br>Login: guest
+            <br>Password: adamsaddam
+        </p>
+        {% endif %}
         <br><h2>DISCLAIMER</h2>
         <p>This website is for educational purposes only. For more information click <a href="{% url 'about' %}">here</a></p>
         <br>
