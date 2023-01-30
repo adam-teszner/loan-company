@@ -2,10 +2,12 @@ from collections import OrderedDict
 from django.views import View
 from django.http import JsonResponse
 
+
 from core.models import (Customer, Adress, Workplace,
                         Product)
 
 # rest framework imports
+from rest_framework.reverse import reverse_lazy
 from rest_framework.metadata import SimpleMetadata
 from django.forms.models import model_to_dict
 from rest_framework.authentication import SessionAuthentication
@@ -325,6 +327,11 @@ class CustomerUpdateFetchApiView(RetrieveModelMixin,
 
 
     def partial_update(self, request, *args, **kwargs):
+
+        #limiting edit/save/create access for "guest_user"
+        if request.user.id == 4:
+            raise exceptions.PermissionDenied
+
         instance = Customer.objects.get(pk=kwargs['pk'])
         mode = request.query_params.get('mode', default=None)
         serializer = self.get_serializer(instance=instance, 
@@ -357,8 +364,8 @@ class CustomerUpdateFetchApiView(RetrieveModelMixin,
 
 class SearchApiView(ListAPIView):
 
-    # authentication_classes = [SessionAuthentication]
-    # permission_classes = [IsAuthenticated]
+    authentication_classes = [SessionAuthentication]
+    permission_classes = [IsAuthenticated]
     serializer_class = ProductSerializer
 
     def get_queryset(self):

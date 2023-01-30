@@ -1686,6 +1686,7 @@ a.fill-th {
 .base-col {
     /* font-family: var(--font-raj); */
     font-weight: 200;
+    border-radius: 0;
 }
 
 .base-col a {
@@ -1704,6 +1705,14 @@ a.fill-th {
     text-decoration: underline;
     font-weight: 600;
     letter-spacing: 2px;
+}
+
+.t-dec-line-through {
+    text-decoration: line-through;
+}
+
+.t-dec-underline {
+    text-decoration: underline;
 }
 
 .t-bold-600 {
@@ -1732,6 +1741,10 @@ a.fill-th {
 
 .t-color-ad1 {
     color: var(--ad-one-color);
+}
+
+.t-color-whitesmoke {
+    color: whitesmoke;
 }
 
 .t-align-center {
@@ -1764,10 +1777,44 @@ a.fill-th {
     flex-direction: column;
 }
 
+.d-block {
+    display: block;
+}
+
 .w-30 {
     width: min(30vw, 30%);
 }
 
 .no-max {
     min-width: auto !important;
+}
+
+.base-info {
+    color: var(--secondary-backgroud-color);
+    padding: .5rem;
+    border-left: 2rem var(--ad-two-color-darker) solid;
+
+}
+
+.cookies {
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    background-color: var(--secondary-backgroud-color);
+    color: whitesmoke;
+    font-weight: 200;
+}
+
+.cookies a {
+    color: red;
+    font-weight: 600;
+    text-decoration: underline;
+}
+
+.cookies button {
+    border-color: whitesmoke;
+}
+
+.cookies button:hover {
+    background-color: black;
 }

@@ -13,12 +13,13 @@ f = Faker()
 f_pl = Faker('pl_PL')
 
 class Command(BaseCommand):
-    help = 'Populates database with fake data, pass in 3 arguments (type:int)'
+    help = 'Populates database with fake data, pass in 4 arguments (type:int)'
 
     def add_arguments(self, parser):
         parser.add_argument('customers', help='number of customers with adresses, workplaces, defaults to 10', type=int, default=10)
         parser.add_argument('products', help='number of products, defaults to 15', type=int, default=15)
         parser.add_argument('payments', help='number of payments, defaults to 30', type=int, default=30)
+        parser.add_argument('user_id', help='User ID associated with created data', type=int, default=4)
     
     def handle(self, *args, **kwargs):
         start = t.time()
@@ -29,11 +30,12 @@ class Command(BaseCommand):
         c = kwargs['customers']
         p = kwargs['products']
         pm = kwargs['payments']
+        user_id = kwargs['user_id']
 
         for obj in range(c):
             customer_params = {
                 # 'adress_id': None,
-                'created_by_id': 4,
+                'created_by_id': user_id,
                 'created_date': datetime.date.today(),
                 'dob': f.date_of_birth(minimum_age=18, maximum_age=70),
                 'email': f.ascii_email(),

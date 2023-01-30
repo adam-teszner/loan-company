@@ -27,6 +27,8 @@ urlpatterns = [
     path('contact', views.ContanctView.as_view(), name='contact'),
     path('about', views.AboutView.as_view(), name='about'),
     path('search', views.SearchView.as_view(), name='search'),
+    path('guest_access', views.GuestUserView.as_view(), name='guest'),
+    path('guest_login', views.guest_login, name='guest_login'),
     # path('test/', views.jsonTestView.as_view(), name='json_test'),
 
     
