@@ -61,17 +61,18 @@
             </select>
           </div>
         </div>
+        <div class="pyl-box pyl-expand"><span id="search-expand">Expand</span></div>
         <hr>
-        <div class="search-bottom">
+        <div class="search-bottom form-hide">
           <div class="search-fields">
             <label class="pyl-label-text" for="amount_requested__gte">Amount requested</label>
             <input class="pyl-input search-input" type="text" name="amount_requested__gte" id="search-amount-requested-gte" placeholder="more than or equal">
             <input class="pyl-input search-input" type="text" name="amount_requested__lte" id="search-amount-requested-lte" placeholder="less than or equal">
           </div>
           <div class="search-fields">
-            <label class="pyl-label-text" for="tot_amount__gte">Total Amount</label>
-            <input class="pyl-input search-input" type="text" name="tot_amount__gte" id="search-tot_amount-gte" placeholder="more than or equal">
-            <input class="pyl-input search-input" type="text" name="tot_amount__lte" id="search-tot_amount-lte" placeholder="less than or equal">
+            <label class="pyl-label-text" for="tot_amout__gte">Total Amount</label>
+            <input class="pyl-input search-input" type="text" name="tot_amout__gte" id="search-tot_amout-gte" placeholder="more than or equal">
+            <input class="pyl-input search-input" type="text" name="tot_amout__lte" id="search-tot_amout-lte" placeholder="less than or equal">
           </div>
           <div class="search-fields">
             <label  class="pyl-label-text"for="tot_paid__lte">Total Paid</label>
@@ -106,13 +107,14 @@
     <div class="container">
         <div class="row">
           <div class="col-sm-12">
-            <table id="products" class="table table-striped table-bordered hover order-column compact nowrap" style="width:100%" data-server-side="false" data-ajax="/search/q?format=datatables">
+            <table id="products" class="table table-striped table-bordered hover order-column compact nowrap" style="width:100%" data-ajax="/search/q?format=datatables">
               <thead>
                 <tr>
                   <th data-data="id">Id</th>
                   <th data-data="owner.first_name">First Name</th>
                   <th data-data="owner.last_name">Last Name</th>
-                  <th data-data="owner.social_security_no_pesel">PESEL</th>
+                  <th>PESEL</th>
+                  {% comment %} <th data-data="owner.social_security_no_pesel">PESEL</th> {% endcomment %}
                   <th data-data="owner.adress.city">City</th>
                   <th data-data="owner.adress.zip_code">Zip-code</th>
                   <th data-data="owner.workplace.name">Workplace</th>

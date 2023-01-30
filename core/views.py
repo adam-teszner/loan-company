@@ -1,4 +1,5 @@
 import json
+from functools import wraps
 from django.urls import reverse, reverse_lazy
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
@@ -16,6 +17,7 @@ from .forms import (CustCreatePersonalInfo, CustCreateAdressForm,
 from django.views import View
 from django.core import serializers
 from django.core.exceptions import PermissionDenied
+from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.views import (PasswordChangeView,
                                 PasswordChangeDoneView, PasswordResetView,
@@ -35,8 +37,18 @@ UserInfoFormSet = inlineformset_factory(User, UserInfo, fields='__all__')
 '''
 
 
-def index(request):  
+### do nauczenia ! wraps !!
+def guest_limiter(function):
+    @wraps(function)
+    def wrapper(self, request, *args, **kwargs):
+        if request.user.username == 'guest':
+            return redirect('guest')
+        else:
+            return function(self, request, *args, **kwargs)
+    return wrapper
 
+
+def index(request):
     return render(request, 'base.html')
 
 @login_required
@@ -112,6 +124,10 @@ def custom_customer(request):
     
     
     if request.method == 'POST' and request.POST.get('customer_id_value') == '':
+        
+        #limiting edit/save/create access for "guest_user"
+        if request.user.id == 4:
+            return redirect('guest')
 
 
         if customer_form.is_valid() and customer_adress.is_valid() and workplace_adr_form.is_valid() and workplace_form.is_valid():
@@ -137,6 +153,10 @@ def custom_customer(request):
 
             
     elif request.method == 'POST' and request.POST.get('customer_id_value') != '':
+
+        #limiting edit/save/create access for "guest_user"
+        if request.user.id == 4:
+            return redirect('guest')
 
         customer_id = request.POST.get('customer_id_value')
         customer_instance = Customer.objects.get(id=customer_id)
@@ -179,7 +199,6 @@ class RegisterUser(SuccessMessageMixin, View):
     def get(self, request):
 
         return render(request, self.template_name, context=self.data)
-
 
     def post(self, request):
         
@@ -263,6 +282,7 @@ class UserProfileEditView(LoginRequiredMixin, UpdateView):
             raise PermissionDenied
         return data
 
+    @guest_limiter
     def post(self, request, *args, **kwargs):
         object = self.get_object()
         forms = [
@@ -293,6 +313,10 @@ class UserChangePassword(LoginRequiredMixin, PasswordChangeView):
         # print(id)
         return reverse('user_password_done', kwargs={'id': id})
     
+    @guest_limiter
+    def post(self, request, *args, **kwargs):
+        super().post(request, *args, **kwargs)
+    
 
 class UserChangePasswordDone(LoginRequiredMixin, PasswordChangeDoneView):
     template_name = 'registration/password_change_done_new.html'
@@ -304,6 +328,12 @@ class UserResetPassword(SuccessMessageMixin, PasswordResetView):
     email_template_name = 'registration/reset_password_email.html'
     template_name = 'registration/reset_password.html'
     success_url = reverse_lazy('index')
+
+    def post(self, request, *args, **kwargs):
+        if request.POST.get('email') == 'guest_email@guest.com':
+            raise PermissionDenied
+        return super().post(request, *args, **kwargs)
+
 
 
 class UserResetPasswordForm(SuccessMessageMixin, PasswordResetConfirmView):
@@ -352,10 +382,12 @@ class AddNewProductView(LoginRequiredMixin, View):
         if self.request.user.id != customer_instance.created_by.id:
             raise PermissionDenied
         return render(request, self.template_name, context={'add_product': self.add_product_form, 'customer_id': customer_instance.id})
-
+    
+    @guest_limiter
     def post(self, request, id):
+
         customer_instance = Customer.objects.get(id=id)
-        add_prod = self.add_product_form(request.POST)
+        add_prod = self.add_product_form(request.POST) 
         if add_prod.is_valid():
             s = add_prod.save(commit=False)
             s.owner = customer_instance
@@ -404,3 +436,20 @@ class ContanctView(TemplateView):
 
 class SearchView(LoginRequiredMixin, TemplateView):
     template_name = 'core/search.html'
+
+class GuestUserView(LoginRequiredMixin, TemplateView):
+    template_name = 'registration/guest_user_denied.html'
+
+    def get(self, request, *args, **kwargs):
+        if request.user.id != 4:
+            raise PermissionDenied
+        
+        return super().get(request, *args, **kwargs)
+
+def guest_login(request):
+    username = 'guest'
+    password = 'djangoguest'
+    user = authenticate(request, username=username, password=password)
+    if user is not None:
+        login(request, user)
+        return redirect('index')

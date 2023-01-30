@@ -2,10 +2,12 @@ from collections import OrderedDict
 from django.views import View
 from django.http import JsonResponse
 
+
 from core.models import (Customer, Adress, Workplace,
                         Product)
 
 # rest framework imports
+from rest_framework.reverse import reverse_lazy
 from rest_framework.metadata import SimpleMetadata
 from django.forms.models import model_to_dict
 from rest_framework.authentication import SessionAuthentication
@@ -17,7 +19,7 @@ from rest_framework.generics import (UpdateAPIView, GenericAPIView,
 from rest_framework.mixins import UpdateModelMixin, RetrieveModelMixin
 from .serializers import (AdressSerializer, CustomerSerializer,
                             WorkplaceSerializer, DynamicFieldsModelSerializer,
-                            ProductSerializer)
+                            ProductSerializer, CustomerDetailsSerializer)
 from rest_framework import (HTTP_HEADER_ENCODING, exceptions,
                             exceptions, serializers, status, viewsets)
 from rest_framework.utils.field_mapping import ClassLookupDict
@@ -325,6 +327,11 @@ class CustomerUpdateFetchApiView(RetrieveModelMixin,
 
 
     def partial_update(self, request, *args, **kwargs):
+
+        #limiting edit/save/create access for "guest_user"
+        if request.user.id == 4:
+            raise exceptions.PermissionDenied
+
         instance = Customer.objects.get(pk=kwargs['pk'])
         mode = request.query_params.get('mode', default=None)
         serializer = self.get_serializer(instance=instance, 
@@ -357,6 +364,8 @@ class CustomerUpdateFetchApiView(RetrieveModelMixin,
 
 class SearchApiView(ListAPIView):
 
+    authentication_classes = [SessionAuthentication]
+    permission_classes = [IsAuthenticated]
     serializer_class = ProductSerializer
 
     def get_queryset(self):
@@ -374,8 +383,8 @@ class SearchApiView(ListAPIView):
             'amount_requested__gte',
             'tot_paid__gte',
             'tot_paid__lte',
-            'tot_amount__gte',
-            'tot_amount__lte',
+            'tot_amout__gte',
+            'tot_amout__lte',
             'tot_debt__gte',
             'tot_debt__lte',
             'tot_delay__gte',

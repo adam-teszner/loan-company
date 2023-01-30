@@ -6,6 +6,7 @@ from xml.sax.handler import property_declaration_handler
 from loan_co_site.storage import OverwriteUploadStorage
 from core.validators import validate_file_size
 from django.db import models
+from django.utils import timezone
 from django.contrib.postgres.fields import ArrayField
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.core.exceptions import ObjectDoesNotExist
@@ -45,7 +46,8 @@ class UserInfo(models.Model):
                                 max_length=9, unique=True, blank=False, 
                                 null=False)
     phone_no = models.CharField(unique=True, max_length=9)
-    created_date = models.DateField(auto_now_add=True)
+    # created_date = models.DateField(auto_now_add=True)
+    created_date = models.DateField(default=timezone.now, editable=False, blank=True)
     information = models.TextField(null=True, blank=True)
     profile_pic = models.FileField(upload_to=user_pic_path, null=True, blank=True, storage=OverwriteUploadStorage, validators=[validate_file_size])
  
@@ -97,7 +99,8 @@ class Customer(models.Model):
     email = models.EmailField(max_length=50, blank=True, null=True)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, 
                                 null=True)
-    created_date = models.DateField(auto_now_add=True)
+    # created_date = models.DateField(auto_now_add=True)
+    created_date = models.DateField(default=timezone.now, editable=False, blank=True)
 
     def __str__(self):
         return f'{self.first_name} {self.last_name}'
@@ -155,7 +158,8 @@ class Product(models.Model, ProductMethods):
                                     default=10000, blank=False)
     loan_period = models.IntegerField(choices=list(zip(range(6, 49), range(6, 49))),
                                     blank=False, default=24)
-    created_date = models.DateField(auto_now_add=True)
+    # created_date = models.DateField(auto_now_add=True)
+    created_date = models.DateField(default=timezone.now, editable=False, blank=True)
     
     
     # new fields -> calculated from methods
@@ -167,6 +171,7 @@ class Product(models.Model, ProductMethods):
     tot_debt = models.DecimalField('Total Debt', blank=True, null=True, default=0, 
                                     max_digits=9, decimal_places=2, editable=False)
     tot_delay = models.IntegerField('Delay', default=0, blank=True, null=True, editable=False)
+    last_payment = models.DateField('Last payment date', blank=True, null=True, editable=False)
     
 
     def __init__(self, *args, **kwargs):
@@ -186,7 +191,8 @@ class Product(models.Model, ProductMethods):
 
 class Payment(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True)
-    created_date = models.DateField(auto_now_add=True)
+    # created_date = models.DateField(auto_now_add=True)
+    created_date = models.DateField(default=timezone.now, editable=False, blank=True)
     amount = models.DecimalField(max_digits=12, decimal_places=2)
 
     def __str__(self):
@@ -197,6 +203,7 @@ class Payment(models.Model):
         self.product.tot_paid = self.product.paid_total()
         self.product.tot_debt = self.product.debt()
         self.product.tot_delay = self.product.delay()
+        self.product.last_payment = self.created_date
         self.product.save()
 
     def delete(self, *args, **kwargs):
@@ -204,6 +211,7 @@ class Payment(models.Model):
         self.product.tot_paid = self.product.paid_total()
         self.product.tot_debt = self.product.debt()
         self.product.tot_delay = self.product.delay()
+        self.product.last_payment = Payment.objects.filter(product__id=self.product.id).latest('created_date').created_date
         self.product.save()
 
 
