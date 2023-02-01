@@ -9,6 +9,6 @@ class CookieMiddleware():
         response = self.get_response(request)
         if not request.COOKIES.get('visited'):
             response.set_cookie('visited', 'yes', max_age=2592000)
-            print('NO COOKIE')
+            # print('NO COOKIE')
 
         return response
