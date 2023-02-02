@@ -441,7 +441,7 @@ class GuestUserView(LoginRequiredMixin, TemplateView):
     template_name = 'registration/guest_user_denied.html'
 
     def get(self, request, *args, **kwargs):
-        if request.user.id != 4:
+        if request.user.username != 'guest':
             raise PermissionDenied
         
         return super().get(request, *args, **kwargs)
