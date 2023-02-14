@@ -22,6 +22,20 @@ class Command(BaseCommand):
         parser.add_argument('user_id', help='User ID associated with created data', type=int, default=4)
     
     def handle(self, *args, **kwargs):
+
+        def fake_number_digits(faker_inst:object, digits:int) -> str:
+            
+            '''
+            generates unique number with defined number of digits,
+            even when first digits are zeros
+            '''
+            
+            number: str = str(faker_inst.unique.random_number(digits=digits))
+            if len(number) < 9:
+                prec_zeros: int = 9 - len(number)
+                return prec_zeros*'0'+number
+            return number
+        
         start = t.time()
         obj_count = 0
         customer_ids = []
@@ -46,7 +60,7 @@ class Command(BaseCommand):
                 'id_passport': f_pl.unique.identity_card_number(),
                 'last_name': f.last_name(),
                 'martial_status': 'mr',
-                'phone_no': f.unique.random_number(digits=9),
+                'phone_no': fake_number_digits(f, 9),
                 'position': f.job()[:40]+'...',
                 'salaty': f.random_number(digits=4),
                 'social_security_no_pesel': f_pl.unique.pesel(),
@@ -60,7 +74,7 @@ class Command(BaseCommand):
                 # 'id': None,
                 'id_nip': f_pl.unique.nip(),
                 'name': f.company(),
-                'phone_no': f.unique.random_number(digits=9),
+                'phone_no': fake_number_digits(f, 9),
                 }
 
             adress_params = {
