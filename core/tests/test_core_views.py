@@ -245,4 +245,4 @@ class TestCreateCustomerView(TestCase):
 
     def test_create_customer_post_customer_id(self) -> None:
         self.client.login(username='tester', password='testete1123')
-        pass        
+        pass
