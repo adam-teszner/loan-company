@@ -51,21 +51,6 @@ def guest_limiter(function):
 def index(request):
     return render(request, 'base.html')
 
-@login_required
-def create_customer(request):
-    return render(request, 'core/create_customer.html')
-
-class CustomerCreateView(LoginRequiredMixin, CreateView):
-    model = Customer
-    fields = '__all__'
-
-#     def form_valid(self, form):
-#         form.instance.adress_id = self.kwargs.get('pk')
-#         return super(CustomerCreateView, self).form_valid(form)
-
-# class AdressCreateView(CreateView):
-#     model = Adress
-#     fields = '__all__'
 
 @login_required
 def custom_customer(request):
@@ -149,6 +134,11 @@ def custom_customer(request):
 
             return redirect('customer_detail', pk=x.id)
         # print('JEDEN')
+        # print(context.items())
+        # print(customer_form.errors)
+        # print(customer_adress.errors)
+        # print(workplace_adr_form.errors)
+        # print(workplace_form.errors)
         return render(request, 'core/custom_create.html', context)
 
             
@@ -176,6 +166,7 @@ def custom_customer(request):
     
     else:
         # print('DWA!!')
+        # print(context.errors)
         return render(request, 'core/custom_create.html', initial)
 
 
@@ -397,6 +388,11 @@ class AddNewProductView(LoginRequiredMixin, View):
             # print(add_prod.errors)
             return render(request, self.template_name, context={'add_product': add_prod, 'customer_id': customer_instance.id})
 
+
+'''
+
+### Only for testing ###
+
 class jsonTestView(View):
     def get(self, request):
 
@@ -426,7 +422,7 @@ class jsonTestView(View):
         # return JsonResponse(context, safe=False, json_dumps_params={'indent':'    '})
         return HttpResponse(merged_json, content_type='application/json')
     
-
+'''
 class AboutView(TemplateView):
     template_name = 'core/about.html'
 
