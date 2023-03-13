@@ -2,7 +2,7 @@
 {% block content %}
 {% load static %}
 <link rel="stylesheet" href="{% static 'css/jquery.dataTables.min.css' %}">
-<link rel="stylesheet" href="{% static 'css/responsive.dataTables.min.css' %}">
+<link rel="stylesheet" href="{% static 'css/datatables.min.css' %}">
 
 <div class="pyl-container">
     <div class="form-header">
@@ -101,6 +101,7 @@
       </div>
       <hr>
       <button id="search-btn" class="pyl-btn">Search</button>
+      <button id="gen-pdf-btn" class="pyl-btn">Generate PDF</button>
     </div>
     
     <!-- Datatables -->
@@ -138,7 +139,7 @@
 
 <script src="{% static 'js/jquery-3.6.3.min.js' %}"></script>
 <script src="{% static 'js/jquery.dataTables.min.js' %}"></script>
-<script src="{% static 'js/dataTables.responsive.min.js' %}"></script>
+<script src="{% static 'js/datatables.min.js' %}"></script>
 {% comment %} <script>
     $(document).ready(function() {
         $('#products').DataTable({
