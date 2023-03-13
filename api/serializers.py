@@ -152,7 +152,6 @@ class UserInfoSerializer(serializers.ModelSerializer):
 
 class PDFProductSeriaziler(serializers.ModelSerializer):
     user = serializers.SerializerMethodField()
-    # schedule = serializers.Se
     owner = CustomerDetailsSerializer()
 
     class Meta:
@@ -174,8 +173,6 @@ class PDFProductSeriaziler(serializers.ModelSerializer):
     def get_user(self, *args, **kwargs):
         request = self.context.get('request')
         user_id = request.user.id
-        # print(request.user)
-        # print(user_id)
-        user_inst = UserInfo.objects.get(user=4)
+        user_inst = UserInfo.objects.get(user=user_id)
         user = UserInfoSerializer(user_inst)
         return user.data
