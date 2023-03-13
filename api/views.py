@@ -337,7 +337,7 @@ class CustomerUpdateFetchApiView(RetrieveModelMixin,
     def partial_update(self, request, *args, **kwargs):
 
         #limiting edit/save/create access for "guest_user"
-        if request.user.id == 4:
+        if request.user.username == 'guest':
             raise exceptions.PermissionDenied
 
         instance = Customer.objects.get(pk=kwargs['pk'])
