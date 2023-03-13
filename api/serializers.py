@@ -5,7 +5,7 @@ from api.validators import (PhoneNumberFieldDRF,
                             PLNIPFieldDRF)
 
 from core.models import (Customer, Adress, Workplace,
-                        Product)
+                        Product, UserInfo)
 
 
 class AdressSerializer(serializers.ModelSerializer):
@@ -137,4 +137,45 @@ class ProductSerializer(serializers.ModelSerializer):
             ]
 
 
+class UserInfoSerializer(serializers.ModelSerializer):
 
+    class Meta:
+        model = UserInfo
+        fields = [
+            'first_name',
+            'last_name',
+            'phone_no',
+            'user',
+            'created_date'
+        ]
+        # fields = '__all__'
+
+class PDFProductSeriaziler(serializers.ModelSerializer):
+    user = serializers.SerializerMethodField()
+    # schedule = serializers.Se
+    owner = CustomerDetailsSerializer()
+
+    class Meta:
+        model = Product
+        fields = [
+            'owner',
+            'id',
+            'amount_requested',
+            'loan_period',
+            'tot_paid',
+            'tot_amout',
+            'tot_debt',
+            'tot_delay',
+            'created_date',
+            'create_schedule',
+            'user'
+            ]
+
+    def get_user(self, *args, **kwargs):
+        request = self.context.get('request')
+        user_id = request.user.id
+        # print(request.user)
+        # print(user_id)
+        user_inst = UserInfo.objects.get(user=4)
+        user = UserInfoSerializer(user_inst)
+        return user.data

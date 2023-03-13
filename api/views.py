@@ -1,6 +1,12 @@
+import zipfile, tempfile, os
+from django.conf import settings
+from api.pdfgen import create_product_detail_pdf
+
 from collections import OrderedDict
 from django.views import View
 from django.http import JsonResponse
+from django.http.response import FileResponse, HttpResponse
+from django.core.files.temp import NamedTemporaryFile
 
 
 from core.models import (Customer, Adress, Workplace,
@@ -10,7 +16,7 @@ from core.models import (Customer, Adress, Workplace,
 from rest_framework.reverse import reverse_lazy
 from rest_framework.metadata import SimpleMetadata
 from django.forms.models import model_to_dict
-from rest_framework.authentication import SessionAuthentication
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, parser_classes
@@ -19,7 +25,9 @@ from rest_framework.generics import (UpdateAPIView, GenericAPIView,
 from rest_framework.mixins import UpdateModelMixin, RetrieveModelMixin
 from .serializers import (AdressSerializer, CustomerSerializer,
                             WorkplaceSerializer, DynamicFieldsModelSerializer,
-                            ProductSerializer, CustomerDetailsSerializer)
+                            ProductSerializer, CustomerDetailsSerializer,
+                            PDFProductSeriaziler)
+from rest_framework.pagination import PageNumberPagination
 from rest_framework import (HTTP_HEADER_ENCODING, exceptions,
                             exceptions, serializers, status, viewsets)
 from rest_framework.utils.field_mapping import ClassLookupDict
@@ -398,4 +406,58 @@ class SearchApiView(ListAPIView):
         if self.request.query_params.get('sadb'):
             return Product.objects.filter(**params).order_by('id')
         
-        return Product.objects.filter(owner__created_by__userinfo__user__id=self.request.user.id).filter(**params).order_by('id')
+        return Product.objects.filter(
+            owner__created_by__userinfo__user__id=self.request.user.id).filter(
+            **params).order_by('id')
+    
+class GeneratePDFView(ListAPIView):
+    authentication_classes = [SessionAuthentication]
+    permission_classes = [IsAuthenticated]
+    serializer_class = PDFProductSeriaziler
+    pagination_class = PageNumberPagination
+
+    def get_queryset(self):
+        '''
+        Returns queryset of Product objects created by current user and
+        filtered by specified list of id's. 
+
+        Id's are of Products selected by user.
+        '''
+        qs = Product.objects.filter(
+            owner__created_by__userinfo__user__id=self.request.user.id)
+        query_params = self.request.query_params.get('id')
+        id_list = query_params.split(',')        
+        return qs.filter(id__in=id_list)
+    
+    def list(self, *args, **kwargs):
+        '''
+        Reposnds with single .pdf file if only one product is selected,
+        or with .zip file (containing pdf's) if many produts are selected.
+
+        Created files are stored in temp directory, so after closure, they
+        are deleted.
+        
+        '''
+        files = []
+        tmp_path = os.path.join(settings.MEDIA_ROOT, 'pdf')
+        folder = tempfile.TemporaryDirectory(dir=tmp_path)
+
+        # Basically data is the serializer.data of Product model
+        data = super().list(*args, **kwargs)
+        for prod in data.data.get('results'):
+            files.append(create_product_detail_pdf(prod, folder))
+
+        # Checks 'files' lenght to determine .pdf or .zip response
+        if len(files) > 1:
+            zip_path = os.path.join(tmp_path, folder.name, 'doc.zip')
+            with zipfile.ZipFile(zip_path, mode='w') as z:
+                for path, fn in files:
+                    file = os.path.join(path, fn)
+                    z.write(file, arcname=file.rsplit('/')[-1])
+            with open(zip_path, 'rb') as zip_file:
+                response = HttpResponse(zip_file.read(),
+                                    content_type='application/x-zip-compressed')
+                response['Content-Disposition'] = 'attachment; filename=doc.zip'
+                return response
+        file = os.path.join(files[0][0], files[0][1])
+        return FileResponse(open(file, 'rb'), as_attachment=True)
