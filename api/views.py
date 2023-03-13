@@ -440,8 +440,9 @@ class GeneratePDFView(ListAPIView):
         '''
         files = []
         tmp_path = os.path.join(settings.MEDIA_ROOT, 'pdf')
+        os.makedirs(tmp_path, exist_ok=True)
         folder = tempfile.TemporaryDirectory(dir=tmp_path)
-
+        
         # Basically data is the serializer.data of Product model
         data = super().list(*args, **kwargs)
         for prod in data.data.get('results'):
