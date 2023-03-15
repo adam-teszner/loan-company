@@ -1,10 +1,12 @@
-from core.models import UserInfo
+from urllib.parse import parse_qs, urlencode, urlparse
+
 from django import template
+from django.core.exceptions import ObjectDoesNotExist
 
-
-
+from core.models import UserInfo
 
 register = template.Library()
+
 
 @register.simple_tag(takes_context=True)
 def user_first_name(context):
@@ -13,8 +15,9 @@ def user_first_name(context):
         user_id = request.user.id
         user_name = UserInfo.objects.get(user=user_id)
         return user_name.first_name
-    except:
+    except ObjectDoesNotExist:
         return request.user.username
+
 
 @register.simple_tag(takes_context=True)
 def user_last_name(context):
@@ -23,9 +26,8 @@ def user_last_name(context):
         user_id = request.user.id
         user_name = UserInfo.objects.get(user=user_id)
         return user_name.last_name
-    except:
+    except ObjectDoesNotExist:
         return None
-
 
 
 @register.simple_tag(takes_context=True)
@@ -33,65 +35,73 @@ def user_icon(context):
     request = context['request']
     try:
         user_id = request.user.id
-        user_initials = UserInfo.objects.get(user=user_id)
-        return user_initials.first_name[0].upper() + user_initials.last_name[0].upper()
-        
-    except:
+        user = UserInfo.objects.get(user=user_id)
+        return user.first_name[0].upper() + user.last_name[0].upper()
+    except ObjectDoesNotExist:
         return None
 
+
 @register.simple_tag(takes_context=True)
-def sort_col(context, arg1=''):
-
-    ####DO DOPRACOWANIA ! funkcjalnosc ok ale do zmiany wstawianie '&'####
+def sort_table_header(context, th_name=None, paginate=False):
+    '''
+    Creates a querystring with sorting parameters.
+    Arranges sort-order by order of clicking eg:
+    Last column clicked becomes first in sorting order.
+    ----
+    Params:
+        context (dict): Passed by django
+        th_name (str): Table header name
+        pagintate (bool): Set to True when tag is placed inside pagination
+            navigation. Put page number after the tag, e.g.
+    
+    ``` <a href="{% sort_table_header paginate=True %}
+        {{ page_obj.next_page_number }}">next</a> ```
+    
+    Returns:
+        Full path with column sorting order and page number (if present)
+    '''
     request = context['request']
-
-    w = str(request.get_full_path)
-    var_path = w.split("'")[1]
-    clean_var_path = var_path.split('page', 1)[0]
-
-    if arg1 == 'PAGINATE':
-        
-        if '?' in var_path:
-            if clean_var_path[-1] == '?' or clean_var_path[-1] == '&':
-                return clean_var_path+'page='
-            else:
-                return clean_var_path+'&page='
-        else:
-            return clean_var_path+'?page='
+    path = request.get_full_path_info()
+    query_params = urlparse(path).query
+    base = urlparse(path).path
+    order = parse_qs(query_params).get('order_by')
+    page = parse_qs(query_params).get('page')
     
+    if order is None:
+        order = []
+
+    if paginate == True:
+        page = ''
+
+    # Move table column header-name to the beginning of sorting order
+    # If header already present in sorting order change sorting
+    # method to oppsite (if asc, change to dsc)
+    if th_name in order:
+        order.remove(th_name)
+        order.insert(0, f'-{th_name}')
+    elif f'-{th_name}' in order:
+        order.remove(f'-{th_name}')
+        order.insert(0, th_name)
     else:
-        ascending_pattern = f'order_by={arg1}'
-        decending_pattern = f'order_by=-{arg1}'
-        base_path = str(request.path) + '?'
-        try: 
-            query_string_path = var_path.split(base_path)[1]
-        except IndexError:
-            query_string_path = ''
-        query_string_clean_path = query_string_path.split('&page', 1)[0]
+        order.insert(0, th_name) if th_name is not None else order
 
-        if '?' in var_path:
-            if clean_var_path[-1] == '?' or clean_var_path[-1] == '&':
-                if ascending_pattern in query_string_path:
-                    x = query_string_clean_path.split(ascending_pattern)
-                    z = base_path + decending_pattern
-                    return z + '&' + ''.join(x)
-                    
-                elif decending_pattern in query_string_path:
-                    x = query_string_clean_path.split(decending_pattern)
-                    z = base_path + ascending_pattern
-                    return z + '&' + ''.join(x)
-                
-                else:
-                    return base_path + 'order_by='+arg1 + '&' + query_string_clean_path              
+    query_string = {
+        'order_by': order,
+        'page': page
+    }
 
-            else:
-                return clean_var_path+'&order_by='+arg1
+    # If first page or no pagination, remove page from query_string
+    if page is None:
+        query_string.pop('page')
 
-        else:
-            return clean_var_path+'?order_by='+arg1
-        
+    # Remove "order_by" key when order list is empty
+    if not order:
+        query_string.pop('order_by')
 
-    
+    new_url_query = urlencode(query_string, doseq=True)
+    url = base + '?' + new_url_query
+    return url
+
 
 @register.simple_tag(takes_context=True)
 def sort_active_th(context):

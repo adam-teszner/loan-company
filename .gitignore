@@ -1,10 +1,10 @@
 *.pyc
 db.sqlite3
 .DS_Store
+**/.DS_Store
 .vscode/
 .venv
 .env
-requirements.txt
 settings.py
 prod_settings.py
 debug.log

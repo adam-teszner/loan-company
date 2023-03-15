@@ -1,37 +1,32 @@
-# loan-company
 
-#### Website for learning purposes only. Created by self-taught dev
-#### Site is trying to mimic a loan-company. Managing loans, customers, debts etc... thats the goal at least :)
+# **LoanCompany** website
 
+This website is my first Django project, created for learning purposes. Some parts of the code, especially the oldest ones, should be rewritten due to their poor quality. However, they do showcase my progression over time.
 
-#### +++ dev  
-#### Installed packages:  
-asgiref==3.5.2  
-certifi==2022.9.24  
-charset-normalizer==2.1.1  
-Django==4.1.2  
-django-cors-headers==3.13.0  
-django-extensions==3.2.1  
-django-localflavor==3.1  
-djangorestframework==3.14.0  
-idna==3.4  
-psycopg2-binary==2.9.4  
-psycopg2==2.9.4  
-python-dateutil==2.8.2  
-python-stdnum==1.18  
-pytz==2022.4. 
-requests==2.28.1  
-six==1.16.0  
-sqlparse==0.4.3  
-urllib3==1.26.12  
-URLObject==2.4.3  
+---
 
-PostgreSQL 14.5. 
+## Features
+The website mimics the debt management service of a loan company, intended for internal use by the company's workers. 
+After logging in, a user who is presumed to be a company worker can create "customers" and sell loans to them. 
+Once a loan is sold, the user can monitor its repayment schedule, including payment dates and amounts etc. 
+Additionally, the user has the ability to sort, filter, and search customers, as well as generate PDF and XLS files with detailed information.
+
+## Live version available at:
+
+##### https://loan-co.xyz
+
+## Installation
 
 
-#### +++ prod  
-gunicorn==20.1.0  
-psycopg2==2.9.4  
+- Open terminal and navigate to desired directory and type:
+	`git clone https://github.com/adam-teszner/loan-company.git .`
+	`docker-compose up`
 
+After docker finishes building containers, you have to make migrations and migrate. 
+If you wish to populate the database with fake data there is a management command for that:
+`manage.py populate` 
+it takes 4 (integer) arguments - more info inside the file
 
-PostgreSQL 14.5
+---
+
+There is a `DEFAULT_SETTINGS` directory, where `prod_settings.py`, `settings.py`,  and `.env` files are stored. Be sure to define your settings and move those files to correct directories before running application. 

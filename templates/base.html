@@ -121,11 +121,12 @@
                         </ul>
                 </ul>
             <li>Statistics => under construction</li>
-            <li>Search => <span class="t-dec-line-through">under construction</span><sup>4</sup></li>
+            <li>Search => <span class="t-dec-line-through">under construction</span><sup> 4</sup></li>
                 <ul>
                     <li>Edit Customer</li>
+                    <li>Generate PDF<sup> 5</li>
                 </ul>
-            <li>Print to pdf => under construction</li>
+            <li><span class="t-dec-line-through">Print to pdf =>under construction</span><sup> 6</sup></li>
             <li>About</li>
             <li>Contanct</li>
             <li>Profile =></li>
@@ -159,10 +160,15 @@
             this is to be changed for ImageField in the future. Later on, images will be resized on the backend using Celery - user will only have to select aspect-ratio.
             <br>
             <span class="t-bold-600">4</span> - <span class="t-dec-underline">update Jan 23</span>, using datatables library with rest framework. In fact it's more of a filter than search, but it gives ability to filter out products by debt, delay etc. Clicking on pesel redirects to customer detail. In the near future, i'm going to also add a generate pdf feature and add a comment/note to each product. PDF will contain product details, customer details, installment schedule with current debt etc and the notes added to this product by users (notes like those, usually contain information about users interaction/contacts with customer - owner of the product) 
+            <br>
+            <span class="t-bold-600">5</span> - <span class="t-dec-underline">update Mar 10</span>, added the ability to generate PDF using ReportLab library, from "Search" subpage. User can generate single or multiple PDF files. When generating more than 1 PDF, user is served with ZIP file containing those pdfs. Default behaviour is to generate pdf files for all Products visible on the current page (filtering included). User has the ability to simply select (os style, for e.g. with SHIFT key) Products that she/he wants to print to PDF. On the backend side, Generated files are stored in TEMP directory and Deleted after being served.
+            <br>
+            <span class="t-bold-600">6</span> - <span class="t-dec-underline">update Mar 10</span>, resigned from seperate subpage for PDF generation. Using Search for selecting is more natural.
         </p>
         <div class="base-info">
             <ul>
                 <li><span class="t-dec-underline">update Jan 23</span> - on the backed, added management commands to update debt/delay everyday at 1.00am and another command to populate database with fake data (also reduced database hits and changed some functions inside models to make everything more efficient) Also added Cookies middleware, ability to log in as a "guest" that has restricted access (guest cannot save any changes) and some minor front-end changes.</li>
+                <li><span class="t-dec-underline">update Mar 15</span> - some parts of the code are rewritten (e.g. templatetags, html and javascript for table column headers sorting in "My Customers" subpage), some are going to be in the future (Helper methods, some function based views and early JS files) Performed code-cleaning, removed commented out code, added docstrings, comments. Removed uselesss files, imports etc.
             </ul>
         <p class="t-size-1-1 t-bold-400">Features to be added later:</p>
         <ul>
