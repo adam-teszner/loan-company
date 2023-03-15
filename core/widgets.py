@@ -1,4 +1,4 @@
-from django.forms.widgets import ClearableFileInput 
+from django.forms.widgets import ClearableFileInput
 
 
 class MyFileInput(ClearableFileInput):
@@ -18,4 +18,3 @@ class MyFileInput(ClearableFileInput):
             }
         )
         return context
-

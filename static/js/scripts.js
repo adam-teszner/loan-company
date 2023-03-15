@@ -14,9 +14,6 @@ function openMenu() {
 }
 
 
-
-
-
 const userInfoTooltip = document.getElementById('user-info');
 const userIcon = document.getElementById('account_icon');
 var timeout;
@@ -39,53 +36,6 @@ userIcon.addEventListener('mouseover', userTooltipShow);
 userIcon.addEventListener('mouseout', userTooltipHide);
 userInfoTooltip.addEventListener('mouseover', userTooltipShow);
 userInfoTooltip.addEventListener('mouseout', userTooltipHide);
-
-
-// not sure it its efficient ! 
-
-
-// TABLE column sorting looks  // 
-
-try {
-    if (sort_order.length > 0) {
-        for (let th = 1; th < sort_order.length; th++) {
-            if (sort_order[th].startsWith('-')) {
-                var id_desc = sort_order[th].slice(1);
-                var add_class = document.getElementById(id_desc).classList.add('active');
-                var remove_primary = document.getElementById(id_desc).classList.remove('active-primary');
-                var arrow = document.getElementById(id_desc).querySelector('#sort-icon').innerHTML = '&#8593';
-                // console.log('jeden');
-            }else{
-                var id_asc = sort_order[th];
-                var add_class = document.getElementById(id_asc).classList.add('active');
-                var remove_primary = document.getElementById(id_asc).classList.remove('active-primary');
-                var arrow = document.getElementById(id_asc).querySelector('#sort-icon').innerHTML = '&#8595';
-                // console.log('dwa');
-            }
-    
-        }
-        if (sort_order[0].startsWith('-')) {
-            var id_desc = sort_order[0].slice(1);
-            var add_class = document.getElementById(id_desc).classList.add('active-primary');
-            var remove_primary = document.getElementById(id_desc).classList.remove('primary');
-            var arrow = document.getElementById(id_desc).querySelector('#sort-icon').innerHTML = '&#8593';
-            // console.log('ZERO');
-        }else{
-            var id_asc = sort_order[0];
-            var add_class = document.getElementById(id_asc).classList.add('active-primary');
-            var remove_primary = document.getElementById(id_asc).classList.remove('primary');
-            var arrow = document.getElementById(id_asc).querySelector('#sort-icon').innerHTML = '&#8595';
-            // console.log('Nie-zero');
-        }
-    
-    
-    }else {
-        // console.log('blank');
-    }
-} catch (error) {
-    console.log(error)
-}
-
 
 
 function formNextPage () {
@@ -153,38 +103,6 @@ function formPreviousPage () {
 
 
 
-
-
-// Searching for PESEL in DB and autocompling other forms if pesel is in DB 
-
-// $('#id_first_name').on('focusout', console.log('left focus'))
-
-// function checkPesel () {
-//     console.log('dziala')
-
-    
-//         var pesel;
-//         pesel = document.getElementById('id_social_security_no_pesel').value;
-//         $.ajax(
-//         {
-//             type:'GET',
-//             url: 'custom_create',
-//             dataType: 'text',
-//             data:{
-//                     pesel:pesel
-//             },
-//             success: function( data ) 
-//             {
-//                 console.log(pesel);
-//             },
-//             error: (error) => {
-//                 console.log('error')
-//             }
-//          })
-// }
-
-// Vanilla JS
-
 var json_data;
 
 function checkPesel () {
@@ -198,9 +116,6 @@ function checkPesel () {
         peselCheck.open('GET', 'custom_create?pesel='+peselInput);
         peselCheck.send()
     } else {}
-
-    // peselCheck.open('GET', 'custom_create?pesel='+peselInput);
-    // peselCheck.send()
 
     peselCheck.onreadystatechange = function success () {
         var DONE = 4;
