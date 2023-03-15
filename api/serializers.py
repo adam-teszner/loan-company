@@ -1,18 +1,16 @@
 
 from rest_framework import serializers
-from api.validators import (PhoneNumberFieldDRF,
-                            PLPESELFieldDRF, PLNationalIDCardNumberFieldDRF,
-                            PLNIPFieldDRF)
 
-from core.models import (Customer, Adress, Workplace,
-                        Product, UserInfo)
+from api.validators import (PhoneNumberFieldDRF,
+                            PLNationalIDCardNumberFieldDRF, PLNIPFieldDRF,
+                            PLPESELFieldDRF)
+from core.models import Adress, Customer, Product, UserInfo, Workplace
 
 
 class AdressSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Adress
-        # fields = '__all__'
         exclude = [
             'id',
         ]
@@ -27,25 +25,24 @@ class WorkplaceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Workplace
-        # fields = '__all__'
         exclude = [
             'id',
         ]
-        # Unique Validators are removed because DRF doesnt know how to deal with unique
-        # validation on nested serializers when updating data
+        # Unique Validators are removed because DRF doesnt know how to deal
+        # with unique validation on nested serializers when updating data
         extra_kwargs = {
-            'id_nip': {'validators' : []},
+            'id_nip': {'validators': []},
             'phone_no': {'validators': []}
         }
 
+
 class DynamicFieldsModelSerializer(serializers.ModelSerializer):
 
-    #copy/paste official DRF docs
+    # Copy/paste official DRF docs
     """
     A ModelSerializer that takes an additional `fields` argument that
     controls which fields should be displayed.
     """
-
 
     def __init__(self, *args, **kwargs):
         # Don't pass the 'fields' arg up to the superclass
@@ -62,7 +59,6 @@ class DynamicFieldsModelSerializer(serializers.ModelSerializer):
                 self.fields.pop(field_name)
 
 
-
 class CustomerSerializer(DynamicFieldsModelSerializer):
 
     adress = AdressSerializer()
@@ -75,7 +71,6 @@ class CustomerSerializer(DynamicFieldsModelSerializer):
     class Meta:
         model = Customer
         fields = '__all__'
- 
 
     def update(self, cust_inst, validated_data):
 
@@ -118,8 +113,8 @@ class CustomerDetailsSerializer(serializers.ModelSerializer):
         model = Customer
         fields = '__all__'
 
+
 class ProductSerializer(serializers.ModelSerializer):
-    # owner = CustomerSerializer()
     owner = CustomerDetailsSerializer()
 
     class Meta:
@@ -148,7 +143,7 @@ class UserInfoSerializer(serializers.ModelSerializer):
             'user',
             'created_date'
         ]
-        # fields = '__all__'
+
 
 class PDFProductSeriaziler(serializers.ModelSerializer):
     user = serializers.SerializerMethodField()

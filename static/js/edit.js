@@ -276,14 +276,6 @@ removeValidationErorrs = () => {
 
 }
 
-
-// listenForId = () => {
-//     inputs.addEventListener('click', (e) => {
-//         console.log(e.target.id);
-//         document.getElementById(e.target.id).disabled = false;
-//     })
-// }
-
 listenForId = () => {
     for (let icon of pencilIcon) {
         icon.addEventListener('click', (e) => {
@@ -292,36 +284,3 @@ listenForId = () => {
         });
     };
 };
-
-// na jutro - NAJPIERW ZMIENhIC ID Z LABELI na ID z Key - DONE
-// pomyslec nad generowaniem unikatowych id dla kazdych pol - tak zeby mozna bylo - DONE
-// wypełnic formy initial data - DONE
-// wygenerować Json ze zmienionych form:
-    // mozna id> pyl-modal-right.children > iterować:
-    // i potem let x child.id = np. adress__street-id
-    // x.slice(0, -3) (zostanie adress__street)
-    // x.split('__') (zostanie [adress] [street])
-    // no i z tego mozna tworzyc jsona
-// fetch Patch - DONE
-
-// na koncu - aktualizacja danych !!! - DONE
-
-
-// problem z validacja unique w workplace nip i phone no .... i tylko tam !! 
-// albo rozwiazanie w backend - wskazane ! - DONE (rozwiazanie dorazne- patrz serializers)
-// ewentualnie na front-end (pomysl: 
-    // zrobić do kazdego inputa dodatkowy atrybut - np. data
-    // i w funkcji formToJson zbadać czy 'child'.data === value
-    // jesli jest to 'continue' iteracje - czyli pomijamy)
-
-    // moze w przyszlosci...
-
-// dodatkowo - zrobić wszystkie pola DISABLED - i DISABLED nie updatetowac bo po co ? 
-// po kliknięciu - pole zrobi się enabled - i tylko enabled będą brane pod uwagę
-// przy generowaniu jsona
-
-// DONE
-
-// napisać validation errors massages ! gdzieś muszą się pokazywać ! najlepiej na podstawie
-// odpowiedzi error - wskazać trzeba ID znowu ...
-// DONE

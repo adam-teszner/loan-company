@@ -28,7 +28,7 @@ class PageStyles:
         self.HEIGHT = self.page_size[1]
 
         # Page margins
-        self.LEFT =  2 * pica
+        self.LEFT = 2 * pica
         self.RIGHT = 2 * pica
         self.TOP = 2 * pica
         self.BOTTOM = 2 * pica
@@ -90,8 +90,8 @@ class PageStyles:
                 ('FONTNAME', (0, 0), (0, -1), 'Helvetica-Bold'),
                 ('FONTSIZE', (0, 0), (-1, -1), 8),
                 ('BACKGROUND', (0, 1), (0, -1), colors.lightgrey),
-                ('BACKGROUND',(2,1), (2, -1), colors.lightgrey), # middle, gray collumn
-                ('FONTNAME', (2, 0), (2, -1), 'Helvetica-Bold'), # middle, gray collumn
+                ('BACKGROUND',(2,1), (2, -1), colors.lightgrey),  # middle, gray collumn
+                ('FONTNAME', (2, 0), (2, -1), 'Helvetica-Bold'),  # middle, gray collumn
                 ('TEXTCOLOR', (0, 0), (-1, 0), colors.black),
                 ('GRID', (0, 0), (-1, -1), 0.2, colors.black),
                 ('TOPPADDING', (0, 0), (-1, -1), 2),
@@ -128,7 +128,7 @@ class PageStyles:
                 ('FONTNAME', (0,0), (-1,-1), 'Helvetica'),
                 ('FONTSIZE', (0,0), (-1,-1), 8),
                 ('FONTNAME', (0,0), (-1,0), 'Helvetica-Bold'),
-                ('ROWBACKGROUNDS', (0,0), (-1,-1), [colors.whitesmoke, colors.white]), #changes colors cyclically
+                ('ROWBACKGROUNDS', (0,0), (-1,-1), [colors.whitesmoke, colors.white]),  #changes colors cyclically
                 ('TOPPADDING', (0, 0), (-1, -1), 1),
                 ('BOTTOMPADDING', (0, 0), (-1, -1), 0.5),
                 ('LEFTPADDING', (0,0), (-1,-1), 5),
@@ -164,14 +164,12 @@ def create_product_detail_pdf(data, folder):
     adress = customer.get('adress')
     workplace = customer.get('workplace')
     work_adr = workplace.get('adress')
-
     
     # Get information from folder param
     filename = f'prod_{id}.pdf'
     path = os.path.join(settings.MEDIA_ROOT, 'pdf', folder.name)
     os.makedirs(os.path.dirname(path + '/' + filename), exist_ok=True)
     
-
     ### Defining main page tables data and column/row count
     ### For more info go to ReportLab documentation.
     personal = [
